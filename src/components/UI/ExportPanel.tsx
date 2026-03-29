@@ -1,4 +1,4 @@
-// src/components/UI/ExportPanel.tsx - 修正版
+// src/components/UI/ExportPanel.tsx - 
 import React, { useState } from 'react';
 import { ExportService, ExportOptions, ExportProgress } from '../../services/ExportService';
 import { promptService } from '../../services/PromptService';
@@ -94,7 +94,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
   const [debugOutput, setDebugOutput] = useState<string>('');
   const [exportCurrentPageOnly, setExportCurrentPageOnly] = useState<boolean>(false);
   
-  // 🆕 NanoBanana関連のstate
+  // 🆕 NanoBananastate
   const [nanoBananaOptions, setNanoBananaOptions] = useState<NanoBananaExportOptions>(DEFAULT_NANOBANANA_EXPORT_OPTIONS);
   const [nanoBananaProgress, setNanoBananaProgress] = useState<NanoBananaExportProgress | null>(null);
   const [isNanoBananaExporting, setIsNanoBananaExporting] = useState(false);
@@ -109,10 +109,10 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
   const exportService = ExportService.getInstance();
   const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
 
-  // 🍌 NanoBananaエクスポート処理関数
+  // 🍌 NanoBanana
   const handleNanoBananaExport = async () => {
     if (!canvasRef.current || panels.length === 0) {
-      alert('エクスポートできるコンテンツがありません');
+      alert('No content to export');
       return;
     }
 
@@ -122,7 +122,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
     setNanoBananaProgress({ 
       step: 'initialize', 
       progress: 0, 
-      message: 'NanoBananaエクスポートを開始しています...' 
+      message: 'NanoBananaStarting export...' 
     });
 
     try {
@@ -138,7 +138,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
       );
 
       if (result.success && result.zipBlob) {
-        // ダウンロードリンクを作成
+        // 
         const url = URL.createObjectURL(result.zipBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -148,14 +148,14 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        // 成功メッセージ
-        alert(`NanoBananaエクスポートが完了しました！\n\nファイル: ${result.filename}\nサイズ: ${(result.size / 1024).toFixed(1)} KB\n\nZIPファイルを解凍して、Google AI Studioで使用してください。`);
+        // 
+        alert(`NanoBananaExport completed\n\n: ${result.filename}\n: ${(result.size / 1024).toFixed(1)} KB\n\nZIPGoogle AI Studio`);
       } else {
-        throw new Error(result.error || 'エクスポートに失敗しました');
+        throw new Error(result.error || '');
       }
     } catch (error) {
       console.error('NanoBanana export error:', error);
-      alert('NanoBananaエクスポートに失敗しました: ' + (error as Error).message);
+      alert('NanoBanana: ' + (error as Error).message);
     } finally {
       setIsNanoBananaExporting(false);
       setTimeout(() => {
@@ -166,20 +166,20 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
   };
 
   const handlePurposeClick = (purpose: ExportPurpose) => {
-    // その他の場合は設定画面を開く
+    // Otherwise, open the settings screen
     if (selectedPurpose === purpose) {
       setSelectedPurpose(null);
       setPromptOutput('');
       setDebugOutput('');
-      setNanoBananaProgress(null); // 🆕 追加
+      setNanoBananaProgress(null); // 🆕 
     } else {
       setSelectedPurpose(purpose);
       setPromptOutput('');
       setDebugOutput('');
-      setNanoBananaProgress(null); // 🆕 追加
+      setNanoBananaProgress(null); // 🆕 
       
       if (purpose === 'nanobanana') {
-        // NanoBanana用設定を適用
+        // NanoBanana
         setNanoBananaOptions(DEFAULT_NANOBANANA_EXPORT_OPTIONS);
       } else if (purpose === 'prompt') {
         handlePromptExport();
@@ -194,7 +194,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
 
   const handleExport = async () => {
     if (!canvasRef.current || !selectedPurpose) {
-      alert('設定に問題があります');
+      alert('');
       return;
     }
 
@@ -205,7 +205,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
     }
 
     setIsExporting(true);
-    setExportProgress({ step: 'initialize', progress: 0, message: '準備中...' });
+    setExportProgress({ step: 'initialize', progress: 0, message: '...' });
 
     try {
       switch (exportOptions.format) {
@@ -220,8 +220,8 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
           break;
       }
     } catch (error) {
-      console.error('エクスポートエラー:', error);
-      alert('エクスポートに失敗しました: ' + (error as Error).message);
+      console.error(':', error);
+      alert(': ' + (error as Error).message);
     } finally {
       setIsExporting(false);
       setExportProgress(null);
@@ -230,24 +230,24 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
   };
 
   /**
-   * 🔧 最終版: キャラクターを最寄りパネルに割り当てる関数（詳細デバッグ対応）
+   * 🔧 : Function to assign a character to the nearest panel (supports detailed debugging)
    */
   const assignCharacterToNearestPanel = (char: Character, allPanels: Panel[]): { panel: Panel | null; debug: string } => {
     if (allPanels.length === 0) {
-      return { panel: null, debug: 'パネルが存在しません' };
+      return { panel: null, debug: '' };
     }
     
-    // キャラクターの中心座標を計算
+    // Calculate Character Center Coordinates
     const charCenterX = char.x + (char.width || 50) / 2;
     const charCenterY = char.y + (char.height || 50) / 2;
     
     let nearestPanel = allPanels[0];
     let minDistance = Number.MAX_VALUE;
-    let debugInfo = `🎭 キャラクター "${char.name}" (ID: ${char.id})\n`;
-    debugInfo += `📍 座標: (${char.x}, ${char.y}) サイズ: (${char.width || 50} x ${char.height || 50})\n`;
-    debugInfo += `🎯 中心点: (${charCenterX}, ${charCenterY})\n\n`;
+    let debugInfo = `🎭  "${char.name}" (ID: ${char.id})\n`;
+    debugInfo += `📍 : (${char.x}, ${char.y}) : (${char.width || 50} x ${char.height || 50})\n`;
+    debugInfo += `🎯 : (${charCenterX}, ${charCenterY})\n\n`;
     
-    // 🔧 各パネルとの距離を計算・記録
+    // 🔧 Calculate and record the distance from each panel
     const distanceCalculations: Array<{
       panel: Panel;
       distance: number;
@@ -265,7 +265,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         Math.pow(charCenterY - panelCenterY, 2)
       );
       
-      // 🆕 パネル内判定
+      // 🆕 
       const isInside = charCenterX >= panel.x && 
                       charCenterX <= panel.x + panel.width &&
                       charCenterY >= panel.y && 
@@ -280,10 +280,10 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
       });
       
       debugInfo += `📐 Panel ${panel.id}:\n`;
-      debugInfo += `   位置: (${panel.x}, ${panel.y}) サイズ: (${panel.width} x ${panel.height})\n`;
-      debugInfo += `   中心: (${panelCenterX}, ${panelCenterY})\n`;
-      debugInfo += `   距離: ${distance.toFixed(2)}px\n`;
-      debugInfo += `   内包: ${isInside ? 'YES ✅' : 'NO ❌'}\n\n`;
+      debugInfo += `   : (${panel.x}, ${panel.y}) : (${panel.width} x ${panel.height})\n`;
+      debugInfo += `   : (${panelCenterX}, ${panelCenterY})\n`;
+      debugInfo += `   : ${distance.toFixed(2)}px\n`;
+      debugInfo += `   : ${isInside ? 'YES ✅' : 'NO ❌'}\n\n`;
       
       if (distance < minDistance) {
         minDistance = distance;
@@ -291,58 +291,58 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
       }
     });
     
-    // 🆕 距離順にソートしてランキング表示
+    // 🆕 Sort by distance to see ranking
     distanceCalculations.sort((a, b) => a.distance - b.distance);
-    debugInfo += '🏆 距離ランキング:\n';
+    debugInfo += '🏆 :\n';
     distanceCalculations.forEach((calc, index) => {
-      const marker = index === 0 ? '👑 1位' : `${index + 1}位`;
-      const insideFlag = calc.isInside ? ' 📍内包' : '';
+      const marker = index === 0 ? '👑 1' : `${index + 1}`;
+      const insideFlag = calc.isInside ? ' 📍' : '';
       debugInfo += `${marker}: Panel ${calc.panel.id} (${calc.distance.toFixed(2)}px)${insideFlag}\n`;
     });
     
-    // 🆕 最終判定結果
+    // 🆕 
     const finalChoice = distanceCalculations[0];
-    debugInfo += `\n✅ 最終判定: Panel ${finalChoice.panel.id}\n`;
-    debugInfo += `   理由: ${finalChoice.isInside ? 'キャラクターがパネル内に存在' : '最も距離が近い'}\n`;
-    debugInfo += `   距離: ${finalChoice.distance.toFixed(2)}px\n`;
+    debugInfo += `\n✅ : Panel ${finalChoice.panel.id}\n`;
+    debugInfo += `   : ${finalChoice.isInside ? 'Character exists in panel' : ''}\n`;
+    debugInfo += `   : ${finalChoice.distance.toFixed(2)}px\n`;
     
     return { panel: nearestPanel, debug: debugInfo };
   };
 
   /**
-   * 🆕 全キャラクターの配置判定デバッグ関数（最終版）
+   * 🆕 All Character Placement Determination Debug Function (Final Version)
    */
   const generatePanelAssignmentDebug = (): string => {
-    let debugText = "=== キャラクター配置判定デバッグ（v1.1.1最終版） ===\n\n";
+    let debugText = "=== Character Placement Determination Debug (v1.1.1 ===\n\n";
     
-    debugText += `📊 基本情報:\n`;
-    debugText += `- パネル数: ${panels.length}\n`;
-    debugText += `- キャラクター数: ${characters.length}\n`;
-    debugText += `- 生成日時: ${new Date().toLocaleString()}\n\n`;
+    debugText += `📊 :\n`;
+    debugText += `- : ${panels.length}\n`;
+    debugText += `- : ${characters.length}\n`;
+    debugText += `- : ${new Date().toLocaleString()}\n\n`;
     
-    // パネル情報詳細
-    debugText += `📐 パネル詳細情報:\n`;
+    // 
+    debugText += `📐 :\n`;
     panels.forEach(panel => {
       const centerX = panel.x + panel.width / 2;
       const centerY = panel.y + panel.height / 2;
       const area = panel.width * panel.height;
       debugText += `Panel ${panel.id}:\n`;
-      debugText += `  📍 左上: (${panel.x}, ${panel.y})\n`;
-      debugText += `  📏 サイズ: ${panel.width} x ${panel.height} (面積: ${area})\n`;
-      debugText += `  🎯 中心: (${centerX}, ${centerY})\n`;
-      debugText += `  📦 範囲: X[${panel.x} - ${panel.x + panel.width}], Y[${panel.y} - ${panel.y + panel.height}]\n\n`;
+      debugText += `  📍 : (${panel.x}, ${panel.y})\n`;
+      debugText += `  📏 : ${panel.width} x ${panel.height} (: ${area})\n`;
+      debugText += `  🎯 : (${centerX}, ${centerY})\n`;
+      debugText += `  📦 : X[${panel.x} - ${panel.x + panel.width}], Y[${panel.y} - ${panel.y + panel.height}]\n\n`;
     });
     
-    // キャラクター配置判定詳細
-    debugText += `👥 キャラクター配置判定詳細:\n`;
+    // 
+    debugText += `👥 :\n`;
     const characterAssignments = new Map<number, Character[]>();
     
-    // パネル初期化
+    // 
     panels.forEach(panel => {
       characterAssignments.set(panel.id, []);
     });
     
-    // 各キャラクターを詳細判定
+    // 
     characters.forEach((char, index) => {
       debugText += `\n${'='.repeat(50)}\n`;
       debugText += `Character ${index + 1}: ${char.name}\n`;
@@ -358,9 +358,9 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
       }
     });
     
-    // 最終配置結果サマリー
+    // 
     debugText += `\n${'='.repeat(60)}\n`;
-    debugText += `📋 最終配置結果サマリー\n`;
+    debugText += `📋 \n`;
     debugText += `${'='.repeat(60)}\n`;
     
     let totalAssigned = 0;
@@ -368,29 +368,29 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
       const assignedChars = characterAssignments.get(panel.id) || [];
       totalAssigned += assignedChars.length;
       
-      debugText += `Panel ${panel.id}: ${assignedChars.length}体`;
+      debugText += `Panel ${panel.id}: ${assignedChars.length}`;
       if (assignedChars.length > 0) {
         const names = assignedChars.map(c => `"${c.name}"`).join(', ');
         debugText += ` → ${names}`;
       } else {
-        debugText += ` → (空)`;
+        debugText += ` → ()`;
       }
       debugText += '\n';
     });
     
-    debugText += `\n📈 統計:\n`;
-    debugText += `- 総キャラクター数: ${characters.length}\n`;
-    debugText += `- 配置完了数: ${totalAssigned}\n`;
-    debugText += `- 未配置数: ${characters.length - totalAssigned}\n`;
+    debugText += `\n📈 :\n`;
+    debugText += `- : ${characters.length}\n`;
+    debugText += `- : ${totalAssigned}\n`;
+    debugText += `- : ${characters.length - totalAssigned}\n`;
     
     if (totalAssigned === characters.length) {
-      debugText += `✅ 全キャラクターの配置が完了しました\n`;
+      debugText += `✅ All characters have been placed\n`;
     } else {
-      debugText += `⚠️ 一部キャラクターが未配置です\n`;
+      debugText += `⚠️ Some characters are not placed\n`;
     }
     
     debugText += `\n${'='.repeat(60)}\n`;
-    debugText += `デバッグ完了 - ${new Date().toISOString()}\n`;
+    debugText += ` - ${new Date().toISOString()}\n`;
     debugText += `${'='.repeat(60)}\n`;
     
     return debugText;
@@ -398,20 +398,20 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
 
   const handlePromptExport = async () => {
     setIsExporting(true);
-    setExportProgress({ step: 'initialize', progress: 10, message: 'プロンプト分析中...' });
+    setExportProgress({ step: 'initialize', progress: 10, message: '...' });
 
     try {
-      // 🔧 修正: 各キャラクターを座標ベースで最寄りパネルに割り当て
+      // 🔧 : Assign each character to the nearest panel based on coordinates
       const characterAssignments = new Map<number, Character[]>();
       
-      // パネル初期化
+      // 
       panels.forEach(panel => {
         characterAssignments.set(panel.id, []);
       });
       
-      // 🔧 重要: 各キャラクターを現在の座標で判定
+      // 🔧 : Determine each character at current coordinates
       characters.forEach(char => {
-        console.log(`🔍 キャラクター配置判定開始:`, {
+        console.log(`🔍 :`, {
           id: char.id,
           name: char.name,
           x: char.x,
@@ -421,23 +421,23 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         });
         
         const { panel, debug } = assignCharacterToNearestPanel(char, panels);
-        console.log(`🔍 配置判定結果:`, debug);
+        console.log(`🔍 :`, debug);
         
         if (panel) {
           const panelChars = characterAssignments.get(panel.id) || [];
           panelChars.push(char);
           characterAssignments.set(panel.id, panelChars);
           
-          // 🆕 デバッグログ追加
-          console.log(`📍 キャラクター "${char.name}" を Panel ${panel.id} に配置 (座標: ${char.x}, ${char.y})`);
+          // 🆕 
+          console.log(`📍  "${char.name}"  Panel ${panel.id}  (: ${char.x}, ${char.y})`);
         } else {
-          console.log(`❌ キャラクター "${char.name}" の配置に失敗`);
+          console.log(`❌  "${char.name}" `);
         }
       });
 
-      setExportProgress({ step: 'processing', progress: 30, message: 'キャラクター詳細分析中...' });
+      setExportProgress({ step: 'processing', progress: 30, message: '...' });
 
-      // 現在ページのみ出力の場合はフィルタ
+      // Filter if output is current page only
       let filteredPanels = panels;
       let filteredCharacters = characters;
       let filteredBubbles = bubbles;
@@ -456,7 +456,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         }
       }
 
-      // 🔧 修正: characterAssignmentsを使ってプロジェクトデータを構築
+      // 🔧 : characterAssignmentsBuild your project data with
       const project = {
         panels: filteredPanels,
         characters: filteredCharacters,
@@ -467,18 +467,18 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         characterNames
       };
 
-      setExportProgress({ step: 'processing', progress: 50, message: '未選択値除外プロンプト生成中...' });
+      setExportProgress({ step: 'processing', progress: 50, message: 'Generating unselected value exclusion prompt...' });
 
-      // 🔧 修正: PromptServiceに座標ベースのcharacterAssignmentsを渡す
+      // 🔧 : PromptServicecharacterAssignments
       const promptData = promptService.generatePrompts(project, characterAssignments);
       
-      setExportProgress({ step: 'processing', progress: 70, message: 'プロンプト整形中...' });
+      setExportProgress({ step: 'processing', progress: 70, message: '...' });
 
-      // ページ情報を準備
+      // 
       let output = '';
       
       if (exportCurrentPageOnly && typeof currentPageIndex === 'number' && pages) {
-        // 現在ページのみ出力
+        // 
         const currentPage = pages[currentPageIndex];
         if (currentPage) {
           const pageInfo = {
@@ -488,35 +488,35 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
           output = promptService.formatPromptOutput(promptData, filteredPanels, pageInfo, characterSettings);
         }
       } else {
-        // 全ページ出力（現在のpanels配列を使用）
-        output = "=== AI画像生成用プロンプト ===\n\n";
+        // panels
+        output = "=== AI ===\n\n";
         
         filteredPanels.forEach((panel: Panel, panelIdx: number) => {
             const sceneData = promptData.scenes[panelIdx];
             if (!sceneData) return;
             
-            output += `【Panel ${panelIdx + 1}】\n`;
+            output += `Panel ${panelIdx + 1}\n`;
             
-            // デバッグ: パネルの内容を確認
-            console.log(`Panel ${panelIdx + 1} データ:`, {
+            // : 
+            console.log(`Panel ${panelIdx + 1} :`, {
               note: panel.note,
               characterPrompt: panel.characterPrompt,
               actionPrompt: panel.actionPrompt,
               selectedCharacterId: panel.selectedCharacterId,
               prompt: panel.prompt,
-              // キャラ設定の確認
+              // 
               characterSettings: panel.selectedCharacterId ? characterSettings?.[panel.selectedCharacterId] : null
             });
             
-            // Panel用メモ
+            // Panel
             if (panel.note) {
-              output += `📌 メモ: ${panel.note}\n`;
+              output += `📌 : ${panel.note}\n`;
             }
             
-            // 🆕 分離プロンプトシステム: キャラ＋動作を合成
+            // 🆕 : 
             const parts: string[] = [];
             
-            // キャラプロンプト取得（panel.characterPrompt or characterSettingsから）
+            // panel.characterPrompt or characterSettings
             let charPrompt = panel.characterPrompt;
             if (!charPrompt && panel.selectedCharacterId && characterSettings?.[panel.selectedCharacterId]?.appearance?.basePrompt) {
               charPrompt = characterSettings[panel.selectedCharacterId].appearance.basePrompt;
@@ -532,10 +532,10 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
             
             if (parts.length > 0) {
               const combinedPrompt = parts.join(', ');
-              output += `プロンプト: ${combinedPrompt}\n`;
+              output += `: ${combinedPrompt}\n`;
             } else if (panel.prompt) {
-              // フォールバック: 旧形式
-              output += `プロンプト: ${panel.prompt}\n`;
+              // : 
+              output += `: ${panel.prompt}\n`;
             }
             
             output += '\n';
@@ -548,20 +548,20 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
           'extra fingers', 'watermark', 'signature',
           'deformed', 'mutated', 'disfigured', 'bad proportions'
         ].join(', ');
-        output += `\n【Negative Prompt】\n${negativePrompt}\n`;
+        output += `\nNegative Prompt\n${negativePrompt}\n`;
       }
 
-      // 追加で背景・効果線・トーン情報を統合
+      // Integrate additional background, effect line, and tone information
       output += await generateAdditionalPrompts(characterAssignments);
 
-      setExportProgress({ step: 'finalizing', progress: 90, message: '最終調整中...' });
+      setExportProgress({ step: 'finalizing', progress: 90, message: '...' });
 
       setPromptOutput(output);
-      setExportProgress({ step: 'complete', progress: 100, message: '完了！' });
+      setExportProgress({ step: 'complete', progress: 100, message: '' });
 
     } catch (error) {
-      console.error('プロンプト生成エラー:', error);
-      alert('プロンプト生成に失敗しました: ' + (error as Error).message);
+      console.error(':', error);
+      alert('Prompt generation failed: ' + (error as Error).message);
     } finally {
       setIsExporting(false);
       setTimeout(() => setExportProgress(null), 1000);
@@ -579,25 +579,25 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
 
       if (panelBackgrounds.length > 0 && panelChars.length === 0) {
         additionalOutput += `━━━ Panel ${panel.id} - Background Only ━━━\n`;
-        additionalOutput += `【Positive Prompt】\n`;
+        additionalOutput += `Positive Prompt\n`;
         additionalOutput += generateBackgroundPrompt(panelBackgrounds);
-        additionalOutput += `\n\n【日本語説明】\n`;
+        additionalOutput += `\n\n\n`;
         additionalOutput += generateBackgroundJapaneseDescription(panelBackgrounds);
         additionalOutput += `\n\n───────────────────────────────\n\n`;
       }
 
       if (panelEffects.length > 0) {
         additionalOutput += `━━━ Panel ${panel.id} - Effects ━━━\n`;
-        additionalOutput += `【Positive Prompt】\n`;
+        additionalOutput += `Positive Prompt\n`;
         additionalOutput += generateEffectsPrompt(panelEffects);
-        additionalOutput += `\n\n【日本語説明】\n`;
+        additionalOutput += `\n\n\n`;
         additionalOutput += generateEffectsJapaneseDescription(panelEffects);
         additionalOutput += `\n\n───────────────────────────────\n\n`;
       }
 
       if (panelTones.length > 0) {
         additionalOutput += `━━━ Panel ${panel.id} - Tones ━━━\n`;
-        additionalOutput += `【Positive Prompt】\n`;
+        additionalOutput += `Positive Prompt\n`;
         additionalOutput += generateTonesPrompt(panelTones);
         additionalOutput += `\n\n───────────────────────────────\n\n`;
       }
@@ -638,16 +638,16 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
 
     const bg = backgrounds[0];
     const typeDescriptions = {
-      'solid': '単色背景',
-      'gradient': 'グラデーション背景',
-      'pattern': 'パターン背景',
-      'image': '画像背景'
+      'solid': '',
+      'gradient': '',
+      'pattern': '',
+      'image': ''
     };
 
     return [
-      `背景: ${typeDescriptions[bg.type] || '背景'}`,
-      "構図: 背景のみ、人物なし",
-      "画質: 高品質なアニメ風背景"
+      `: ${typeDescriptions[bg.type] || ''}`,
+      ": ",
+      ": "
     ].join("\n");
   };
 
@@ -679,18 +679,18 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
 
     const effectNames = effects.map(effect => {
       switch (effect.type) {
-        case 'speed': return 'スピード線';
-        case 'focus': return '集中線';
-        case 'explosion': return '爆発エフェクト';
-        case 'flash': return 'フラッシュ効果';
-        default: return '効果線';
+        case 'speed': return '';
+        case 'focus': return '';
+        case 'explosion': return '';
+        case 'flash': return '';
+        default: return '';
       }
     });
 
     return [
-      `効果: ${effectNames.join('、')}`,
-      "動き: ダイナミック、エネルギッシュ",
-      "画質: 高品質なアニメ風エフェクト"
+      `: ${effectNames.join('')}`,
+      ": Dynamic, Energetic",
+      ": "
     ].join("\n");
   };
 
@@ -710,19 +710,19 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
 
   const handleCopyPrompt = () => {
     navigator.clipboard.writeText(promptOutput).then(() => {
-      alert('プロンプトをクリップボードにコピーしました！');
+      alert('Prompt copied to clipboard!');
     }).catch(err => {
-      console.error('コピーに失敗:', err);
-      alert('コピーに失敗しました。テキストを手動で選択してコピーしてください。');
+      console.error(':', err);
+      alert('Copy failed. Please manually select and copy the text.');
     });
   };
 
   const handleCopyDebug = () => {
     navigator.clipboard.writeText(debugOutput).then(() => {
-      alert('デバッグ情報をクリップボードにコピーしました！');
+      alert('Debug info copied to clipboard!');
     }).catch(err => {
-      console.error('コピーに失敗:', err);
-      alert('コピーに失敗しました。');
+      console.error(':', err);
+      alert('');
     });
   };
 
@@ -742,32 +742,32 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
     {
       id: 'nanobanana' as ExportPurpose,
       icon: '🍌',
-      title: 'NanoBanana出力（調整中）',
-      desc: 'AI漫画生成用'
+      title: 'NanoBanana',
+      desc: 'AI'
     },
     {
       id: 'prompt' as ExportPurpose,
       icon: '🎨',
-      title: 'プロンプト出力',
-      desc: 'AI画像生成用'
+      title: '',
+      desc: 'AI'
     },
     {
       id: 'print' as ExportPurpose,
       icon: '📄',
-      title: '印刷用PDF',
-      desc: 'ネーム印刷・共有用'
+      title: 'PDF',
+      desc: ''
     },
     {
       id: 'image' as ExportPurpose,
       icon: '🖼️',
-      title: '画像保存',
-      desc: 'SNS・Web用'
+      title: '',
+      desc: 'SNSWeb'
     },
     {
       id: 'clipstudio' as ExportPurpose,
       icon: '🎭',
-      title: 'クリスタ用',
-      desc: 'レイヤー分け'
+      title: '',
+      desc: ''
     }
   ];
 
@@ -794,7 +794,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         }}
       >
         <span style={{ color: "#ff8833" }}>📁</span>
-        出力
+        
       </h3>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -804,11 +804,11 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
               onClick={() => {
                 if (purpose.id === 'prompt') {
                   if (selectedPurpose === 'prompt') {
-                    setSelectedPurpose(null); // 既に開いている場合は閉じる
-                    setPromptOutput(''); // プロンプト結果もクリア
+                    setSelectedPurpose(null); // 
+                    setPromptOutput(''); // 
                   } else {
-                    setSelectedPurpose('prompt'); // まず画面を開く
-                    handlePromptExport(); // それから生成開始
+                    setSelectedPurpose('prompt'); // 
+                    handlePromptExport(); // 
                   }
                 } else {
                   handlePurposeClick(purpose.id);
@@ -844,7 +844,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                   }}>
                     {purpose.id === 'prompt' && isExporting && (
                       <span style={{ fontSize: "10px", marginLeft: "8px", color: "#f59e0b" }}>
-                        🎯 生成中...
+                        🎯 ...
                       </span>
                     )}
                   </div>
@@ -871,7 +871,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
               >
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
 
-                  {/* プロンプト出力設定画面 */}
+                  {/*  */}
                   {selectedPurpose === 'prompt' && promptOutput && (
                     <div>
                       <div style={{ 
@@ -889,7 +889,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                           alignItems: "center",
                           gap: "6px"
                         }}>
-                          ✅ プロンプト生成完了
+                          ✅ 
                         </h4>
                         <button
                           onClick={handlePromptExport}
@@ -908,11 +908,11 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             gap: "4px"
                           }}
                         >
-                          {isExporting ? '更新中...' : '🔄 再生成'}
+                          {isExporting ? '...' : '🔄 '}
                         </button>
                       </div>
 
-                      {/* ページ出力オプション */}
+                      {/*  */}
                       <div style={{
                         marginBottom: "12px",
                         padding: "8px",
@@ -931,7 +931,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             checked={exportCurrentPageOnly}
                             onChange={(e) => setExportCurrentPageOnly(e.target.checked)}
                           />
-                          📄 現在のページのみ出力
+                          📄 
                         </label>
                       </div>
 
@@ -953,7 +953,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             fontWeight: "600"
                           }}
                         >
-                          📋 プロンプトコピー
+                          📋 
                         </button>
                       </div>
 
@@ -975,11 +975,11 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                     </div>
                   )}
                   
-                  {/* 🍌 NanoBanana設定画面 */}
+                  {/* 🍌 NanoBanana */}
                   {selectedPurpose === 'nanobanana' && (
                     <div>
 
-                      {/* 説明 */}
+                      {/*  */}
                       <div 
                         style={{
                           background: isDarkMode ? "rgba(251, 191, 36, 0.1)" : "rgba(245, 158, 11, 0.05)",
@@ -997,16 +997,16 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             lineHeight: "1.4"
                           }}
                         >
-                          レイアウト画像＋プロンプト＋使用方法ガイドを一括出力。<br/>
-                          Google AI StudioのNanoBananaで完成した漫画を生成できます。<br/>
-                          <strong>商用利用する場合はGoogleの利用規約に従ってください。</strong>
+                          Batch output layout image + prompt + usage guide.<br/>
+                          Google AI StudioNanoBananaYou can generate completed cartoons in.<br/>
+                          <strong>GooglePlease follow the terms and conditions of the.</strong>
                         </p>
                       </div>
 
-                      {/* オプション設定 */}
+                      {/*  */}
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         
-                        {/* レイアウト画像品質 */}
+                        {/*  */}
                         <div>
                           <label 
                             style={{
@@ -1017,7 +1017,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               marginBottom: "4px",
                             }}
                           >
-                            レイアウト画像品質
+                            
                           </label>
                           <select
                             value={nanoBananaOptions.layoutImageQuality}
@@ -1037,13 +1037,13 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               fontFamily: "inherit",
                             }}
                           >
-                            <option value="high">高品質（推奨）</option>
-                            <option value="medium">標準</option>
-                            <option value="low">軽量</option>
+                            <option value="high"></option>
+                            <option value="medium"></option>
+                            <option value="low"></option>
                           </select>
                         </div>
 
-                        {/* プロンプト言語 */}
+                        {/*  */}
                         <div>
                           <label 
                             style={{
@@ -1054,7 +1054,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               marginBottom: "4px",
                             }}
                           >
-                            プロンプト言語
+                            
                           </label>
                           <select
                             value={nanoBananaOptions.promptLanguage}
@@ -1074,13 +1074,13 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               fontFamily: "inherit",
                             }}
                           >
-                            <option value="english">英語（推奨）</option>
-                            <option value="japanese">日本語</option>
-                            <option value="both">両方</option>
+                            <option value="english"></option>
+                            <option value="japanese"></option>
+                            <option value="both"></option>
                           </select>
                         </div>
 
-                        {/* チェックボックスオプション */}
+                        {/*  */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                           <label style={{ 
                             display: "flex", 
@@ -1100,7 +1100,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               disabled={isNanoBananaExporting}
                               style={{ margin: 0 }}
                             />
-                            使用方法ガイドを含める
+                            
                           </label>
 
                           <label style={{ 
@@ -1121,12 +1121,12 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               disabled={isNanoBananaExporting}
                               style={{ margin: 0 }}
                             />
-                            キャラクター名対応表を含める
+                            Include character name correspondence table
                           </label>
                         </div>
                       </div>
 
-                      {/* エクスポートボタン */}
+                      {/*  */}
                       <button
                         onClick={handleNanoBananaExport}
                         disabled={isNanoBananaExporting || panels.length === 0}
@@ -1157,14 +1157,14 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                                 animation: "spin 1s linear infinite",
                               }}
                             />
-                            エクスポート中...
+                            ...
                           </span>
                         ) : (
-                          '🍌 NanoBananaパッケージ作成'
+                          '🍌 NanoBanana'
                         )}
                       </button>
 
-                      {/* プログレス表示 */}
+                      {/*  */}
                       {isNanoBananaExporting && nanoBananaProgress && (
                         <div 
                           style={{
@@ -1217,7 +1217,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             />
                           </div>
 
-                          {/* 完了時のメッセージ */}
+                          {/*  */}
                           {nanoBananaProgress.step === 'complete' && (
                             <div style={{
                               marginTop: "8px",
@@ -1228,7 +1228,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                               color: isDarkMode ? "#10b981" : "#059669",
                               textAlign: "center"
                             }}>
-                              ✅ エクスポート完了！ZIPファイルをダウンロードしてください。
+                              ✅ ZIPPlease download the file.
                             </div>
                           )}
                         </div>
@@ -1237,7 +1237,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                     </div>
                   )}
                   
-                  {/* 印刷用設定 */}
+                  {/*  */}
                   {selectedPurpose === 'print' && (
                     <>
                       <div>
@@ -1250,7 +1250,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             marginBottom: "4px",
                           }}
                         >
-                          解像度
+                          
                         </label>
                         <select
                           value={exportOptions.resolution}
@@ -1270,9 +1270,9 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             fontFamily: "inherit",
                           }}
                         >
-                          <option value={150}>150 DPI (標準)</option>
-                          <option value={300}>300 DPI (高品質)</option>
-                          <option value={600}>600 DPI (最高品質)</option>
+                          <option value={150}>150 DPI ()</option>
+                          <option value={300}>300 DPI ()</option>
+                          <option value={600}>600 DPI ()</option>
                         </select>
                       </div>
                       
@@ -1294,12 +1294,12 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                           disabled={isExporting}
                           style={{ margin: 0 }}
                         />
-                        各コマを別ページにする
+                        
                       </label>
                     </>
                   )}
 
-                  {/* 画像用設定 */}
+                  {/*  */}
                   {selectedPurpose === 'image' && (
                     <>
                       <div>
@@ -1312,13 +1312,13 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             marginBottom: "6px",
                           }}
                         >
-                          品質
+                          
                         </label>
                         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                           {[
-                            { value: 'high', label: '高品質' },
-                            { value: 'medium', label: '標準' },
-                            { value: 'low', label: '軽量' }
+                            { value: 'high', label: '' },
+                            { value: 'medium', label: '' },
+                            { value: 'low', label: '' }
                           ].map((item) => (
                             <label 
                               key={item.value} 
@@ -1367,12 +1367,12 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                           disabled={isExporting}
                           style={{ margin: 0 }}
                         />
-                        背景を透明にする
+                        
                       </label>
                     </>
                   )}
 
-                  {/* クリスタ用設定 */}
+                  {/*  */}
                   {selectedPurpose === 'clipstudio' && (
                     <>
                       <div 
@@ -1390,7 +1390,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             margin: 0,
                           }}
                         >
-                          レイヤー構造のJSONファイルと各要素（背景・キャラクター・吹き出し・効果線・トーン）のPNG画像を出力
+                          JSONof the file and each element (background, character, callout, effect line, tone)PNG
                         </p>
                       </div>
                       
@@ -1404,7 +1404,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             marginBottom: "4px",
                           }}
                         >
-                          解像度
+                          
                         </label>
                         <select
                           value={exportOptions.resolution}
@@ -1424,14 +1424,14 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             fontFamily: "inherit",
                           }}
                         >
-                          <option value={300}>300 DPI (推奨)</option>
-                          <option value={600}>600 DPI (高品質)</option>
+                          <option value={300}>300 DPI ()</option>
+                          <option value={600}>600 DPI ()</option>
                         </select>
                       </div>
                     </>
                   )}
 
-                  {/* 出力ボタン（プロンプト以外） */}
+                  {/* Output buttons (other than prompts) */}
                   <button
                     onClick={handleExport}
                     disabled={isExporting || panels.length === 0}
@@ -1461,10 +1461,10 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
                             animation: "spin 1s linear infinite",
                           }}
                         />
-                        出力中...
+                        ...
                       </span>
                     ) : (
-                      'ファイルダウンロード'
+                      ''
                     )}
                   </button>
                 </div>
@@ -1474,7 +1474,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         ))}
       </div>
 
-      {/* プログレス表示（生成中のみ） */}
+      {/* Progress display (only during generation) */}
       {isExporting && exportProgress && (
         <div 
           style={{
@@ -1520,7 +1520,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
         </div>
       )}
 
-      {/* アニメーション定義 */}
+      {/*  */}
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }

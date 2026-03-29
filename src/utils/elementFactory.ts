@@ -1,4 +1,4 @@
-// src/utils/elementFactory.ts - 完全統合要素ファクトリーシステム v2.0
+// src/utils/elementFactory.ts - Fully Integrated Element Factory System v2.0
 
 import { 
   Character, 
@@ -9,45 +9,45 @@ import {
 } from '../types';
 
 // ==========================================
-// 🎭 キャラクターファクトリー（辞書対応完全版）
+// 🎭 Character factory (full dictionary)
 // ==========================================
 
 export const createCharacter = (config: {
-  // 基本情報
+  // 
   characterId?: string;
   name?: string;
   type?: string;
   
-  // 位置・サイズ（統一座標系）
+  // 
   x?: number;
   y?: number;
   scale?: number;
   rotation?: number;
   
-  // 表示設定
+  // 
   viewType?: "face" | "upper_body" | "full_body" | "close_up_face" | "chest_up" | "three_quarters";
   
-  // 🔧 辞書対応設定（未選択時は空文字でプロンプト除外）
-  expression?: string;    // expressions カテゴリ
-  action?: string;       // pose_manga カテゴリ  
-  facing?: string;       // gaze カテゴリ
-  eyeState?: string;     // 詳細設定
-  mouthState?: string;   // 詳細設定
-  handGesture?: string;  // 詳細設定
+  // 🔧 Dictionary-compatible settings (exclude prompts with empty text when not selected)
+  expression?: string;    // expressions 
+  action?: string;       // pose_manga   
+  facing?: string;       // gaze 
+  eyeState?: string;     // 
+  mouthState?: string;   // 
+  handGesture?: string;  // 
   
-  // 🆕 座標系統一
+  // 🆕 
   isGlobalPosition?: boolean;
 }): Omit<Character, 'id' | 'panelId'> => ({
   characterId: config.characterId ?? "character_1",
   type: config.type ?? "character_1",
-  name: config.name ?? "キャラクター",
+  name: config.name ?? "",
   x: config.x ?? 0.5,
   y: config.y ?? 0.6,
   scale: config.scale ?? 2.0,
   rotation: config.rotation ?? 0,
   isGlobalPosition: config.isGlobalPosition ?? true,
   viewType: config.viewType ?? "upper_body",
-  // 🔧 辞書対応設定（空文字はプロンプト出力で除外される）
+  // 🔧 Dictionary-compatible settings (empty characters are excluded at prompt output)
   expression: config.expression ?? "",
   action: config.action ?? "", 
   facing: config.facing ?? "",
@@ -56,10 +56,10 @@ export const createCharacter = (config: {
   handGesture: config.handGesture ?? "",
 });
 
-// 🎭 キャラクタープリセット（感情・行動別最適化）
+// 🎭 Character presets (optimized by emotion and behavior)
 export const characterPresets = {
   // ==========================================
-  // 感情表現プリセット（男女差対応）
+  // Emotional Expression Preset (Gender Equality)
   // ==========================================
   happy: (overrides?: Partial<Parameters<typeof createCharacter>[0]>) => 
     createCharacter({
@@ -67,9 +67,9 @@ export const characterPresets = {
       action: "standing", 
       facing: "at_viewer",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      name: "",
+      // 
       eyeState: "sparkling_eyes",
       mouthState: "slight_smile",
       handGesture: "waving",
@@ -83,10 +83,10 @@ export const characterPresets = {
       action: "sitting",
       facing: "down", 
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      y: 0.65, // 少し下に配置
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      y: 0.65, // 
+      name: "",
+      // 
       eyeState: "eyes_closed",
       mouthState: "frown",
       handGesture: "covering_mouth",
@@ -100,9 +100,9 @@ export const characterPresets = {
       action: "arms_crossed",
       facing: "at_viewer",
       viewType: "upper_body", 
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      name: "",
+      // 
       eyeState: "half_closed_eyes",
       mouthState: "frown",
       handGesture: "clenched_fist",
@@ -115,9 +115,9 @@ export const characterPresets = {
       action: "standing",
       facing: "at_viewer",
       viewType: "face",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      name: "",
+      // 
       eyeState: "wide_eyes",
       mouthState: "open_mouth",
       handGesture: "covering_mouth",
@@ -130,9 +130,9 @@ export const characterPresets = {
       action: "standing", 
       facing: "away",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      name: "",
+      // 
       eyeState: "half_closed_eyes",
       mouthState: "frown",
       handGesture: "hands_clasped",
@@ -145,9 +145,9 @@ export const characterPresets = {
       action: "arms_crossed",
       facing: "at_viewer",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      name: "",
+      // 
       eyeState: "eyes_open",
       mouthState: "mouth_closed",
       handGesture: "thumbs_up",
@@ -160,9 +160,9 @@ export const characterPresets = {
       action: "standing",
       facing: "away",
       viewType: "upper_body", 
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
-      // 拡張機能設定
+      scale: 2.0, // 
+      name: "",
+      // 
       eyeState: "half_closed_eyes",
       mouthState: "mouth_closed",
       handGesture: "open_palm",
@@ -170,7 +170,7 @@ export const characterPresets = {
     }),
     
   // ==========================================
-  // アクション表現プリセット
+  // 
   // ==========================================
   running: (overrides?: Partial<Parameters<typeof createCharacter>[0]>) =>
     createCharacter({
@@ -178,10 +178,10 @@ export const characterPresets = {
       action: "running",
       facing: "to_side",
       viewType: "full_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      x: 0.4, // 少し左に配置
+      scale: 2.0, // 
+      x: 0.4, // 
       y: 0.7,
-      name: "主人公",
+      name: "",
       ...overrides
     }),
     
@@ -191,8 +191,8 @@ export const characterPresets = {
       action: "pointing",
       facing: "to_side",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
+      scale: 2.0, // 
+      name: "",
       ...overrides
     }),
     
@@ -202,15 +202,15 @@ export const characterPresets = {
       action: "walking",
       facing: "to_side", 
       viewType: "full_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
+      scale: 2.0, // 
       x: 0.4,
       y: 0.7,
-      name: "主人公",
+      name: "",
       ...overrides
     }),
     
   // ==========================================
-  // 日常表現プリセット
+  // 
   // ==========================================
   eating: (overrides?: Partial<Parameters<typeof createCharacter>[0]>) =>
     createCharacter({
@@ -218,9 +218,9 @@ export const characterPresets = {
       action: "sitting",
       facing: "down",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
+      scale: 2.0, // 
       y: 0.65,
-      name: "主人公",
+      name: "",
       ...overrides
     }),
     
@@ -230,13 +230,13 @@ export const characterPresets = {
       action: "standing",
       facing: "to_side",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
-      name: "主人公",
+      scale: 2.0, // 
+      name: "",
       ...overrides
     }),
     
   // ==========================================
-  // 対話用プリセット（2人用）
+  // 2
   // ==========================================
   dialogue_left: (overrides?: Partial<Parameters<typeof createCharacter>[0]>) =>
     createCharacter({
@@ -244,10 +244,10 @@ export const characterPresets = {
       action: "standing",
       facing: "to_side",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
+      scale: 2.0, // 
       x: 0.3,
       y: 0.6,
-      name: "主人公",
+      name: "",
       ...overrides
     }),
     
@@ -257,152 +257,152 @@ export const characterPresets = {
       action: "standing",
       facing: "to_side",
       viewType: "upper_body",
-      scale: 2.0, // 手動追加と同じサイズに調整
+      scale: 2.0, // 
       x: 0.7,
       y: 0.6,
-      name: "相手",
+      name: "",
       ...overrides
     }),
 };
 
 // ==========================================
-// 💬 吹き出しファクトリー（編集互換統一版）
+// 💬 Callout Factory (Editorial Compatibility Unified Edition)
 // ==========================================
 
 export const createSpeechBubble = (config: {
-  // 基本情報
+  // 
   type?: string;
   text?: string;
   
-  // 🔧 位置・サイズ（統一座標系）
+  // 🔧 
   x?: number;
   y?: number;
   width?: number;
   height?: number;
   scale?: number;
   
-  // 表示設定
+  // 
   vertical?: boolean;
   
-  // 🆕 座標系統一（手動作成との完全互換性）
+  // 🆕 Coordinate system unification (full compatibility with manual creation)
   isGlobalPosition?: boolean;
 }): Omit<SpeechBubble, 'id' | 'panelId'> => ({
-  type: config.type ?? "普通",
+  type: config.type ?? "",
   text: config.text ?? "",
   x: config.x ?? 0.15,
   y: config.y ?? 0.15,
-  width: config.width ?? 160, // 80 → 160 に拡大
-  height: config.height ?? 120, // 60 → 120 に拡大
+  width: config.width ?? 160, // 80 → 160 
+  height: config.height ?? 120, // 60 → 120 
   scale: config.scale ?? 1.0,
   vertical: config.vertical ?? true,
-  // 🔧 編集互換性: 手動作成と同じ座標系を使用
+  // 🔧 : 
   isGlobalPosition: config.isGlobalPosition ?? true,
 });
 
-// 💬 吹き出しプリセット（タイプ別最適化完全版）
+// 💬 Callout preset (optimized full version by type)
 export const bubblePresets = {
   normal: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "普通",
+      type: "",
       text,
-      width: 160, // 80 → 160 に拡大
-      height: 120, // 60 → 120 に拡大
+      width: 160, // 80 → 160 
+      height: 120, // 60 → 120 
       vertical: true,
       ...overrides
     }),
     
   shout: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "叫び",
+      type: "",
       text,
-      // 🔧 叫び系は大きめ + 横書き推奨
-      width: 200, // 100 → 200 に拡大
-      height: 160, // 80 → 160 に拡大
+      // 🔧  + 
+      width: 200, // 100 → 200 
+      height: 160, // 80 → 160 
       scale: 1.1,
-      vertical: false, // 叫びは横書きが効果的
+      vertical: false, // 
       ...overrides
     }),
     
   thought: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "心の声", 
+      type: "", 
       text,
-      // 🔧 思考系は楕円に適したサイズ + 右上配置
-      width: 180, // 90 → 180 に拡大
-      height: 140, // 70 → 140 に拡大
-      x: 0.65,      // 右上配置が一般的
+      // 🔧  + 
+      width: 180, // 90 → 180 
+      height: 140, // 70 → 140 
+      x: 0.65,      // 
       y: 0.15,
-      vertical: true, // 思考は縦書きが自然
+      vertical: true, // 
       ...overrides
     }),
     
   whisper: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "小声",
+      type: "",
       text,
-      // 🔧 小声は小さめ
-      width: 140, // 70 → 140 に拡大
-      height: 100, // 50 → 100 に拡大
+      // 🔧 
+      width: 140, // 70 → 140 
+      height: 100, // 50 → 100 
       scale: 0.9,
       vertical: true,
       ...overrides
     }),
     
-  // 🆕 新しいプリセット
+  // 🆕 
   dialog: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "普通",
+      type: "",
       text,
-      width: 170, // 85 → 170 に拡大
-      height: 130, // 65 → 130 に拡大
+      width: 170, // 85 → 170 
+      height: 130, // 65 → 130 
       vertical: true,
       ...overrides
     }),
     
   narration: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "普通",
+      type: "",
       text,
-      // 🔧 ナレーション用は横長 + 上部配置
-      width: 240, // 120 → 240 に拡大
-      height: 80, // 40 → 80 に拡大
-      vertical: false, // ナレーションは横書き
+      // 🔧  + 
+      width: 240, // 120 → 240 
+      height: 80, // 40 → 80 
+      vertical: false, // 
       x: 0.1,
       y: 0.05,
       ...overrides
     }),
     
-  // 🆕 位置別プリセット
+  // 🆕 
   left: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "普通",
+      type: "",
       text,
       x: 0.05,
       y: 0.15,
-      width: 140, // 70 → 140 に拡大
-      height: 100, // 50 → 100 に拡大
+      width: 140, // 70 → 140 
+      height: 100, // 50 → 100 
       ...overrides
     }),
     
   right: (text: string, overrides?: Partial<Parameters<typeof createSpeechBubble>[0]>) =>
     createSpeechBubble({
-      type: "普通",
+      type: "",
       text,
       x: 0.75,
       y: 0.15,
-      width: 140, // 70 → 140 に拡大
-      height: 100, // 50 → 100 に拡大
+      width: 140, // 70 → 140 
+      height: 100, // 50 → 100 
       ...overrides
     }),
 };
 
 // ==========================================
-// 🎨 背景ファクトリー（統合版）
+// 🎨 
 // ==========================================
 
 export const createBackground = (config: {
   type: 'solid' | 'gradient' | 'pattern';
-  // 位置・サイズ（相対座標 0-1）
+  //  0-1
   x?: number;
   y?: number; 
   width?: number;
@@ -410,15 +410,15 @@ export const createBackground = (config: {
   opacity?: number;
   zIndex?: number;
   
-  // 単色用
+  // 
   solidColor?: string;
   
-  // グラデーション用
+  // 
   gradientType?: 'linear' | 'radial';
   gradientColors?: string[];
   gradientDirection?: number;
   
-  // パターン用
+  // 
   patternType?: 'dots' | 'lines' | 'grid';
   patternColor?: string;
   patternSize?: number;
@@ -465,9 +465,9 @@ export const createBackground = (config: {
   }
 };
 
-// 🎨 背景プリセット（感情・シーン別）
+// 🎨 Background Presets by Emotion/Scene
 export const backgroundPresets = {
-  // 感情系背景
+  // 
   happy: () => createBackground({
     type: 'gradient',
     gradientType: 'radial',
@@ -495,7 +495,7 @@ export const backgroundPresets = {
     opacity: 0.3
   }),
   
-  // アクション系背景
+  // 
   speed: () => createBackground({
     type: 'gradient',
     gradientType: 'linear',
@@ -511,7 +511,7 @@ export const backgroundPresets = {
     opacity: 0.5
   }),
   
-  // 日常系背景
+  // 
   neutral: () => createBackground({
     type: 'solid',
     solidColor: '#FAFAFA',
@@ -526,7 +526,7 @@ export const backgroundPresets = {
     opacity: 0.3
   }),
   
-  // 特殊系背景
+  // 
   determination: () => createBackground({
     type: 'gradient',
     gradientType: 'linear',
@@ -558,10 +558,10 @@ export const backgroundPresets = {
   }),
   
   // ==========================================
-  // 🏠 場所・環境系背景（漫画ネーム用）
+  // 🏠 Location/environment background (for comic names)
   // ==========================================
   
-  // 室内系
+  // 
   home: () => createBackground({
     type: 'gradient',
     gradientType: 'linear',
@@ -590,7 +590,7 @@ export const backgroundPresets = {
     opacity: 0.5
   }),
   
-  // 屋外系
+  // 
   park: () => createBackground({
     type: 'gradient',
     gradientType: 'radial',
@@ -623,7 +623,7 @@ export const backgroundPresets = {
   }),
   
   // ==========================================
-  // ⏰ 時間帯・天候系背景（漫画ネーム用）
+  // ⏰ Time zone/weather background (for comic names)
   // ==========================================
   
   morning: () => createBackground({
@@ -680,7 +680,7 @@ export const backgroundPresets = {
   }),
   
   // ==========================================
-  // 💫 感情・ムード系背景（漫画ネーム用）
+  // 💫 Emotional/mood-based background (for comic names)
   // ==========================================
   
   tension: () => createBackground({
@@ -722,7 +722,7 @@ export const backgroundPresets = {
   }),
   
   // ==========================================
-  // ✨ 特殊効果系背景（漫画ネーム用）
+  // ✨ Special Effects Background (for Comic Names)
   // ==========================================
   
   flash: () => createBackground({
@@ -763,7 +763,7 @@ export const backgroundPresets = {
   }),
   
   // ==========================================
-  // 🚗 交通機関系背景（漫画ネーム用）
+  // 🚗 Transportation background (for comic names)
   // ==========================================
   
   train: () => createBackground({
@@ -790,25 +790,25 @@ export const backgroundPresets = {
 };
 
 // ==========================================
-// ⚡ 効果線ファクトリー
+// ⚡ 
 // ==========================================
 
 export const createEffect = (config: {
-  // 基本情報
+  // 
   type?: 'speed' | 'focus' | 'explosion' | 'flash';
   
-  // 位置・サイズ（相対座標 0-1）
+  //  0-1
   x?: number;
   y?: number;
   width?: number;
   height?: number;
   
-  // 効果設定
+  // 
   direction?: 'horizontal' | 'vertical' | 'radial' | 'custom';
   intensity?: number;    // 0.1-1.0
   density?: number;      // 0.1-1.0
-  length?: number;       // 線の長さ
-  angle?: number;        // 角度
+  length?: number;       // 
+  angle?: number;        // 
   color?: string;
   opacity?: number;
   blur?: number;
@@ -832,7 +832,7 @@ export const createEffect = (config: {
   isGlobalPosition: false,
 });
 
-// ⚡ 効果線プリセット（シーン別最適化）
+// ⚡ Effect line preset (optimized by scene)
 export const effectPresets = {
   speed_horizontal: (overrides?: Partial<Parameters<typeof createEffect>[0]>) =>
     createEffect({
@@ -882,38 +882,38 @@ export const effectPresets = {
 };
 
 // ==========================================
-// 🎯 トーンファクトリー
+// 🎯 
 // ==========================================
 
 export const createTone = (config: {
-  // 基本情報
+  // 
   type?: 'halftone' | 'gradient' | 'crosshatch' | 'dots' | 'lines' | 'noise';
   pattern?: 'dots_60' | 'dots_85' | 'dots_100' | 'dots_120' | 'dots_150' | 'lines_horizontal' | 'lines_vertical' | 'lines_diagonal' | 'lines_cross' | 'gradient_linear' | 'gradient_radial' | 'gradient_diamond' | 'noise_fine' | 'noise_coarse' | 'noise_grain' | 'speed_lines' | 'focus_lines' | 'explosion';
   
-  // 位置・サイズ（相対座標 0-1）
+  //  0-1
   x?: number;
   y?: number;
   width?: number;
   height?: number;
   
-  // 表示設定
+  // 
   density?: number;      // 0-1
   opacity?: number;      // 0-1
   rotation?: number;     // 0-360
   scale?: number;        // 0.1-3.0
   
-  // 高度な設定
+  // 
   blendMode?: 'normal' | 'multiply' | 'screen' | 'overlay';
   contrast?: number;     // 0-2
   brightness?: number;   // -1 to 1
   invert?: boolean;
   
-  // マスク設定
+  // 
   maskEnabled?: boolean;
   maskShape?: 'rectangle' | 'ellipse' | 'custom';
   maskFeather?: number;  // 0-20
   
-  // その他
+  // 
   zIndex?: number;
   visible?: boolean;
 }): Omit<ToneElement, 'id' | 'panelId'> => ({
@@ -938,14 +938,14 @@ export const createTone = (config: {
   zIndex: config.zIndex ?? 0,
   isGlobalPosition: false,
   visible: config.visible ?? true,
-  // 🆕 描画用プロパティ
+  // 🆕 
   color: '#000000',
   intensity: 0.5,
   angle: 0,
   direction: 'vertical'
 });
 
-// 🎯 トーンプリセット（用途別最適化）
+// 🎯 Tone presets (optimized by application)
 export const tonePresets = {
   shadow: (overrides?: Partial<Parameters<typeof createTone>[0]>) =>
     createTone({
@@ -985,7 +985,7 @@ export const tonePresets = {
 };
 
 // ==========================================
-// 🔧 統合シーンファクトリー（編集互換版）
+// 🔧 Integrated Scene Factory (Editorial Compatibility Edition)
 // ==========================================
 
 export interface UnifiedSceneConfig {
@@ -1042,76 +1042,76 @@ export const createUnifiedScene = (config: UnifiedSceneConfig) => {
 };
 
 // ==========================================
-// 🎮 便利な組み合わせプリセット
+// 🎮 
 // ==========================================
 
 export const scenePresets = {
-  // 😊 基本的な嬉しいシーン
+  // 😊 
   happy_basic: () => createUnifiedScene({
     characters: [{ preset: 'happy' }],
-    bubbles: [{ preset: 'normal', text: 'やったー！' }],
+    bubbles: [{ preset: 'normal', text: '' }],
     background: { preset: 'happy' },
     effects: [{ preset: 'flash' }]
   }),
   
-  // 😢 悲しい・落ち込みシーン
+  // 😢 
   sad_basic: () => createUnifiedScene({
     characters: [{ 
       preset: 'sad',
       overrides: { y: 0.65 }
     }],
-    bubbles: [{ preset: 'thought', text: 'つらい...' }],
+    bubbles: [{ preset: 'thought', text: '...' }],
     background: { preset: 'sad' },
     tones: [{ preset: 'shadow' }]
   }),
   
-  // 😡 怒り・イライラシーン
+  // 😡 
   angry_basic: () => createUnifiedScene({
     characters: [{ preset: 'angry' }],
-    bubbles: [{ preset: 'shout', text: 'もう！' }],
+    bubbles: [{ preset: 'shout', text: '' }],
     background: { preset: 'angry' },
     effects: [{ preset: 'explosion' }]
   }),
   
-  // 🏃 アクションシーン
+  // 🏃 
   running_basic: () => createUnifiedScene({
     characters: [{ preset: 'running' }],
-    bubbles: [{ preset: 'shout', text: '急がなきゃ！' }],
+    bubbles: [{ preset: 'shout', text: '' }],
     effects: [{ preset: 'speed_horizontal' }]
   }),
   
-  // 🤝 二人の対話シーン
+  // 🤝 
   dialogue_basic: () => createUnifiedScene({
     characters: [
       { preset: 'dialogue_left' },
       { preset: 'dialogue_right' }
     ],
     bubbles: [
-      { preset: 'left', text: 'こんにちは' },
-      { preset: 'right', text: 'こんにちは！' }
+      { preset: 'left', text: '' },
+      { preset: 'right', text: '' }
     ],
     background: { preset: 'calm' }
   }),
   
-  // 💭 思考・悩みシーン
+  // 💭 
   thinking_basic: () => createUnifiedScene({
     characters: [{ preset: 'thoughtful' }],
-    bubbles: [{ preset: 'thought', text: 'うーん...' }],
+    bubbles: [{ preset: 'thought', text: '...' }],
     background: { preset: 'neutral' },
     tones: [{ preset: 'texture' }]
   }),
 };
 
 // ==========================================
-// 🔧 レガシー変換関数（既存コードとの互換性）
+// 🔧 Legacy conversion function (compatibility with existing code)
 // ==========================================
 
 /**
- * 旧形式の背景設定を新形式に変換
+ * Convert old format background settings to new format
  */
 export const convertLegacyBackground = (legacyBg: any): Omit<BackgroundElement, 'id' | 'panelId'> => {
   if (legacyBg.colors && Array.isArray(legacyBg.colors)) {
-    // 旧形式のシーンテンプレート背景を新形式に変換
+    // Convert Old Format Scene Template Background to New Format
     return createBackground({
       type: legacyBg.type,
       gradientType: legacyBg.type === 'gradient' ? 'linear' : undefined,
@@ -1122,12 +1122,12 @@ export const convertLegacyBackground = (legacyBg: any): Omit<BackgroundElement, 
     });
   }
   
-  // 既に新形式の場合はそのまま返す
+  // Return as is if it is already in the new format
   return legacyBg;
 };
 
 /**
- * 背景テンプレート用の要素生成
+ * Element generation for background templates
  */
 export const createBackgroundTemplateElements = (
   baseConfig: Parameters<typeof createBackground>[0],
@@ -1149,11 +1149,11 @@ export const createBackgroundTemplateElements = (
 };
 
 // ==========================================
-// 🛠️ ID・パネルID付与ヘルパー関数
+// 🛠️ IDID
 // ==========================================
 
 /**
- * 要素にIDとパネルIDを付与
+ * IDID
  */
 export const addElementIds = <T extends Record<string, any>>(
   elements: T[],
@@ -1168,14 +1168,14 @@ export const addElementIds = <T extends Record<string, any>>(
 };
 
 /**
- * 座標変換ヘルパー（相対座標→絶対座標）
+ * →
  */
 export const convertToAbsolutePosition = <T extends { x: number; y: number; isGlobalPosition?: boolean }>(
   element: T,
   panel: { x: number; y: number; width: number; height: number }
 ): T => {
   if (element.isGlobalPosition) {
-    // 既に絶対座標の場合は変換不要
+    // Absolute coordinates do not need to be converted
     return element;
   }
   
@@ -1188,47 +1188,47 @@ export const convertToAbsolutePosition = <T extends { x: number; y: number; isGl
 };
 
 // ==========================================
-// 📋 使用例・テストケース
+// 📋 
 // ==========================================
 
 /*
-// 🎭 キャラクター作成例
+// 🎭 
 const happyCharacter = characterPresets.happy({
-  name: "主人公",
+  name: "",
   x: 0.3,
   y: 0.5
 });
 
-// 💬 吹き出し作成例
-const normalBubble = bubblePresets.normal("こんにちは！", {
+// 💬 
+const normalBubble = bubblePresets.normal("", {
   x: 0.1,
   y: 0.2
 });
 
-// 🎨 背景作成例
+// 🎨 
 const happyBackground = backgroundPresets.happy();
 
-// ⚡ 効果線作成例
+// ⚡ 
 const speedEffect = effectPresets.speed_horizontal();
 
-// 🎯 トーン作成例
+// 🎯 
 const shadowTone = tonePresets.shadow();
 
-// 🎮 統合シーン作成例
+// 🎮 
 const completeScene = scenePresets.happy_basic();
 
-// 🔧 カスタムシーン作成例
+// 🔧 
 const customScene = createUnifiedScene({
   characters: [
     { 
       preset: 'happy',
-      overrides: { name: "カスタムキャラ", scale: 2.5 }
+      overrides: { name: "", scale: 2.5 }
     }
   ],
   bubbles: [
     { 
       preset: 'shout', 
-      text: "カスタムセリフ！",
+      text: "",
       overrides: { x: 0.2, y: 0.1 }
     }
   ],
@@ -1239,11 +1239,11 @@ const customScene = createUnifiedScene({
 */
 
 // ==========================================
-// 🎯 エクスポート
+// 🎯 
 // ==========================================
 
 export default {
-  // ファクトリー関数
+  // 
   createCharacter,
   createSpeechBubble,
   createBackground,
@@ -1251,7 +1251,7 @@ export default {
   createTone,
   createUnifiedScene,
   
-  // プリセット
+  // 
   characterPresets,
   bubblePresets,
   backgroundPresets,
@@ -1259,7 +1259,7 @@ export default {
   tonePresets,
   scenePresets,
   
-  // ヘルパー関数
+  // 
   convertLegacyBackground,
   createBackgroundTemplateElements,
   addElementIds,

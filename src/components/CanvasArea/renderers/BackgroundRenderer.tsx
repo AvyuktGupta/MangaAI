@@ -4,7 +4,7 @@ import { BackgroundElement, BackgroundRendererProps, BackgroundHandle } from '..
 
 export class BackgroundRenderer {
   /**
-   * 背景要素を描画
+   * 
    */
   static renderBackground(
     ctx: CanvasRenderingContext2D,
@@ -14,13 +14,13 @@ export class BackgroundRenderer {
   ): void {
     ctx.save();
     
-    // 絶対座標に変換
+    // 
     const x = panelBounds.x + (background.x * panelBounds.width);
     const y = panelBounds.y + (background.y * panelBounds.height);
     const width = background.width * panelBounds.width;
     const height = background.height * panelBounds.height;
     
-    // 回転処理
+    // 
     if (background.rotation !== 0) {
       const centerX = x + width / 2;
       const centerY = y + height / 2;
@@ -31,10 +31,10 @@ export class BackgroundRenderer {
       ctx.translate(x, y);
     }
     
-    // 透明度設定
+    // 
     ctx.globalAlpha = background.opacity;
     
-    // 背景タイプ別描画
+    // 
     switch (background.type) {
       case 'solid':
         this.drawSolid(ctx, background, width, height);
@@ -50,7 +50,7 @@ export class BackgroundRenderer {
         break;
     }
     
-    // 選択状態の表示
+    // 
     if (isSelected) {
       this.drawSelectionBorder(ctx, width, height);
     }
@@ -59,7 +59,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * 単色背景を描画
+   * 
    */
   private static drawSolid(
     ctx: CanvasRenderingContext2D,
@@ -72,7 +72,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * グラデーション背景を描画
+   * 
    */
   private static drawGradient(
     ctx: CanvasRenderingContext2D,
@@ -98,7 +98,7 @@ export class BackgroundRenderer {
       gradient = ctx.createLinearGradient(x1, y1, x2, y2);
     }
     
-    // グラデーション色設定
+    // 
     const colors = background.gradientColors || ['#FFFFFF', '#CCCCCC'];
     colors.forEach((color, index) => {
       gradient.addColorStop(index / (colors.length - 1), color);
@@ -109,7 +109,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * パターン背景を描画
+   * 
    */
   private static drawPattern(
     ctx: CanvasRenderingContext2D,
@@ -145,7 +145,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * 画像背景を描画（将来実装予定）
+   * Draw image background (to be implemented in the future)
    */
   private static drawImage(
     ctx: CanvasRenderingContext2D,
@@ -153,21 +153,21 @@ export class BackgroundRenderer {
     width: number,
     height: number
   ): void {
-    // TODO: 画像読み込みと描画
-    // 現在は仮の灰色で表示
+    // TODO: 
+    // 
     ctx.fillStyle = '#E0E0E0';
     ctx.fillRect(0, 0, width, height);
     
-    // 「画像」テキスト表示
+    // 
     ctx.fillStyle = '#666666';
     ctx.font = '14px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('画像', width / 2, height / 2);
+    ctx.fillText('', width / 2, height / 2);
   }
   
   /**
-   * パターン描画: ドット
+   * : 
    */
   private static drawDotsPattern(
     ctx: CanvasRenderingContext2D,
@@ -186,7 +186,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * パターン描画: 線
+   * : 
    */
   private static drawLinesPattern(
     ctx: CanvasRenderingContext2D,
@@ -213,7 +213,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * パターン描画: グリッド
+   * : 
    */
   private static drawGridPattern(
     ctx: CanvasRenderingContext2D,
@@ -226,7 +226,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * パターン描画: 斜線
+   * : 
    */
   private static drawDiagonalPattern(
     ctx: CanvasRenderingContext2D,
@@ -236,7 +236,7 @@ export class BackgroundRenderer {
   ): void {
     ctx.beginPath();
     
-    // 右上がり斜線
+    // 
     for (let i = -height; i < width; i += spacing) {
       ctx.moveTo(i, 0);
       ctx.lineTo(i + height, height);
@@ -246,7 +246,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * パターン描画: クロスハッチ
+   * : 
    */
   private static drawCrosshatchPattern(
     ctx: CanvasRenderingContext2D,
@@ -256,13 +256,13 @@ export class BackgroundRenderer {
   ): void {
     ctx.beginPath();
     
-    // 右上がり斜線
+    // 
     for (let i = -height; i < width; i += spacing) {
       ctx.moveTo(i, 0);
       ctx.lineTo(i + height, height);
     }
     
-    // 左上がり斜線
+    // 
     for (let i = 0; i < width + height; i += spacing) {
       ctx.moveTo(i, 0);
       ctx.lineTo(i - height, height);
@@ -272,7 +272,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * 選択境界線を描画
+   * 
    */
   private static drawSelectionBorder(
     ctx: CanvasRenderingContext2D,
@@ -287,7 +287,7 @@ export class BackgroundRenderer {
   }
   
   /**
-   * 背景操作用ハンドルを描画
+   * 
    */
   static drawBackgroundHandles(
     ctx: CanvasRenderingContext2D,
@@ -302,7 +302,7 @@ export class BackgroundRenderer {
     const handles: BackgroundHandle[] = [];
     const handleSize = 8;
     
-    // リサイズハンドル（8方向）
+    // 8
     const positions = [
       { dir: 'nw', x: x - handleSize/2, y: y - handleSize/2 },
       { dir: 'n', x: x + width/2 - handleSize/2, y: y - handleSize/2 },
@@ -329,7 +329,7 @@ export class BackgroundRenderer {
       });
     });
     
-    // 移動ハンドル（中央）
+    // 
     const centerX = x + width/2;
     const centerY = y + height/2;
     ctx.fillStyle = '#0066FF';

@@ -1,4 +1,4 @@
-// src/components/CanvasComponent/hooks/useElementActions.ts - キャラクター移動時データ保持修正版
+// src/components/CanvasComponent/hooks/useElementActions.ts - Data retention revision when moving characters
 import { useEffect } from 'react';
 import { Panel, Character, SpeechBubble } from '../../../types';
 import { CanvasState, CanvasStateActions } from './useCanvasState';
@@ -23,13 +23,13 @@ export interface ElementActionsReturn {
   addBubble: (type: string, text: string) => void;
   handleEditComplete: () => void;
   handleEditCancel: () => void;
-  // 🆕 キャラクター移動時データ保持機能を追加
+  // 🆕 Added data retention when moving characters
   updateCharacterPosition: (characterId: string, newX: number, newY: number, additionalUpdates?: Partial<Character>) => void;
 }
 
 /**
- * Canvas要素の追加・編集機能を管理するカスタムhook
- * キャラクター・吹き出しの追加、編集処理を一元化
+ * CanvasCustom to manage the ability to add and edit elementshook
+ * Centralize character and callout additions and editing
  */
 export const useElementActions = ({
   state,
@@ -46,7 +46,7 @@ export const useElementActions = ({
 }: ElementActionsHookProps): ElementActionsReturn => {
 
   /**
-   * 🆕 キャラクター位置更新時の詳細設定保持機能
+   * 🆕 Advanced setting retention function when updating character position
    */
   const updateCharacterPosition = (
     characterId: string, 
@@ -54,7 +54,7 @@ export const useElementActions = ({
     newY: number, 
     additionalUpdates?: Partial<Character>
   ) => {
-    console.log('🔧 キャラクター位置更新開始:', {
+    console.log('🔧 :', {
       characterId,
       newPosition: { x: newX, y: newY },
       additionalUpdates
@@ -62,8 +62,8 @@ export const useElementActions = ({
 
     const updatedCharacters = characters.map(char => {
       if (char.id === characterId) {
-        // 🔧 詳細設定をログで確認
-        console.log('🔍 移動前のキャラクター詳細設定:', {
+        // 🔧 
+        console.log('🔍 Character advanced settings before moving:', {
           id: char.id,
           name: char.name,
           expression: char.expression,
@@ -77,14 +77,14 @@ export const useElementActions = ({
         });
 
         const updatedChar = {
-          ...char,  // 🔧 既存の全プロパティを保持
+          ...char,  // 🔧 
           x: newX,
           y: newY,
-          ...additionalUpdates   // 必要に応じて追加の更新を適用
+          ...additionalUpdates   // Apply additional updates as needed
         };
 
-        // 🔧 移動後の詳細設定確認
-        console.log('✅ 移動後のキャラクター詳細設定保持確認:', {
+        // 🔧 
+        console.log('✅ Confirmation of character detail setting retention after moving:', {
           id: updatedChar.id,
           name: updatedChar.name,
           preserved_expression: updatedChar.expression,
@@ -100,12 +100,12 @@ export const useElementActions = ({
 
         return updatedChar;
       }
-      return char;  // 他のキャラクターは変更しない
+      return char;  // Don't change other characters
     });
 
     setCharacters(updatedCharacters);
 
-    // 🔧 選択状態も更新
+    // 🔧 
     if (state.selectedCharacter && state.selectedCharacter.id === characterId) {
       const updatedSelectedChar = updatedCharacters.find(c => c.id === characterId);
       if (updatedSelectedChar) {
@@ -116,7 +116,7 @@ export const useElementActions = ({
   };
 
   /**
-   * 🆕 新しい吹き出しの配置位置を計算（重複回避）
+   * 🆕 Calculate new callout placement (avoid duplicates)
    */
   const calculateBubblePosition = (
     targetPanel: Panel,
@@ -125,23 +125,23 @@ export const useElementActions = ({
     existingBubbles: SpeechBubble[]
   ): { x: number; y: number } => {
     
-    // パネル内の配置エリア定義（上から下、左から右の順）
+    // Placement area definition in panel (top to bottom, left to right)
     const placementAreas = [
-      { x: 0.2, y: 0.1 }, // 左上
-      { x: 0.7, y: 0.1 }, // 右上
-      { x: 0.5, y: 0.2 }, // 上中央
-      { x: 0.1, y: 0.4 }, // 左中央
-      { x: 0.8, y: 0.4 }, // 右中央
-      { x: 0.3, y: 0.6 }, // 左下
-      { x: 0.6, y: 0.6 }, // 右下
-      { x: 0.5, y: 0.8 }, // 下中央
+      { x: 0.2, y: 0.1 }, // 
+      { x: 0.7, y: 0.1 }, // 
+      { x: 0.5, y: 0.2 }, // 
+      { x: 0.1, y: 0.4 }, // 
+      { x: 0.8, y: 0.4 }, // 
+      { x: 0.3, y: 0.6 }, // 
+      { x: 0.6, y: 0.6 }, // 
+      { x: 0.5, y: 0.8 }, // 
     ];
 
-    // パネル内の既存吹き出し数を数える
+    // Count the number of existing bubbles in the panel
     const panelBubbles = existingBubbles.filter(b => b.panelId === targetPanel.id);
-    console.log(`💬 パネル${targetPanel.id}内の既存吹き出し数: ${panelBubbles.length}`);
+    console.log(`💬 ${targetPanel.id}: ${panelBubbles.length}`);
 
-    // 配置エリアを順番に試す
+    // 
     for (let i = 0; i < placementAreas.length; i++) {
       const areaIndex = (panelBubbles.length + i) % placementAreas.length;
       const area = placementAreas[areaIndex];
@@ -149,32 +149,32 @@ export const useElementActions = ({
       const candidateX = targetPanel.x + targetPanel.width * area.x - bubbleWidth / 2;
       const candidateY = targetPanel.y + targetPanel.height * area.y - bubbleHeight / 2;
       
-      // 既存の吹き出しと重複しないかチェック
+      // Check if it overlaps with an existing callout
       const hasOverlap = existingBubbles.some(bubble => {
         if (bubble.panelId !== targetPanel.id) return false;
         
         const distance = Math.sqrt(
           Math.pow(bubble.x - candidateX, 2) + Math.pow(bubble.y - candidateY, 2)
         );
-        return distance < 80; // 最小距離80px
+        return distance < 80; // 80px
       });
 
       if (!hasOverlap) {
-        console.log(`✅ 吹き出し配置: エリア${areaIndex + 1} (${candidateX.toFixed(1)}, ${candidateY.toFixed(1)})`);
+        console.log(`✅ : ${areaIndex + 1} (${candidateX.toFixed(1)}, ${candidateY.toFixed(1)})`);
         return { x: candidateX, y: candidateY };
       }
     }
 
-    // 全エリアが埋まっている場合はランダム配置
+    // Random placement if all areas are filled
     const randomX = targetPanel.x + Math.random() * (targetPanel.width - bubbleWidth);
     const randomY = targetPanel.y + Math.random() * (targetPanel.height - bubbleHeight);
-    console.log(`🎲 ランダム配置: (${randomX.toFixed(1)}, ${randomY.toFixed(1)})`);
+    console.log(`🎲 : (${randomX.toFixed(1)}, ${randomY.toFixed(1)})`);
     
     return { x: randomX, y: randomY };
   };
 
   /**
-   * キャラクター追加機能
+   * 
    */
   const addCharacter = (type: string) => {
     let availablePanels = panels;
@@ -184,19 +184,19 @@ export const useElementActions = ({
     
     const targetPanel = state.selectedPanel || availablePanels[0];
     if (!targetPanel) {
-      console.log("⚠️ 利用可能なパネルがありません");
+      console.log("⚠️ No panels available");
       return;
     }
 
     const characterNames: Record<string, string> = {
-      hero: "主人公",
-      heroine: "ヒロイン", 
-      rival: "ライバル",
-      friend: "友人",
-      character_1: "主人公", // 🔧 character_1タイプに対応
-      character_2: "ヒロイン", // 🔧 character_2タイプに対応
-      character_3: "ライバル", // 🔧 character_3タイプに対応
-      character_4: "友人", // 🔧 character_4タイプに対応
+      hero: "",
+      heroine: "", 
+      rival: "",
+      friend: "",
+      character_1: "", // 🔧 character_1
+      character_2: "", // 🔧 character_2
+      character_3: "", // 🔧 character_3
+      character_4: "", // 🔧 character_4
     };
 
     let viewType: "face" | "upper_body" | "full_body";
@@ -227,30 +227,30 @@ export const useElementActions = ({
       panelId: targetPanel.id,
       characterId: `char_${type}_${Date.now()}`,
       type: type,
-      name: characterNames[type] || "キャラクター",
+      name: characterNames[type] || "",
       x: targetPanel.x + targetPanel.width * 0.5,
       y: targetPanel.y + targetPanel.height * 0.7,
       scale: 2.0,
-      // width: initialWidth,    // 🔧 削除：基本サイズを使用
-      // height: initialHeight,  // 🔧 削除：基本サイズを使用
-      facing: "",           // 🔧 未選択に変更
-      action: "",           // 🔧 未選択に変更
-      expression: "",       // 🔧 未選択に変更
+      // width: initialWidth,    // 🔧 
+      // height: initialHeight,  // 🔧 
+      facing: "",           // 🔧 
+      action: "",           // 🔧 
+      expression: "",       // 🔧 
       viewType: viewType,
-      eyeState: "",         // 🔧 未選択に変更
-      mouthState: "",       // 🔧 未選択に変更
-      handGesture: "",      // 🔧 未選択に変更
+      eyeState: "",         // 🔧 
+      mouthState: "",       // 🔧 
+      handGesture: "",      // 🔧 
       isGlobalPosition: true,
     };
 
     setCharacters([...characters, newCharacter]);
     actions.setSelectedCharacter(newCharacter);
     if (onCharacterSelect) onCharacterSelect(newCharacter);
-    console.log("✅ キャラクター追加:", newCharacter.name, `(基本サイズ使用)`);
+    console.log("✅ :", newCharacter.name, `()`);
   };
 
   /**
-   * 🔧 吹き出し追加機能（重複回避版）
+   * 🔧 Callout Addition (Duplicate Avoidance)
    */
   const addBubble = (type: string, text: string) => {
     let availablePanels = panels;
@@ -260,7 +260,7 @@ export const useElementActions = ({
     
     const targetPanel = state.selectedPanel || availablePanels[0];
     if (!targetPanel) {
-      console.log("⚠️ 利用可能なパネルがありません");
+      console.log("⚠️ No panels available");
       return;
     }
 
@@ -268,16 +268,16 @@ export const useElementActions = ({
     const baseWidth = Math.max(60, textLength * 8 + 20);
     const baseHeight = Math.max(80, Math.ceil(textLength / 4) * 20 + 40);
 
-    // 🔧 重複しない位置を計算
+    // 🔧 
     const position = calculateBubblePosition(targetPanel, baseWidth, baseHeight, speechBubbles);
 
     const newBubble: SpeechBubble = {
       id: `bubble_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
       panelId: targetPanel.id,
       type: type,
-      text: text || "ダブルクリックで編集",
-      x: position.x,  // 🔧 計算された位置を使用
-      y: position.y,  // 🔧 計算された位置を使用
+      text: text || "",
+      x: position.x,  // 🔧 
+      y: position.y,  // 🔧 
       scale: 1.0,
       width: baseWidth,
       height: baseHeight,
@@ -285,31 +285,31 @@ export const useElementActions = ({
       isGlobalPosition: true,
     };
 
-    // 🔧 既存の吹き出しの座標を保持したまま新しい吹き出しを追加
+    // 🔧 Add a new callout while retaining the coordinates of the existing callout
     setSpeechBubbles([...speechBubbles, newBubble]);
     actions.setSelectedBubble(newBubble);
     
-    console.log("✅ 吹き出し追加:", type, `位置:(${position.x.toFixed(1)}, ${position.y.toFixed(1)})`);
+    console.log("✅ :", type, `:(${position.x.toFixed(1)}, ${position.y.toFixed(1)})`);
   };
 
   /**
-   * 吹き出し編集完了処理
+   * 
    */
   const handleEditComplete = () => {
     if (state.editingBubble && state.editText.trim()) {
       const textLength = state.editText.length;
       
-      // 相対座標か絶対座標かで処理を分ける
+      // Separate processing by relative coordinates or absolute coordinates
       let newWidth: number;
       let newHeight: number;
       
       if (state.editingBubble.isGlobalPosition === false) {
-        // 相対座標の場合（AI生成など）: 0-1の範囲で指定
-        // 元のサイズを保持（テキスト量に応じた自動調整はしない）
+        // AI: 0-1
+        // Keep the original size (does not auto-adjust according to the amount of text)
         newWidth = state.editingBubble.width;
         newHeight = state.editingBubble.height;
       } else {
-        // 絶対座標の場合（手動配置）: ピクセル単位で計算
+        // : 
         newWidth = Math.max(60, textLength * 8 + 20);
         newHeight = Math.max(80, Math.ceil(textLength / 4) * 20 + 40);
       }
@@ -321,14 +321,14 @@ export const useElementActions = ({
         height: newHeight,
       };
       
-      // 🔧 既存の吹き出しの位置を保持したまま更新
+      // 🔧 Keep and update existing callout positions
       setSpeechBubbles(
         speechBubbles.map((bubble) =>
           bubble.id === state.editingBubble!.id ? updatedBubble : bubble
         )
       );
       
-      console.log("✅ 吹き出し編集完了:", state.editText);
+      console.log("✅ :", state.editText);
     }
     
     actions.setEditingBubble(null);
@@ -336,12 +336,12 @@ export const useElementActions = ({
   };
 
   /**
-   * 吹き出し編集キャンセル処理
+   * 
    */
   const handleEditCancel = () => {
     actions.setEditingBubble(null);
     actions.setEditText("");
-    console.log("❌ 吹き出し編集キャンセル");
+    console.log("❌ ");
   };
 
   useEffect(() => {
@@ -357,6 +357,6 @@ export const useElementActions = ({
     addBubble,
     handleEditComplete,
     handleEditCancel,
-    updateCharacterPosition  // 🆕 新機能を公開
+    updateCharacterPosition  // 🆕 
   };
 };

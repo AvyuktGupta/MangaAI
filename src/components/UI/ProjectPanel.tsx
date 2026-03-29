@@ -1,7 +1,7 @@
-// src/components/UI/ProjectPanel.tsx - 引数順序修正版
+// src/components/UI/ProjectPanel.tsx - 
 import React, { useState, useRef } from 'react';
 import SaveService, { ProjectMetadata } from '../../services/SaveService';
-import { BackgroundElement, EffectElement, ToneElement } from '../../types'; // 🆕 ToneElement型も追加
+import { BackgroundElement, EffectElement, ToneElement } from '../../types'; // 🆕 ToneElement
 
 interface ProjectPanelProps {
   isOpen: boolean;
@@ -40,83 +40,83 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
 
   if (!isOpen) return null;
 
-  // プロジェクト一覧を更新
+  // 
   const refreshProjects = () => {
     setProjects(SaveService.getProjectList());
   };
 
-  // 新規プロジェクト
+  // 
   const handleNewProject = () => {
     onNewProject();
     onClose();
   };
 
-  // プロジェクト読み込み
+  // 
   const handleLoadProject = (projectId: string) => {
     onLoadProject(projectId);
     onClose();
   };
 
-  // プロジェクト保存（新規）
+  // 
   const handleSaveAsNew = async () => {
-    const name = prompt('プロジェクト名を入力してください:', '新規プロジェクト');
+    const name = prompt('Enter a project name:', '');
     if (name && name.trim()) {
       try {
-        console.log('🎯 名前付き保存開始:', name.trim());
+        console.log('🎯 :', name.trim());
         
-        // プロジェクト保存実行
+        // 
         const projectId = await onSaveProject(name.trim());
         
-        console.log('📊 保存結果:', projectId);
+        console.log('📊 :', projectId);
         
         if (projectId) {
-          // 少し待ってからリストを更新
+          // 
           setTimeout(() => {
-            console.log('🔄 プロジェクトリスト更新開始');
+            console.log('🔄 ');
             const newList = SaveService.getProjectList();
-            console.log('📋 取得したプロジェクト一覧:', newList);
+            console.log('📋 :', newList);
             setProjects(newList);
           }, 100);
           
-          alert(`プロジェクト「${name.trim()}」を保存しました`);
+          alert(`${name.trim()}`);
         } else {
-          console.error('❌ プロジェクト保存失敗: projectIdがnull');
-          alert('プロジェクトの保存に失敗しました');
+          console.error('❌ : projectIdnull');
+          alert('Failed to save project');
         }
       } catch (error) {
-        console.error('❌ プロジェクト保存エラー:', error);
-        alert('プロジェクトの保存中にエラーが発生しました');
+        console.error('❌ :', error);
+        alert('An error occurred while saving the project');
       }
     }
   };
 
-  // 🔧 プロジェクト名変更（トーン対応修正版）
+  // 🔧 Rename Project (Tone Corrected)
   const handleRename = async (projectId: string) => {
     if (newName.trim()) {
       const project = SaveService.loadProject(projectId);
       if (project) {
-        // 🔧 後方互換性：古いプロジェクトデータに対応
+        // 🔧 Backwards Compatibility: Supports old project data
         const backgrounds: BackgroundElement[] = (project.data as any).backgrounds || [];
         const effects: EffectElement[] = (project.data as any).effects || [];
-        const tones: ToneElement[] = (project.data as any).tones || []; // 🆕 トーンデータ追加
+        const tones: ToneElement[] = (project.data as any).tones || []; // 🆕 
         
-        // 🔧 正しい引数順序で呼び出し（characterNames, characterSettings含む）
+        // 🔧 characterNames, characterSettings
         SaveService.saveProject(
-          newName.trim(),           // プロジェクト名
-          project.data.panels,      // パネルデータ
-          project.data.characters,  // キャラクターデータ
-          project.data.bubbles,     // 吹き出しデータ
-          backgrounds,              // 背景データ
-          effects,                  // 効果線データ
-          tones,                    // 🆕 トーンデータ（正しい位置）
-          project.data.canvasSize,  // キャンバスサイズ
-          project.data.settings,    // 設定
-          projectId,                // プロジェクトID
-          project.data.characterNames,    // キャラクター名
-          project.data.characterSettings, // キャラクター設定
-          project.data.pages,       // ページデータ
-          project.data.currentPageIndex, // 現在ページインデックス
-          project.data.canvasSettings    // キャンバス設定
+          newName.trim(),           // 
+          project.data.panels,      // 
+          project.data.characters,  // 
+          project.data.bubbles,     // 
+          backgrounds,              // 
+          effects,                  // 
+          tones,                    // 🆕 
+          project.data.canvasSize,  // 
+          project.data.settings,    // 
+          projectId,                // ID
+          project.data.characterNames,    // 
+          project.data.characterSettings, // 
+          project.data.pages,       // 
+          project.data.currentPageIndex, // 
+          project.data.canvasSettings    // 
         );
         refreshProjects();
       }
@@ -125,7 +125,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
     setNewName('');
   };
 
-  // プロジェクト削除
+  // 
   const handleDelete = (projectId: string) => {
     if (SaveService.deleteProject(projectId)) {
       refreshProjects();
@@ -136,7 +136,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
     setShowConfirmDelete(null);
   };
 
-  // プロジェクト複製
+  // 
   const handleDuplicate = (projectId: string) => {
     const newId = SaveService.duplicateProject(projectId);
     if (newId) {
@@ -144,16 +144,16 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
     }
   };
 
-  // エクスポート
+  // 
   const handleExport = (projectId: string) => {
     try {
       SaveService.exportProject(projectId);
     } catch (error) {
-      alert('エクスポートに失敗しました');
+      alert('');
     }
   };
 
-  // インポート
+  // 
   const handleImport = () => {
     fileInputRef.current?.click();
   };
@@ -164,15 +164,15 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
       const projectId = await SaveService.importProject(file);
       if (projectId) {
         refreshProjects();
-        alert('プロジェクトをインポートしました');
+        alert('Project imported');
       } else {
-        alert('インポートに失敗しました');
+        alert('');
       }
     }
     event.target.value = '';
   };
 
-  // 日時フォーマット
+  // 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString('ja-JP', {
@@ -183,10 +183,10 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
     });
   };
 
-  // ストレージ情報
+  // 
   const storageInfo = SaveService.getStorageInfo();
 
-  // ボタンスタイル定義
+  // 
   const buttonStyles = {
     base: {
       display: 'flex' as const,
@@ -236,7 +236,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
           flexDirection: 'column'
         }}
       >
-        {/* ヘッダー */}
+        {/*  */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -263,7 +263,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
               color: isDarkMode ? '#f9fafb' : '#111827',
               margin: 0
             }}>
-              プロジェクト管理
+              
             </h2>
           </div>
           <button
@@ -286,7 +286,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
           </button>
         </div>
 
-        {/* 保存状態表示 */}
+        {/*  */}
         <div style={{
           padding: '16px 24px',
           backgroundColor: isDarkMode ? '#111827' : '#f9fafb',
@@ -305,8 +305,8 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
               fontWeight: '500',
               color: isDarkMode ? '#d1d5db' : '#374151'
             }}>
-              {saveStatus.isAutoSaving ? '自動保存中...' :
-               saveStatus.hasUnsavedChanges ? '未保存の変更あり' : '保存済み'}
+              {saveStatus.isAutoSaving ? '...' :
+               saveStatus.hasUnsavedChanges ? '' : ''}
             </span>
           </div>
           
@@ -319,12 +319,12 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
               backgroundColor: '#fef2f2',
               borderRadius: '6px'
             }}>
-              エラー: {saveStatus.error}
+              : {saveStatus.error}
             </div>
           )}
         </div>
 
-        {/* アクションボタン */}
+        {/*  */}
         <div style={{
           padding: '16px 24px',
           borderBottom: `1px solid ${isDarkMode ? '#333' : '#e5e7eb'}`
@@ -346,7 +346,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
               }}
             >
               <span>📄</span>
-              新規プロジェクト
+              
             </button>
             <button
               onClick={handleSaveAsNew}
@@ -364,7 +364,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
               }}
             >
               <span>💾</span>
-              名前を付けて保存
+              
             </button>
             <button
               onClick={handleImport}
@@ -382,12 +382,12 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
               }}
             >
               <span>📥</span>
-              インポート
+              
             </button>
           </div>
         </div>
 
-        {/* プロジェクト一覧 */}
+        {/*  */}
         <div style={{
           flex: 1,
           overflowY: 'auto',
@@ -398,8 +398,8 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
             <div style={{ textAlign: 'center', padding: '48px 0' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>📂</div>
               <div style={{ color: '#6b7280', fontSize: '16px' }}>
-                プロジェクトがありません<br/>
-                <span style={{ fontSize: '14px' }}>新規プロジェクトを作成してください</span>
+                <br/>
+                <span style={{ fontSize: '14px' }}>Create a new project</span>
               </div>
             </div>
           ) : (
@@ -464,7 +464,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                               borderRadius: '9999px',
                               display: 'inline-block'
                             }}>
-                              現在のプロジェクト
+                              
                             </div>
                           )}
                           <div style={{ 
@@ -472,8 +472,8 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                             color: isDarkMode ? '#9ca3af' : '#6b7280',
                             marginTop: '8px' 
                           }}>
-                            作成: {formatDate(project.createdAt)}<br/>
-                            更新: {formatDate(project.updatedAt)}
+                            : {formatDate(project.createdAt)}<br/>
+                            : {formatDate(project.updatedAt)}
                           </div>
                         </div>
                       )}
@@ -493,9 +493,9 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                           setNewName(project.name);
                         }}
                         style={{...buttonStyles.base, ...buttonStyles.blue}}
-                        title="名前変更"
+                        title=""
                       >
-                        ✏️ 名前変更
+                        ✏️ 
                       </button>
                       <button
                         onClick={(e) => {
@@ -503,9 +503,9 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                           handleDuplicate(project.id);
                         }}
                         style={{...buttonStyles.base, ...buttonStyles.green}}
-                        title="複製"
+                        title=""
                       >
-                        📋 複製
+                        📋 
                       </button>
                       <button
                         onClick={(e) => {
@@ -513,9 +513,9 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                           handleExport(project.id);
                         }}
                         style={{...buttonStyles.base, ...buttonStyles.purple}}
-                        title="エクスポート"
+                        title=""
                       >
-                        📥 出力
+                        📥 
                       </button>
                       <button
                         onClick={(e) => {
@@ -523,9 +523,9 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                           setShowConfirmDelete(project.id);
                         }}
                         style={{...buttonStyles.base, ...buttonStyles.red}}
-                        title="削除"
+                        title=""
                       >
-                        🗑️ 削除
+                        🗑️ 
                       </button>
                     </div>
                   </div>
@@ -535,7 +535,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
           )}
         </div>
 
-        {/* フッター：ストレージ情報 */}
+        {/*  */}
         <div style={{
           padding: '16px 24px',
           borderTop: '1px solid #e5e7eb',
@@ -548,7 +548,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
             fontSize: '14px'
           }}>
             <span style={{ color: isDarkMode ? '#9ca3af' : '#4b5563' }}>
-              ストレージ使用量: {Math.round(storageInfo.percentage)}%
+              : {Math.round(storageInfo.percentage)}%
             </span>
             <span style={{ color: isDarkMode ? '#9ca3af' : '#6b7280' }}>
               {(storageInfo.used / 1024).toFixed(1)}KB / {(storageInfo.available / 1024).toFixed(0)}KB
@@ -574,7 +574,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
           </div>
         </div>
 
-        {/* 隠しファイル入力 */}
+        {/*  */}
         <input
           ref={fileInputRef}
           type="file"
@@ -583,7 +583,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
           style={{ display: 'none' }}
         />
 
-        {/* 削除確認ダイアログ */}
+        {/*  */}
         {showConfirmDelete && (
           <div style={{
             position: 'fixed',
@@ -614,15 +614,15 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                   color: '#111827',
                   margin: '0 0 16px 0'
                 }}>
-                  プロジェクトを削除
+                  
                 </h3>
                 <p style={{
                   color: '#4b5563',
                   marginBottom: '24px',
                   lineHeight: '1.5'
                 }}>
-                  このプロジェクトを削除しますか？<br/>
-                  この操作は取り消せません。
+                  Are you sure you want to delete this project?<br/>
+                  This action cannot be undone
                 </p>
                 <div style={{ display: 'flex', gap: '12px' }}>
                   <button
@@ -637,7 +637,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                       cursor: 'pointer'
                     }}
                   >
-                    キャンセル
+                    
                   </button>
                   <button
                     onClick={() => handleDelete(showConfirmDelete)}
@@ -651,7 +651,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({
                       cursor: 'pointer'
                     }}
                   >
-                    削除
+                    
                   </button>
                 </div>
               </div>

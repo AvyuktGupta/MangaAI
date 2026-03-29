@@ -1,4 +1,4 @@
-// src/components/CanvasArea/EditBubbleModal.tsx - 実際のセリフ編集版
+// src/components/CanvasArea/EditBubbleModal.tsx - 
 import React from "react";
 import { SpeechBubble } from "../../types";
 
@@ -40,18 +40,18 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // 編集モーダル内でのキーイベントをグローバルに伝播させない
+    // Do not propagate key events globally within the edit modal
     e.stopPropagation();
     
     if (e.key === "Enter" && e.ctrlKey) {
-      // Ctrl+Enterで完了
+      // Ctrl+Enter
       e.preventDefault();
       onComplete();
     } else if (e.key === "Escape") {
       e.preventDefault();
       onCancel();
     }
-    // バックスペースキーは通常のテキスト編集として処理（何もしない）
+    // Backspace keys are processed as normal text editing (do nothing)
   };
 
   return (
@@ -73,10 +73,10 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
       onKeyDown={(e) => e.stopPropagation()}
     >
       <div style={{ marginBottom: "15px", fontWeight: "bold", fontSize: "16px" }}>
-        💬 セリフ編集
+        💬 
       </div>
 
-      {/* 縦書き/横書き切り替え */}
+      {/* / */}
       <div style={{ 
         marginBottom: "12px",
         display: "flex",
@@ -99,17 +99,17 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
             gap: "4px"
           }}
         >
-          {editingBubble.vertical ? "📖 縦書き" : "📄 横書き"}
+          {editingBubble.vertical ? "📖 " : "📄 "}
         </button>
         <span style={{ fontSize: "11px", color: "#666" }}>
-          {editingBubble.vertical ? "右→左で表示" : "左→右で表示"}
+          {editingBubble.vertical ? "→" : "→"}
         </span>
       </div>
 
-      {/* フォントサイズ調整 */}
+      {/*  */}
       <div style={{ marginBottom: "12px" }}>
         <label style={{ fontSize: "12px", fontWeight: "bold", display: "block", marginBottom: "6px" }}>
-          📏 文字サイズ: {editingBubble.fontSize || 32}px
+          📏 : {editingBubble.fontSize || 32}px
         </label>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
           <input
@@ -142,22 +142,22 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
         </div>
       </div>
 
-      {/* 文字数カウント */}
+      {/*  */}
       <div style={{ marginBottom: "8px", fontSize: "11px", color: "#666", textAlign: "right" }}>
-        📝 文字数: {editText.length}文字
+        📝 : {editText.length}
         {editText.length > 50 && (
           <span style={{ color: "#ff6b6b", marginLeft: "8px" }}>
-            ⚠️ 長すぎる可能性
+            ⚠️ 
           </span>
         )}
       </div>
 
-      {/* セリフ編集エリア */}
+      {/*  */}
       <textarea
         value={editText}
         onChange={(e) => setEditText(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="セリフを入力してください..."
+        placeholder="..."
         autoFocus
         style={{
           width: "100%",
@@ -175,7 +175,7 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
         }}
       />
 
-      {/* ボタンエリア */}
+      {/*  */}
       <div style={{ marginTop: "15px", textAlign: "right" }}>
         <button
           onClick={onCancel}
@@ -189,7 +189,7 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
             fontSize: "14px",
           }}
         >
-          キャンセル
+          
         </button>
         <button
           onClick={onComplete}
@@ -203,11 +203,11 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
             fontSize: "14px",
           }}
         >
-          完了
+          
         </button>
       </div>
 
-      {/* 操作説明 */}
+      {/*  */}
       <div style={{ 
         marginTop: "10px", 
         fontSize: "12px", 
@@ -216,7 +216,7 @@ const EditBubbleModal: React.FC<EditBubbleModalProps> = ({
         borderTop: "1px solid #eee",
         paddingTop: "8px"
       }}>
-        💡 Ctrl+Enter: 完了 / Escape: キャンセル
+        💡 Ctrl+Enter:  / Escape: 
       </div>
     </div>
   );

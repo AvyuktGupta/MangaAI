@@ -1,4 +1,4 @@
-// src/types.ts - 効果線完全対応版（CanvasComponentProps修正） + トーン型追加
+// src/types.ts - CanvasComponentProps + 
 
 export interface Panel {
   id: number;
@@ -6,22 +6,22 @@ export interface Panel {
   y: number;
   width: number;
   height: number;
-  prompt?: string;  // AI Prompt Maker Pro連携用（廃止予定）
-  note?: string;    // コマの日本語メモ（構図・動き・シーン説明）
-  importance?: 'normal' | 'important' | 'climax';  // コマの重要度マーカー
-  // 🆕 分離プロンプトシステム
-  characterPrompt?: string;  // キャラベースプロンプト（AI Prompt Maker Pro）
-  actionPrompt?: string;     // 動作・シチュエーションプロンプト（OpenAI自動生成）
-  actionPromptJa?: string;   // 動作プロンプトの日本語説明
-  selectedCharacterId?: string; // 使用キャラクターID（character_1, character_2等）
+  prompt?: string;  // AI Prompt Maker Pro
+  note?: string;    // Japanese notes on the frame (composition, movement, scene description)
+  importance?: 'normal' | 'important' | 'climax';  // 
+  // 🆕 
+  characterPrompt?: string;  // AI Prompt Maker Pro
+  actionPrompt?: string;     // Operation/Situation Prompt (Ollama / Llama 
+  actionPromptJa?: string;   // 
+  selectedCharacterId?: string; // IDcharacter_1, character_2
 }
 
 export interface Character {
   id: string;
   panelId: number;
-  characterId: string;    // 新：設定への参照
+  characterId: string;    // 
   
-  // 配置（既存維持）
+  // 
   x: number;
   y: number;
   width?: number;
@@ -30,24 +30,24 @@ export interface Character {
   rotation?: number;
   isGlobalPosition: boolean;
   
-  // シンプル化された状態
-  name: string;           // そのまま残す
-  type: string;          // そのまま残す  
-  expression: string;     // 辞書対応
-  action: string;        // 辞書対応（旧pose）
-  facing: string;        // 辞書対応（旧gaze/bodyDirection統合）
+  // 
+  name: string;           // 
+  type: string;          //   
+  expression: string;     // 
+  action: string;        // pose
+  facing: string;        // gaze/bodyDirection
   viewType: "face" | "upper_body" | "full_body" | "close_up_face" | "chest_up" | "three_quarters";
   eyeState?: string;
   mouthState?: string; 
   handGesture?: string;
-  // 🆕 新規追加8項目
-  poses?: string;         // 漫画向けポーズ
-  gaze?: string;         // 視線方向
-  emotionPrimary?: string; // 基本感情
-  physicalState?: string; // 体調・状態
+  // 🆕 8
+  poses?: string;         // 
+  gaze?: string;         // 
+  emotionPrimary?: string; // 
+  physicalState?: string; // 
 }
 
-// 新しく追加する設定型
+// 
 export interface CharacterSettings {
   id: string;
   name: string;
@@ -56,21 +56,21 @@ export interface CharacterSettings {
   basePrompt: string;
 }
 
-// 辞書エントリ
+// 
 export interface DictionaryEntry {
   key: string;
   japanese: string;
   english: string;
 }
 
-// 辞書データ
+// 
 export interface Dictionary {
   expressions: DictionaryEntry[];
   actions: DictionaryEntry[];
   facings: DictionaryEntry[];
 }
 
-// 🆕 新しい型定義を追加
+// 🆕 
 export interface CharacterBounds {
   x: number;
   y: number;
@@ -96,20 +96,20 @@ export interface CharacterInteractionState {
   originalRotation?: number;
 }
 
-// EditBubbleModalProps型定義（セリフ入力関連削除）
+// EditBubbleModalPropsType definition (serial input related deletion)
 export interface EditBubbleModalProps {
   editingBubble: SpeechBubble | null;
   onComplete: () => void;
   onCancel: () => void;
-  // 🔧 削除: editText, setEditText関連の型定義
+  // 🔧 : editText, setEditText
 }
 
-// SpeechBubble型は既存のまま維持
+// SpeechBubble
 export interface SpeechBubble {
   id: string;
   panelId: number;
   type: string;
-  text: string;  // セリフテキストは維持（表示用）
+  text: string;  // Keep dialogue text (for display)
   x: number;
   y: number;
   scale: number;
@@ -117,48 +117,48 @@ export interface SpeechBubble {
   height: number;
   vertical: boolean;
   isGlobalPosition: boolean;
-  fontSize?: number;  // フォントサイズ（未指定時はデフォルト32）
+  fontSize?: number;  // Font size (default if not specified)32
 }
 
-// 🆕 テキスト描画設定の型定義（新規追加）
+// 🆕 Type Definition for Text Drawing Settings (Add New)
 export interface BubbleTextSettings {
-  fontSize?: number;           // 基本フォントサイズ
-  fontFamily?: string;         // フォントファミリー
-  lineHeight?: number;         // 行の高さ倍率
-  padding?: number;           // 内側余白
-  alignment?: 'center' | 'left' | 'right' | 'justify'; // テキスト整列
-  verticalAlignment?: 'top' | 'middle' | 'bottom';     // 縦方向整列
-  autoResize?: boolean;        // フォントサイズ自動調整
-  minFontSize?: number;        // 最小フォントサイズ
-  maxFontSize?: number;        // 最大フォントサイズ
-  wordWrap?: 'character' | 'word' | 'smart';           // 折り返し方式
+  fontSize?: number;           // 
+  fontFamily?: string;         // 
+  lineHeight?: number;         // 
+  padding?: number;           // 
+  alignment?: 'center' | 'left' | 'right' | 'justify'; // 
+  verticalAlignment?: 'top' | 'middle' | 'bottom';     // 
+  autoResize?: boolean;        // 
+  minFontSize?: number;        // 
+  maxFontSize?: number;        // 
+  wordWrap?: 'character' | 'word' | 'smart';           // 
 }
 
-// 🆕 テキストセグメンテーション設定
+// 🆕 Text Segmentation Settings
 export interface TextSegmentationOptions {
-  enableJapaneseSegmentation?: boolean; // 日本語セグメント化有効
-  respectPunctuation?: boolean;         // 句読点での改行を尊重
-  preserveSpaces?: boolean;            // スペースの保持
-  breakOnLanguageChange?: boolean;     // 言語変更時の改行
+  enableJapaneseSegmentation?: boolean; // 
+  respectPunctuation?: boolean;         // 
+  preserveSpaces?: boolean;            // 
+  breakOnLanguageChange?: boolean;     // 
 }
 
-// 🆕 描画レイアウト情報
+// 🆕 
 export interface TextLayoutInfo {
-  lines: string[];             // 分割された行
-  actualFontSize: number;      // 実際のフォントサイズ
-  totalHeight: number;         // テキスト全体の高さ
-  lineHeight: number;          // 行の高さ
-  overflow: boolean;           // オーバーフロー発生
+  lines: string[];             // 
+  actualFontSize: number;      // 
+  totalHeight: number;         // 
+  lineHeight: number;          // 
+  overflow: boolean;           // 
 }
 
-// マウスイベント関連（EditBubbleModal用）
+// EditBubbleModal
 export interface BubbleEditState {
   isEditing: boolean;
   editingBubbleId: string | null;
   modalPosition?: { x: number; y: number };
 }
 
-// src/types.ts - CanvasComponentProps修正版
+// src/types.ts - CanvasComponentProps
 export interface CanvasComponentProps {
   selectedTemplate: string;
   panels: Panel[];
@@ -168,11 +168,11 @@ export interface CanvasComponentProps {
   speechBubbles: SpeechBubble[];
   setSpeechBubbles: (speechBubbles: SpeechBubble[]) => void;
   
-  // 背景関連プロパティ
+  // 
   backgrounds: BackgroundElement[];
   setBackgrounds: (backgrounds: BackgroundElement[]) => void;
   
-  // 効果線関連プロパティ
+  // 
   effects: EffectElement[];
   setEffects: (effects: EffectElement[]) => void;
   selectedEffect?: EffectElement | null;
@@ -181,7 +181,7 @@ export interface CanvasComponentProps {
   showEffectPanel?: boolean;
   onEffectPanelToggle?: () => void;
   
-  // 🔧 トーン関連プロパティ（?を削除して必須にする）
+  // 🔧 ?
   tones: ToneElement[];
   setTones: (tones: ToneElement[]) => void;
   selectedTone: ToneElement | null;
@@ -189,7 +189,7 @@ export interface CanvasComponentProps {
   showTonePanel: boolean;
   onTonePanelToggle: () => void;
   
-  // 既存プロパティ
+  // 
   onCharacterAdd: (func: (type: string) => void) => void;
   onBubbleAdd: (func: (type: string, text: string) => void) => void;
   onPanelSelect?: (panel: Panel | null) => void;
@@ -202,51 +202,51 @@ export interface CanvasComponentProps {
   onPanelDelete?: (panelId: string) => void;
   snapSettings?: SnapSettings;
   
-  // 🆕 入れ替え選択状態
+  // 🆕 
   swapPanel1?: number | null;
   swapPanel2?: number | null;
   
-  // 🆕 ドラッグイベント
+  // 🆕 
   onDragStart?: () => void;
   onDragEnd?: () => void;
 }
 
-// テンプレート定義の型
+// 
 export interface Template {
   panels: Panel[];
 }
 
 export type Templates = Record<string, Template>;
 
-// シーン情報の型
+// 
 export interface SceneInfo {
   id: string;
   icon: string;
   name: string;
 }
 
-// キャラクター情報の型
+// 
 export interface CharacterInfo {
   id: string;
   icon: string;
   name: string;
 }
 
-// 吹き出し情報の型
+// 
 export interface BubbleInfo {
   id: string;
   icon: string;
   name: string;
 }
 
-// テンプレート情報の型
+// 
 export interface TemplateInfo {
   id: string;
   title: string;
   desc: string;
 }
 
-// パネル操作関連の型
+// 
 export interface PanelHandle {
   type: "resize" | "move" | "split" | "delete";
   direction?: "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
@@ -260,7 +260,7 @@ export interface PanelOperation {
   data: any;
 }
 
-// 履歴管理の型
+// 
 export interface OperationHistory {
   characters: Character[][];
   speechBubbles: SpeechBubble[][];
@@ -268,7 +268,7 @@ export interface OperationHistory {
   currentIndex: number;
 }
 
-// スナップ設定の型定義
+// 
 export interface SnapSettings {
   enabled: boolean;
   gridSize: number;
@@ -277,16 +277,16 @@ export interface SnapSettings {
 }
 
 // ==========================================
-// 背景機能用型定義
+// 
 // ==========================================
 
-// src/types.ts - BackgroundElement修正版（nameをオプショナルに）
+// src/types.ts - BackgroundElementname
 
 export interface BackgroundElement {
   id: string;
-  panelId: number;  // 既存のPanel.idに対応（number型を維持）
+  panelId: number;  // Panel.idnumber
   type: 'solid' | 'gradient' | 'pattern' | 'image';
-  name?: string;    // 🔧 オプショナルに変更（既存システムと互換性保持）
+  name?: string;    // 🔧 Change to optional (maintain compatibility with existing systems)
   x: number;
   y: number;
   width: number;
@@ -295,34 +295,34 @@ export interface BackgroundElement {
   zIndex: number;
   opacity: number;
   
-  // 単色背景用
+  // 
   solidColor?: string;
   
-  // グラデーション背景用
+  // 
   gradientType?: 'linear' | 'radial';
   gradientColors?: string[];
-  gradientDirection?: number; // 角度（度数）
+  gradientDirection?: number; // 
   
-  // パターン背景用
+  // 
   patternType?: 'dots' | 'lines' | 'grid' | 'diagonal' | 'crosshatch';
   patternColor?: string;
   patternSize?: number;
   patternSpacing?: number;
   
-  // 画像背景用
+  // 
   imageUrl?: string;
   imageMode?: 'fit' | 'fill' | 'stretch' | 'tile';
   imageBrightness?: number;
   imageContrast?: number;
   
-  // 背景プリセット名（統合テンプレート用）
+  // Background preset name (for integrated templates)
   preset?: string;
   
-  // 背景テンプレート名（ユーザーフレンドリーな表示用）
+  // Background template name (for user-friendly display)
   templateName?: string;
 }
 
-// 背景テンプレート定義
+// 
 export interface BackgroundTemplate {
   id: string;
   name: string;
@@ -331,7 +331,7 @@ export interface BackgroundTemplate {
   elements: Omit<BackgroundElement, 'id' | 'panelId'>[];
 }
 
-// 背景管理用の型
+// 
 export interface BackgroundManager {
   backgrounds: BackgroundElement[];
   selectedBackground: BackgroundElement | null;
@@ -340,7 +340,7 @@ export interface BackgroundManager {
   resizeDirection: string;
 }
 
-// 背景コンポーネントのプロパティ
+// Background Component Properties
 export interface BackgroundPanelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -350,7 +350,7 @@ export interface BackgroundPanelProps {
   onBackgroundAdd: (template: BackgroundTemplate) => void;
 }
 
-// 背景レンダラーのプロパティ
+// 
 export interface BackgroundRendererProps {
   backgrounds: BackgroundElement[];
   panelId: number;
@@ -365,7 +365,7 @@ export interface BackgroundRendererProps {
   selectedBackground?: BackgroundElement | null;
 }
 
-// 背景操作のハンドル
+// 
 export interface BackgroundHandle {
   type: "move" | "resize" | "rotate";
   direction?: "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
@@ -375,40 +375,40 @@ export interface BackgroundHandle {
 }
 
 // ==========================================
-// 効果線機能用型定義（新規追加）
+// Effect line function type definition (add new)
 // ==========================================
 
-// 効果線の種類
+// 
 export type EffectType = 'speed' | 'focus' | 'explosion' | 'flash';
 
-// 効果線の方向
+// 
 export type EffectDirection = 'horizontal' | 'vertical' | 'radial' | 'custom';
 
-// 効果線要素の定義
+// 
 export interface EffectElement {
   id: string;
-  panelId: number;  // 既存のPanel.idに対応
+  panelId: number;  // Panel.id
   type: EffectType;
   x: number;
   y: number;
   width: number;
   height: number;
   direction: EffectDirection;
-  intensity: number;        // 効果の強度 (0.1-1.0)
-  density: number;          // 線の密度 (0.1-1.0)
-  length: number;           // 線の長さ (0.1-1.0)
-  angle: number;            // カスタム方向の角度 (0-360度)
-  color: string;            // 効果線の色
-  opacity: number;          // 透明度 (0-1)
-  blur: number;             // ぼかし効果 (0-10)
-  centerX?: number;         // 放射状効果の中心X (radial用)
-  centerY?: number;         // 放射状効果の中心Y (radial用)
-  selected: boolean;        // 選択状態
-  zIndex: number;           // 重ね順
-  isGlobalPosition: boolean; // グローバル座標かどうか
+  intensity: number;        //  (0.1-1.0)
+  density: number;          //  (0.1-1.0)
+  length: number;           //  (0.1-1.0)
+  angle: number;            //  (0-360)
+  color: string;            // 
+  opacity: number;          //  (0-1)
+  blur: number;             //  (0-10)
+  centerX?: number;         // X (radial)
+  centerY?: number;         // Y (radial)
+  selected: boolean;        // 
+  zIndex: number;           // 
+  isGlobalPosition: boolean; // 
 }
 
-// 効果線テンプレートの定義
+// 
 export interface EffectTemplate {
   id: string;
   name: string;
@@ -425,7 +425,7 @@ export interface EffectTemplate {
   category: 'action' | 'emotion' | 'environment' | 'special';
 }
 
-// 効果線パネルのプロパティ
+// 
 export interface EffectPanelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -435,13 +435,13 @@ export interface EffectPanelProps {
   isDarkMode: boolean;
 }
 
-// 効果線レンダラーのプロパティ
+// Effect Line Renderer Properties
 export interface EffectRendererProps {
   effects: EffectElement[];
   canvasScale: number;
 }
 
-// 効果線操作のハンドル
+// 
 export interface EffectHandle {
   type: "move" | "resize" | "rotate";
   direction?: "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
@@ -451,74 +451,74 @@ export interface EffectHandle {
 }
 
 // ==========================================
-// トーンシステム用型定義（新規追加）
+// Tone System Type Definition (Add New)
 // ==========================================
 
-// トーンの種類
+// 
 export type ToneType = 'halftone' | 'gradient' | 'crosshatch' | 'dots' | 'lines' | 'noise';
 
-// トーンパターンの種類
+// 
 export type TonePattern = 
-  // 網点系
+  // 
   | 'dots_60' | 'dots_85' | 'dots_100' | 'dots_120' | 'dots_150'
-  // 線系
+  // 
   | 'lines_horizontal' | 'lines_vertical' | 'lines_diagonal' | 'lines_cross'
-  // グラデーション系
+  // 
   | 'gradient_linear' | 'gradient_radial' | 'gradient_diamond'
-  // ノイズ系
+  // 
   | 'noise_fine' | 'noise_coarse' | 'noise_grain'
-  // 特殊効果
+  // 
   | 'speed_lines' | 'focus_lines' | 'explosion';
 
-// ブレンドモード
+// 
 export type BlendMode = 
   | 'normal' | 'multiply' | 'screen' | 'overlay' | 'soft-light' 
   | 'hard-light' | 'darken' | 'lighten' | 'difference' | 'exclusion';
 
-// ToneElement型定義 - 必要プロパティ追加版
-// 現在のToneElementインターフェースに以下のプロパティを追加してください
+// ToneElement - 
+// ToneElementAdd the following properties to the interface
 
 export interface ToneElement {
   id: string;
-  panelId: number;  // 既存のPanel.idに対応
+  panelId: number;  // Panel.id
   type: ToneType;
   pattern: TonePattern;
-  x: number;        // パネル内相対座標 (0-1)
-  y: number;        // パネル内相対座標 (0-1)
-  width: number;    // パネル内相対サイズ (0-1)
-  height: number;   // パネル内相対サイズ (0-1)
+  x: number;        //  (0-1)
+  y: number;        //  (0-1)
+  width: number;    //  (0-1)
+  height: number;   //  (0-1)
   
-  // 基本設定
-  density: number;          // 密度・濃度 (0-1)
-  opacity: number;          // 透明度 (0-1)
-  rotation: number;         // 回転角度 (0-360度)
-  scale: number;            // パターンスケール (0.1-3.0)
+  // 
+  density: number;          //  (0-1)
+  opacity: number;          //  (0-1)
+  rotation: number;         //  (0-360)
+  scale: number;            //  (0.1-3.0)
   
-  // 🆕 描画で使用されるプロパティを追加
-  color?: string;           // 色（デフォルト: '#000000'）
-  intensity?: number;       // 強度（デフォルト: 0.5）
-  angle?: number;          // 角度（デフォルト: 0）
-  direction?: 'horizontal' | 'vertical' | 'radial';  // 方向（デフォルト: 'vertical'）
+  // 🆕 Add properties to be used in drawings
+  color?: string;           // : '#000000'
+  intensity?: number;       // : 0.5
+  angle?: number;          // : 0
+  direction?: 'horizontal' | 'vertical' | 'radial';  // : 'vertical'
   
-  // 高度な設定
-  blendMode: BlendMode;     // ブレンドモード
-  contrast: number;         // コントラスト (0-2)
-  brightness: number;       // 明度 (-1 to 1)
-  invert: boolean;          // 反転
+  // 
+  blendMode: BlendMode;     // 
+  contrast: number;         //  (0-2)
+  brightness: number;       //  (-1 to 1)
+  invert: boolean;          // 
   
-  // マスク設定
-  maskEnabled: boolean;     // マスク有効
-  maskShape: 'rectangle' | 'ellipse' | 'custom'; // マスク形状
-  maskFeather: number;      // マスクのぼかし (0-20)
+  // 
+  maskEnabled: boolean;     // 
+  maskShape: 'rectangle' | 'ellipse' | 'custom'; // 
+  maskFeather: number;      //  (0-20)
   
-  // 選択・表示設定
-  selected: boolean;        // 選択状態
-  zIndex: number;           // 重ね順
-  isGlobalPosition: boolean; // グローバル座標かどうか
-  visible: boolean;         // 表示・非表示
+  // 
+  selected: boolean;        // 
+  zIndex: number;           // 
+  isGlobalPosition: boolean; // 
+  visible: boolean;         // 
 }
 
-// トーンテンプレートの定義
+// 
 export interface ToneTemplate {
   id: string;
   name: string;
@@ -533,14 +533,14 @@ export interface ToneTemplate {
   brightness: number;
   description: string;
   category: 'shadow' | 'highlight' | 'texture' | 'background' | 'effect' | 'mood';
-  thumbnail?: string;       // プレビュー用サムネイル
-  preview: {                // プレビュー設定
+  thumbnail?: string;       // 
+  preview: {                // 
     backgroundColor: string;
     showPattern: boolean;
   };
 }
 
-// トーンパネルのプロパティ
+// 
 export interface TonePanelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -552,13 +552,13 @@ export interface TonePanelProps {
   tones: ToneElement[];
 }
 
-// トーンレンダラーのプロパティ
+// Tone Renderer Properties
 export interface ToneRendererProps {
   tones: ToneElement[];
   canvasScale: number;
 }
 
-// トーン操作のハンドル
+// 
 export interface ToneHandle {
   type: "move" | "resize" | "rotate" | "mask";
   direction?: "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
@@ -567,13 +567,13 @@ export interface ToneHandle {
   radius?: number;
 }
 
-// Canvas要素の種類にトーンを追加
+// Canvas
 export type CanvasElementType = 'panel' | 'character' | 'bubble' | 'background' | 'effect' | 'tone';
 
-// Canvas要素の統合型
+// Canvas
 export type CanvasElement = Panel | Character | SpeechBubble | BackgroundElement | EffectElement | ToneElement;
 
-// 🆕 キャラクター見た目設定の型定義（新規追加）
+// 🆕 Character Appearance Settings Type Definition (Add New)
 /*export interface CharacterAppearance {
   gender: 'male' | 'female' | 'other';
   hairColor: 'black' | 'brown' | 'blonde' | 'red' | 'blue' | 'green' | 'white' | 'silver';
@@ -585,17 +585,17 @@ export type CanvasElement = Panel | Character | SpeechBubble | BackgroundElement
   accessories: string;
 } */
 
-// types.ts に追加する型定義（既存ファイルの末尾に追加）
+// types.ts Type definition to add to (append to end of existing file)
 
 // ==========================================
-// ページ管理システム用型定義（新規追加）
+// Type definitions for page management systems (new)
 // ==========================================
 
-// ページ単位のデータ構造
+// 
 export interface Page {
   id: string;
   title: string;
-  note?: string;  // ページ全体のメモ（構成、展開、意図など）
+  note?: string;  // Full page notes (configuration, deployment, intent, etc.)
   createdAt: string;
   updatedAt: string;
   panels: Panel[];
@@ -606,7 +606,7 @@ export interface Page {
   tones: ToneElement[];
 }
 
-// プロジェクトデータ構造（ページ対応版）
+// Project Data Structure (Pageable Version)
 export interface ProjectDataWithPages {
   id: string;
   name: string;
@@ -624,14 +624,14 @@ export interface ProjectDataWithPages {
   };
 }
 
-// ページ管理コンポーネントのプロパティ
+// Page Management Component Properties
 export interface PageManagerProps {
-  // 現在のページデータ
+  // 
   currentPage: Page;
   pages: Page[];
   currentPageIndex: number;
   
-  // ページ操作コールバック
+  // 
   onPageChange: (pageIndex: number) => void;
   onPageAdd: () => void;
   onPageDelete: (pageIndex: number) => void;
@@ -639,15 +639,15 @@ export interface PageManagerProps {
   onPageRename: (pageIndex: number, newTitle: string) => void;
   onPageReorder: (fromIndex: number, toIndex: number) => void;
   
-  // 現在のページデータ更新
+  // 
   onCurrentPageUpdate: (pageData: Partial<Page>) => void;
   
-  // UI設定
+  // UI
   isDarkMode: boolean;
   isCompact?: boolean;
 }
 
-// ページタブのプロパティ
+// 
 export interface PageTabProps {
   page: Page;
   index: number;
@@ -659,7 +659,7 @@ export interface PageTabProps {
   isDarkMode: boolean;
 }
 
-// ページ操作の種類
+// 
 export type PageOperation = 
   | { type: 'ADD_PAGE' }
   | { type: 'DELETE_PAGE'; pageIndex: number }
@@ -668,13 +668,13 @@ export type PageOperation =
   | { type: 'REORDER_PAGE'; fromIndex: number; toIndex: number }
   | { type: 'SWITCH_PAGE'; pageIndex: number };
 
-// ページ状態管理用のhook型
+// hook
 export interface UsePageManagerReturn {
   pages: Page[];
   currentPageIndex: number;
   currentPage: Page;
   
-  // ページ操作関数
+  // 
   addPage: () => void;
   deletePage: (pageIndex: number) => void;
   duplicatePage: (pageIndex: number) => void;
@@ -682,15 +682,15 @@ export interface UsePageManagerReturn {
   switchToPage: (pageIndex: number) => void;
   reorderPages: (fromIndex: number, toIndex: number) => void;
   
-  // 現在ページデータ更新
+  // 
   updateCurrentPageData: (data: Partial<Page>) => void;
   
-  // ページメタデータ
+  // 
   canDeletePage: boolean;
   hasUnsavedChanges: boolean;
 }
 
-// バッチプロンプト生成用の型
+// 
 export interface BatchPromptOptions {
   includePages: number[];
   outputFormat: 'individual' | 'combined' | 'structured';
@@ -701,25 +701,25 @@ export interface BatchPromptOptions {
 }
 
 // ==========================================
-// 用紙サイズシステム用型定義（v1.1.3 修正版）
+// Paper Size System Type Definition (v1.1.3 
 // ==========================================
 
-// 用紙サイズ定義
+// 
 export interface PaperSize {
   id: string;
   name: string;
   displayName: string;
-  width: number;        // mm単位
-  height: number;       // mm単位
-  pixelWidth: number;   // 300DPI基準
-  pixelHeight: number;  // 300DPI基準
-  aspectRatio: number;  // 縦横比
+  width: number;        // mm
+  height: number;       // mm
+  pixelWidth: number;   // 300DPI
+  pixelHeight: number;  // 300DPI
+  aspectRatio: number;  // 
   category: 'standard' | 'manga' | 'web' | 'custom';
   description: string;
   isPortrait: boolean;
 }
 
-// Canvas設定
+// Canvas
 export interface CanvasSettings {
   paperSize: PaperSize;
   dpi: number;
@@ -729,76 +729,76 @@ export interface CanvasSettings {
   gridSize: number;
 }
 
-// 標準用紙サイズ定義（修正版 - 正確なピクセル計算）
+//  - 
 export const PAPER_SIZES: Record<string, PaperSize> = {
   A4_PORTRAIT: {
     id: 'a4_portrait',
-    name: 'A4縦',
-    displayName: 'A4 縦（210×297mm）',
+    name: 'A4_portrait',
+    displayName: 'A4 portrait (210×297mm)',
     width: 210,
     height: 297,
-    pixelWidth: 800,   // より適切なサイズに調整
-    pixelHeight: 1131, // アスペクト比を維持
+    pixelWidth: 800,
+    pixelHeight: 1131,
     aspectRatio: 297/210,
     category: 'standard',
-    description: '最も一般的な印刷サイズ',
+    description: 'Common print size',
     isPortrait: true
   },
   B5_PORTRAIT: {
     id: 'b5_portrait',
-    name: 'B5縦',
-    displayName: 'B5 縦（182×257mm）',
+    name: 'B5_portrait',
+    displayName: 'B5 portrait (182×257mm)',
     width: 182,
     height: 257,
-    pixelWidth: 700,   // より適切なサイズに調整
-    pixelHeight: 990,  // アスペクト比を維持
+    pixelWidth: 700,
+    pixelHeight: 990,
     aspectRatio: 257/182,
     category: 'standard',
-    description: '同人誌標準サイズ',
+    description: 'Standard doujin / magazine trim',
     isPortrait: true
   },
   A4_LANDSCAPE: {
     id: 'a4_landscape',
-    name: 'A4横',
-    displayName: 'A4 横（297×210mm）',
+    name: 'A4_landscape',
+    displayName: 'A4 landscape (297×210mm)',
     width: 297,
     height: 210,
-    pixelWidth: 1131,  // A4縦の高さ
-    pixelHeight: 800,  // A4縦の幅
+    pixelWidth: 1131,
+    pixelHeight: 800,
     aspectRatio: 210/297,
     category: 'standard',
-    description: '横長レイアウト用',
+    description: 'Wide horizontal layout',
     isPortrait: false
   },
   TWITTER_CARD: {
     id: 'twitter_card',
     name: 'Twitter',
-    displayName: 'Twitter（1200×675px）',
+    displayName: 'Twitter1200×675px',
     width: 101.6,  // 1200px ÷ 300DPI × 25.4mm ≈ 101.6mm
     height: 57.15, // 675px ÷ 300DPI × 25.4mm ≈ 57.15mm
     pixelWidth: 1200,
     pixelHeight: 675,
     aspectRatio: 675/1200,
     category: 'web',
-    description: 'Twitter投稿最適化',
+    description: 'Optimized for Twitter / X cards',
     isPortrait: false
   },
   CUSTOM: {
     id: 'custom',
-    name: 'カスタム',
-    displayName: 'カスタムサイズ',
-    width: 210,        // 初期値はA4と同じ
-    height: 297,       // 初期値はA4と同じ
-    pixelWidth: 800,   // 初期値はA4と同じ
-    pixelHeight: 1131, // 初期値はA4と同じ
+    name: 'custom',
+    displayName: 'Custom size',
+    width: 210,
+    height: 297,
+    pixelWidth: 800,
+    pixelHeight: 1131,
     aspectRatio: 297/210,
     category: 'custom',
-    description: '自由設定',
+    description: 'Custom dimensions',
     isPortrait: true
   }
 };
 
-// デフォルト設定
+// 
 export const DEFAULT_CANVAS_SETTINGS: CanvasSettings = {
   paperSize: PAPER_SIZES.A4_PORTRAIT,
   dpi: 300,
@@ -808,12 +808,12 @@ export const DEFAULT_CANVAS_SETTINGS: CanvasSettings = {
   gridSize: 5
 };
 
-// デバッグ用ユーティリティ関数（開発時のみ使用）
+// Utility function for debugging (development only)
 export const debugPaperSizeCalculations = () => {
   console.group('📐 Paper Size Calculations Debug');
   
   Object.entries(PAPER_SIZES).forEach(([key, paperSize]) => {
-    // mm から pixel への変換式: (mm ÷ 25.4) × DPI
+    // mm  pixel : (mm ÷ 25.4) × DPI
     const expectedPixelWidth = Math.round((paperSize.width / 25.4) * 300);
     const expectedPixelHeight = Math.round((paperSize.height / 25.4) * 300);
     
@@ -832,7 +832,7 @@ export const debugPaperSizeCalculations = () => {
   console.groupEnd();
 };
 
-// スケール変換テスト関数
+// 
 export const testPaperSizeScaling = () => {
   console.group('🔄 Paper Size Scale Transform Test');
   
@@ -861,90 +861,90 @@ export const testPaperSizeScaling = () => {
   console.groupEnd();
 };
 
-// types.ts に追加するNanoBanana関連型定義（簡略版 - v1.1.5実装用）
+// types.ts NanoBanana - v1.1.5
 
 // ==========================================
-// NanoBanana連携機能用型定義（v1.1.5版）
+// NanoBananav1.1.5
 // ==========================================
 
-// NanoBananaエクスポートオプション
+// NanoBanana
 export interface NanoBananaExportOptions {
-  includeInstructions: boolean;     // 使用方法ガイドを含める
-  includeCharacterMapping: boolean; // キャラクター名対応表を含める
-  layoutImageFormat: 'png' | 'jpg'; // レイアウト画像形式
-  layoutImageQuality: 'high' | 'medium' | 'low'; // レイアウト画像品質
-  promptLanguage: 'english' | 'japanese' | 'both'; // プロンプト言語
-  zipFilename?: string;            // ZIP ファイル名（省略時は自動生成）
+  includeInstructions: boolean;     // 
+  includeCharacterMapping: boolean; // Include character name correspondence table
+  layoutImageFormat: 'png' | 'jpg'; // 
+  layoutImageQuality: 'high' | 'medium' | 'low'; // 
+  promptLanguage: 'english' | 'japanese' | 'both'; // 
+  zipFilename?: string;            // ZIP File name (auto-generated if omitted)
 }
 
-// NanoBananaエクスポートパッケージの構成
+// NanoBananaExport Package Configuration
 export interface NanoBananaExportPackage {
-  layoutImage: Blob;               // レイアウト画像（PNG/JPG）
-  promptText: string;              // 統合プロンプト
-  characterMapping: string;        // キャラクター名対応表
-  instructions: string;            // 使用方法ガイド
-  metadata: NanoBananaExportMetadata; // メタデータ
+  layoutImage: Blob;               // PNG/JPG
+  promptText: string;              // 
+  characterMapping: string;        // 
+  instructions: string;            // 
+  metadata: NanoBananaExportMetadata; // 
 }
 
-// エクスポートメタデータ
+// 
 export interface NanoBananaExportMetadata {
-  exportedAt: string;              // エクスポート日時
-  toolVersion: string;             // ツールバージョン
-  pageCount: number;               // ページ数
-  panelCount: number;              // コマ数
-  characterCount: number;          // キャラクター数
-  paperSize: string;               // 用紙サイズ
-  totalElements: number;           // 総要素数
+  exportedAt: string;              // 
+  toolVersion: string;             // 
+  pageCount: number;               // 
+  panelCount: number;              // 
+  characterCount: number;          // 
+  paperSize: string;               // 
+  totalElements: number;           // 
 }
 
-// キャラクター名マッピング情報
+// Character Name Mapping Information
 export interface CharacterNameMapping {
-  originalName: string;            // ネーム内での名前
-  suggestedFilename: string;       // 推奨ファイル名
-  characterId: string;             // キャラクターID
-  description?: string;            // キャラクター説明
+  originalName: string;            // 
+  suggestedFilename: string;       // 
+  characterId: string;             // ID
+  description?: string;            // 
 }
 
-// NanoBananaプロンプト構成要素
+// NanoBanana
 export interface NanoBananaPromptStructure {
-  introduction: string;            // 導入説明
-  characterMappingSection: string; // キャラクター対応セクション
-  panelDetailsSection: string;     // パネル詳細セクション
-  styleSettingsSection: string;    // スタイル設定セクション
-  instructionsSection: string;     // 指示セクション
+  introduction: string;            // 
+  characterMappingSection: string; // 
+  panelDetailsSection: string;     // 
+  styleSettingsSection: string;    // 
+  instructionsSection: string;     // 
 }
 
-// レイアウト画像生成オプション
+// Layout Image Generation Options
 export interface LayoutImageOptions {
-  showPanelNumbers: boolean;       // パネル番号表示
-  showGrid: boolean;              // グリッド表示
-  backgroundColor: string;         // 背景色
-  borderColor: string;            // 枠線色
-  borderWidth: number;            // 枠線太さ
-  fontSize: number;               // 番号フォントサイズ
-  fontColor: string;              // 番号フォント色
-  quality: number;                // 画像品質（0.1-1.0）
+  showPanelNumbers: boolean;       // 
+  showGrid: boolean;              // 
+  backgroundColor: string;         // 
+  borderColor: string;            // 
+  borderWidth: number;            // 
+  fontSize: number;               // 
+  fontColor: string;              // 
+  quality: number;                // 0.1-1.0
 }
 
-// NanoBananaエクスポート進行状況
+// NanoBanana
 export interface NanoBananaExportProgress {
   step: 'initialize' | 'generate_layout' | 'generate_prompt' | 'create_mapping' | 'create_instructions' | 'package_files' | 'complete';
-  progress: number;               // 進行率（0-100）
-  message: string;                // 現在の処理内容
-  currentFile?: string;           // 現在処理中のファイル
+  progress: number;               // 0-100
+  message: string;                // 
+  currentFile?: string;           // 
 }
 
-// NanoBananaエクスポート結果
+// NanoBanana
 export interface NanoBananaExportResult {
-  success: boolean;               // 成功フラグ
-  zipBlob?: Blob;                // 生成されたZIPファイル
-  filename: string;               // ファイル名
-  size: number;                   // ファイルサイズ（バイト）
-  metadata: NanoBananaExportMetadata; // エクスポートメタデータ
-  error?: string;                 // エラーメッセージ
+  success: boolean;               // 
+  zipBlob?: Blob;                // ZIP
+  filename: string;               // 
+  size: number;                   // 
+  metadata: NanoBananaExportMetadata; // 
+  error?: string;                 // 
 }
 
-// デフォルト設定
+// 
 export const DEFAULT_NANOBANANA_EXPORT_OPTIONS: NanoBananaExportOptions = {
   includeInstructions: true,
   includeCharacterMapping: true,
@@ -964,7 +964,7 @@ export const DEFAULT_LAYOUT_IMAGE_OPTIONS: LayoutImageOptions = {
   quality: 1.0,
 };
 
-// 🔧 v1.1.6以降で実装予定の型定義（現在は未使用）
+// 🔧 v1.1.6Type definitions to be implemented later (currently unused)
 // 
 // export interface NanoBananaStylePreset {
 //   id: string;
@@ -977,5 +977,5 @@ export const DEFAULT_LAYOUT_IMAGE_OPTIONS: LayoutImageOptions = {
 // }
 // 
 // export const NANOBANANA_STYLE_PRESETS: NanoBananaStylePreset[] = [
-//   // v1.1.6以降で実装予定
+//   // v1.1.6
 // ];

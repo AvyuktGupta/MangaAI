@@ -1,87 +1,75 @@
-# 🎨 AI漫画ネームメーカー（ベータ版）
+# Comic Layout Maker (beta)
 
-AIを活用した漫画ネーム制作ツールです。ストーリーからコマ内容・セリフ・プロンプトを自動生成し、AI画像生成ツールと連携して効率的に漫画を制作できます。
+A browser app for laying out comic panels (name/namu), speech bubbles, characters, and backgrounds. Use story-to-comic helpers and Ollama (optional) to draft prompts and preview images, then export layouts and prompts for your image pipeline.
 
-## 🌐 ベータ版について
+## Beta notes
 
-このリポジトリは公開用のベータ版です。
-- **使用制限**: 1日10回、合計100回まで無料でAI生成が利用可能
-- **APIキー不要**: ユーザーはAPIキーの設定なしで利用できます
+- **Usage caps** (when enabled via env): daily and total limits for AI-related actions may apply.
+- **No cloud API required for core editing**; optional Ollama runs locally.
 
-## ✨ 主な機能
+## Features
 
-### 📖 AI自動生成
-- **1ページ分生成**: ストーリー全体からコマ割り・セリフを一括生成
-- **1コマ生成**: 個別のコマ内容を生成
-- **プロンプト出力**: Stable Diffusion、Midjourney、DALL-E対応の英語プロンプト
+### AI-assisted workflow
 
-### 🎨 ネーム制作機能
-- **コマ割りテンプレート**: 1コマ〜複数コマの様々なレイアウト
-- **吹き出し編集**: 縦書き/横書き、フォントサイズ調整
-- **キャラクター管理**: 名前設定とキャラクター情報管理
-- **エクスポート**: PNG/JPEG形式 + プロンプトファイル出力
+- **Page / batch ideas**: Generate panel-related text from a story outline (when wired in the UI).
+- **Single panel**: Generate content for one panel at a time.
+- **Prompt export**: English prompts suitable for common image models.
 
-### 🚀 AI画像生成連携
-1. このツールでネーム作成
-2. プロンプトファイル（prompts.txt）を出力
-3. AI画像生成ツールで各コマを生成
-4. 画像を合成して完成
+### Layout tools
 
-## 📦 デプロイ方法
+- **Panel templates**: One to many panel layouts.
+- **Speech bubbles**: Vertical / horizontal text, adjustable size.
+- **Characters**: Slots and settings for cast prompts.
+- **Export**: Raster images plus prompt text bundles.
 
-### Vercelでのデプロイ（推奨）
+### Image pipeline
 
-1. **Vercelプロジェクトを作成**
-   - https://vercel.com でGitHubリポジトリをインポート
-   - Framework Preset: **Create React App**
+1. Build your layout in the app.
+2. Export `prompts.txt` (or equivalent) from the export panel.
+3. Run your preferred image generator.
+4. Composite results in your usual tool.
 
-2. **環境変数を設定**
-   ```
-   REACT_APP_OPENAI_API_KEY=sk-your-api-key
-   REACT_APP_USE_ENV_API_KEY=true
-   REACT_APP_APP_NAME=AI漫画ネームメーカー（ベータ版）
-   ```
+## Deploy
 
-3. **デプロイ**
-   - `main`ブランチへのpushで自動デプロイ
+See [DEPLOYMENT.md](./DEPLOYMENT.md). Typical path: static build from `npm run build`, hosted on any static host (e.g. Vercel with Create React App preset).
 
-詳細は [DEPLOYMENT.md](./DEPLOYMENT.md) をご覧ください。
+Example env vars (adjust names to match your fork):
 
-## 🛠️ ローカル開発
+```
+REACT_APP_USE_ENV_API_KEY=true
+REACT_APP_APP_NAME=Comic Layout Maker
+```
 
-### セットアップ
+## Local development
 
 ```bash
 npm install
 npm start
 ```
 
-ブラウザで http://localhost:3000 が開きます。
-
-### ビルド
+Open `http://localhost:3000`.
 
 ```bash
 npm run build
 ```
 
-## 📚 ドキュメント
+## Docs
 
-- [USER_GUIDE.md](./USER_GUIDE.md) - 使い方ガイド
-- [DEPLOYMENT.md](./DEPLOYMENT.md) - デプロイメントガイド
-- [PROJECT_STATUS.md](./PROJECT_STATUS.md) - プロジェクト状況
+- [USER_GUIDE.md](./USER_GUIDE.md) – user-facing guide
+- [DEPLOYMENT.md](./DEPLOYMENT.md) – hosting
+- [PROJECT_STATUS.md](./PROJECT_STATUS.md) – project notes
 
-## 🔒 セキュリティ
+## Security
 
-- APIキーは環境変数で管理（`.env`ファイルはGit管理対象外）
-- クライアント側でブラウザフィンガープリントによる使用制限
-- 1日10回、合計100回の生成制限
+- Prefer env vars for any API keys; do not commit `.env`.
+- Optional usage limits may use browser storage / fingerprinting—see code in `UsageLimitService`.
 
-## 📝 ライセンス
+## License
 
-このプロジェクトはベータ版として公開されています。
+Beta / see repository owner for terms.
 
-## 🙏 謝辞
+## Thanks
 
 - React
-- OpenAI API
-- Vercel
+- Ollama (optional local LLM / image models)
+- Hosting providers you choose for deployment

@@ -1,9 +1,9 @@
-// src/utils/TemplateScaler.ts - 動的テンプレート生成システム
+// src/utils/TemplateScaler.ts - Dynamic Template Generation System
 import { Panel, CanvasSettings } from '../types';
 import { templates } from '../components/CanvasArea/templates';
 
 /**
- * ベーステンプレートのサイズ（固定テンプレートが想定しているサイズ）
+ * Base template size (expected size for fixed templates)
  */
 const BASE_CANVAS_SIZE = {
   width: 800,
@@ -11,15 +11,15 @@ const BASE_CANVAS_SIZE = {
 };
 
 /**
- * マージン設定
+ * 
  */
 const MARGINS = {
-  outer: 20,  // 外側マージン
-  gap: 10     // パネル間のギャップ
+  outer: 20,  // 
+  gap: 10     // 
 };
 
 /**
- * テンプレートを現在のキャンバスサイズに合わせてスケールする
+ * Scale template to current canvas size
  */
 export const scaleTemplateToCanvas = (
   templateKey: string, 
@@ -33,7 +33,7 @@ export const scaleTemplateToCanvas = (
 
   const { pixelWidth, pixelHeight } = canvasSettings.paperSize;
   
-  // スケール比率を計算
+  // 
   const scaleX = pixelWidth / BASE_CANVAS_SIZE.width;
   const scaleY = pixelHeight / BASE_CANVAS_SIZE.height;
   
@@ -46,7 +46,7 @@ export const scaleTemplateToCanvas = (
     scaleY: `${(scaleY * 100).toFixed(1)}%` 
   });
   
-  // パネルをスケール変換
+  // 
   const scaledPanels = template.panels.map(panel => {
     const scaledPanel = {
       ...panel,
@@ -71,7 +71,7 @@ export const scaleTemplateToCanvas = (
 };
 
 /**
- * 用紙サイズに最適化された動的テンプレート生成（将来用）
+ * Dynamic template generation optimized for paper size (for future use)
  */
 export const generateDynamicTemplate = (
   templateKey: string,
@@ -87,13 +87,13 @@ export const generateDynamicTemplate = (
     case 'grid_2x2_dynamic':
       return generate2x2GridTemplate(workWidth, workHeight);
     default:
-      // フォールバック：既存テンプレートをスケール
+      // Fallback: Scale Existing Template
       return scaleTemplateToCanvas(templateKey, canvasSettings);
   }
 };
 
 /**
- * 4コマ漫画テンプレートの動的生成
+ * 4Dynamic generation of comic strip templates
  */
 const generate4KomaTemplate = (workWidth: number, workHeight: number): Panel[] => {
   const panelHeight = (workHeight - (MARGINS.gap * 3)) / 4;
@@ -107,7 +107,7 @@ const generate4KomaTemplate = (workWidth: number, workHeight: number): Panel[] =
 };
 
 /**
- * 2×2グリッドテンプレートの動的生成
+ * 2×2Dynamic Generation of Grid Templates
  */
 const generate2x2GridTemplate = (workWidth: number, workHeight: number): Panel[] => {
   const panelWidth = (workWidth - MARGINS.gap) / 2;
@@ -122,7 +122,7 @@ const generate2x2GridTemplate = (workWidth: number, workHeight: number): Panel[]
 };
 
 /**
- * テンプレート情報を取得
+ * 
  */
 export const getTemplateInfo = (templateKey: string) => {
   const template = templates[templateKey];
@@ -136,7 +136,7 @@ export const getTemplateInfo = (templateKey: string) => {
 };
 
 /**
- * デバッグ用：スケール変換の検証
+ * For Debugging: Validating Scale Transformations
  */
 export const validateScaledTemplate = (
   originalPanels: Panel[],
@@ -145,13 +145,13 @@ export const validateScaledTemplate = (
 ): boolean => {
   const { pixelWidth, pixelHeight } = canvasSettings.paperSize;
   
-  // パネル数の確認
+  // 
   if (originalPanels.length !== scaledPanels.length) {
     console.error('Panel count mismatch');
     return false;
   }
   
-  // キャンバス境界チェック
+  // 
   for (const panel of scaledPanels) {
     if (panel.x < 0 || panel.y < 0 || 
         panel.x + panel.width > pixelWidth || 

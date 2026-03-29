@@ -1,4 +1,4 @@
-// src/components/CanvasComponent/hooks/useCanvasDrawing.ts - ToneRenderer統合修正版
+// src/components/CanvasComponent/hooks/useCanvasDrawing.ts - ToneRenderer
 import { RefObject, useEffect } from 'react';
 import { Panel, Character, SpeechBubble, BackgroundElement, EffectElement, ToneElement, SnapSettings } from '../../../types';
 import { CanvasState } from './useCanvasState';
@@ -6,9 +6,9 @@ import { CanvasDrawing } from '../../CanvasArea/CanvasDrawing';
 import { BubbleRenderer } from '../../CanvasArea/renderers/BubbleRenderer';
 import { CharacterRenderer } from '../../CanvasArea/renderers/CharacterRenderer/CharacterRenderer';
 import { BackgroundRenderer } from '../../CanvasArea/renderers/BackgroundRenderer';
-import { ToneRenderer } from '../../CanvasArea/renderers/ToneRenderer'; // 🆕 ToneRenderer追加
+import { ToneRenderer } from '../../CanvasArea/renderers/ToneRenderer'; // 🆕 ToneRenderer
 
-// 1. インターフェース修正 - getCharacterDisplayNameを追加
+// 1.  - getCharacterDisplayName
 export interface CanvasDrawingHookProps {
   canvasRef: RefObject<HTMLCanvasElement | null>;
   state: CanvasState;
@@ -17,27 +17,27 @@ export interface CanvasDrawingHookProps {
   speechBubbles: SpeechBubble[];
   backgrounds: BackgroundElement[];
   selectedBackground?: BackgroundElement | null;
-  // 🆕 効果線関連追加
+  // 🆕 
   effects: EffectElement[];
   selectedEffect?: EffectElement | null;
-  // 🆕 トーン関連追加
+  // 🆕 
   tones: ToneElement[];
   selectedTone?: ToneElement | null;
   isPanelEditMode: boolean;
   snapSettings: SnapSettings;
-  // 🆕 キャラクター名前取得関数を追加
+  // 🆕 Added character name retrieval function
   getCharacterDisplayName?: (character: Character) => string;
   
-  // 🆕 入れ替え選択状態
+  // 🆕 
   swapPanel1?: number | null;
   swapPanel2?: number | null;
 }
 
 /**
- * Canvas描画処理を管理するカスタムhook（効果線+トーン描画対応版）
- * 描画順序: 背景色 → グリッド → パネル → 背景要素 → トーン → 効果線 → 吹き出し → キャラクター → UI要素
+ * Canvashook+
+ * :  →  →  →  →  →  →  →  → UI
  */
-// 2. useCanvasDrawing関数の引数に追加
+// 2. useCanvasDrawing
 export const useCanvasDrawing = ({
   canvasRef,
   state,
@@ -46,30 +46,30 @@ export const useCanvasDrawing = ({
   speechBubbles,
   backgrounds,
   selectedBackground,
-  // 🆕 効果線データ
+  // 🆕 
   effects,
   selectedEffect,
-  // 🆕 トーンデータ
+  // 🆕 
   tones,
   selectedTone,
   isPanelEditMode,
   snapSettings,
-  getCharacterDisplayName, // 🆕 追加
-  swapPanel1, // 🆕 入れ替え選択1
-  swapPanel2, // 🆕 入れ替え選択2
+  getCharacterDisplayName, // 🆕 
+  swapPanel1, // 🆕 1
+  swapPanel2, // 🆕 2
 }: CanvasDrawingHookProps) => {
 
   /**
-   * 背景を描画（パネル内で zIndex 順）
+   *  zIndex 
    */
   const drawBackgrounds = (ctx: CanvasRenderingContext2D) => {
     panels.forEach(panel => {
-      // 各パネルの背景要素を取得（zIndex順にソート）
+      // zIndex
       const panelBackgrounds = backgrounds
         .filter(bg => bg.panelId === panel.id)
         .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
 
-      // パネル内の背景を順番に描画
+      // 
       panelBackgrounds.forEach(background => {
         const isSelected = selectedBackground?.id === background.id;
         
@@ -84,36 +84,36 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 🆕 トーンを描画（背景の後、効果線の前）- ToneRenderer使用
+   * 🆕 Draw tone (after background, before effect line)- ToneRenderer
    */
   const drawTones = (ctx: CanvasRenderingContext2D) => {
     panels.forEach(panel => {
-      // 各パネルのトーン要素を取得（zIndex順にソート）
+      // Get the tone elements of each panel (zIndex
       const panelTones = tones
         .filter(tone => tone.panelId === panel.id && tone.visible)
         .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
 
-      // パネル内のトーンを順番に描画（ToneRenderer使用）
+      // Draw the tones in the panel in order (ToneRenderer
       panelTones.forEach(tone => {
         const isSelected = selectedTone?.id === tone.id;
         
-        // ✅ ToneRenderer.renderToneを使用（正しい実装）
+        // ✅ ToneRenderer.renderTone
         ToneRenderer.renderTone(ctx, tone, panel, isSelected);
       });
     });
   };
 
   /**
-   * 🆕 効果線を描画（パネル内で zIndex 順）
+   * 🆕  zIndex 
    */
   const drawEffects = (ctx: CanvasRenderingContext2D) => {
     panels.forEach(panel => {
-      // 各パネルの効果線要素を取得（zIndex順にソート）
+      // Obtain the effect line elements for each panel (zIndex
       const panelEffects = effects
         .filter(effect => effect.panelId === panel.id)
         .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
 
-      // パネル内の効果線を順番に描画
+      // Draw effect lines in the panel sequentially
       panelEffects.forEach(effect => {
         const isSelected = selectedEffect?.id === effect.id;
         
@@ -123,7 +123,7 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 🆕 単一効果線の描画関数
+   * 🆕 
    */
   const drawSingleEffect = (
     ctx: CanvasRenderingContext2D,
@@ -131,7 +131,7 @@ export const useCanvasDrawing = ({
     panel: Panel,
     isSelected: boolean
   ) => {
-    // パネル内の絶対座標を計算
+    // 
     const absoluteX = panel.x + effect.x * panel.width;
     const absoluteY = panel.y + effect.y * panel.height;
     const absoluteWidth = effect.width * panel.width;
@@ -140,7 +140,7 @@ export const useCanvasDrawing = ({
     ctx.save();
     ctx.globalAlpha = effect.opacity;
 
-    // 効果線のタイプ別描画
+    // 
     switch (effect.type) {
       case 'speed':
         drawSpeedLines(ctx, effect, absoluteX, absoluteY, absoluteWidth, absoluteHeight);
@@ -158,14 +158,14 @@ export const useCanvasDrawing = ({
 
     ctx.restore();
 
-    // 選択状態の描画
+    // 
     if (isSelected) {
       drawEffectSelection(ctx, absoluteX, absoluteY, absoluteWidth, absoluteHeight);
     }
   };
 
   /**
-   * 🆕 スピード線描画（コマ全体・端から自然に）
+   * 🆕 Speed line drawing (whole frame, naturally from the edge)
    */
   const drawSpeedLines = (
     ctx: CanvasRenderingContext2D,
@@ -181,7 +181,7 @@ export const useCanvasDrawing = ({
     const lineCount = Math.floor(effect.density * 50);
     const baseLength = Math.min(width, height) * effect.length * 0.6;
 
-    // コマ枠内にクリッピング
+    // 
     ctx.save();
     ctx.beginPath();
     ctx.rect(x, y, width, height);
@@ -191,60 +191,60 @@ export const useCanvasDrawing = ({
       let x1, y1, x2, y2;
 
       if (effect.direction === 'horizontal') {
-        // 水平線 - 左右の端から
+        //  - 
         const isFromLeft = Math.random() > 0.5;
-        const yPos = y + height * 0.1 + Math.random() * height * 0.8; // 端を避ける
+        const yPos = y + height * 0.1 + Math.random() * height * 0.8; // 
         const lineLength = baseLength * (0.4 + Math.random() * 0.6);
         
         if (isFromLeft) {
-          // 左端から右へ
-          x1 = x - lineLength * 0.3; // 少し枠外から開始
+          // 
+          x1 = x - lineLength * 0.3; // 
           x2 = x1 + lineLength;
         } else {
-          // 右端から左へ
-          x1 = x + width + lineLength * 0.3; // 少し枠外から開始
+          // 
+          x1 = x + width + lineLength * 0.3; // 
           x2 = x1 - lineLength;
         }
         y1 = y2 = yPos;
       } else if (effect.direction === 'vertical') {
-        // 垂直線 - 上下の端から
+        //  - 
         const isFromTop = Math.random() > 0.5;
-        const xPos = x + width * 0.1 + Math.random() * width * 0.8; // 端を避ける
+        const xPos = x + width * 0.1 + Math.random() * width * 0.8; // 
         const lineLength = baseLength * (0.4 + Math.random() * 0.6);
         
         if (isFromTop) {
-          // 上端から下へ
-          y1 = y - lineLength * 0.3; // 少し枠外から開始
+          // 
+          y1 = y - lineLength * 0.3; // 
           y2 = y1 + lineLength;
         } else {
-          // 下端から上へ
-          y1 = y + height + lineLength * 0.3; // 少し枠外から開始
+          // 
+          y1 = y + height + lineLength * 0.3; // 
           y2 = y1 - lineLength;
         }
         x1 = x2 = xPos;
       } else {
-        // カスタム角度 - 角度に応じた端から
+        //  - 
         const angleRad = (effect.angle * Math.PI) / 180;
         const lineLength = baseLength * (0.5 + Math.random() * 0.5);
         
-        // 角度の向きに応じて開始位置を決定
+        // Determine the starting position according to the angle orientation
         let startX, startY;
         const normalizedAngle = ((effect.angle % 360) + 360) % 360;
         
         if (normalizedAngle >= 315 || normalizedAngle < 45) {
-          // 右向き - 左端から
+          //  - 
           startX = x - 20 + Math.random() * 40;
           startY = y + Math.random() * height;
         } else if (normalizedAngle >= 45 && normalizedAngle < 135) {
-          // 下向き - 上端から
+          //  - 
           startX = x + Math.random() * width;
           startY = y - 20 + Math.random() * 40;
         } else if (normalizedAngle >= 135 && normalizedAngle < 225) {
-          // 左向き - 右端から
+          //  - 
           startX = x + width - 20 + Math.random() * 40;
           startY = y + Math.random() * height;
         } else {
-          // 上向き - 下端から
+          //  - 
           startX = x + Math.random() * width;
           startY = y + height - 20 + Math.random() * 40;
         }
@@ -265,7 +265,7 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 🆕 集中線描画（コマ全体・四隅からの放射）
+   * 🆕 Focus line drawing (radiation from the entire frame and four corners)
    */
   const drawFocusLines = (
     ctx: CanvasRenderingContext2D,
@@ -278,11 +278,11 @@ export const useCanvasDrawing = ({
     ctx.strokeStyle = effect.color;
 
     const lineCount = Math.floor(effect.density * 60);
-    // 集中点を設定（デフォルトは中央だが端寄りも可能）
+    // Set the focus point (the default is center, but you can also lean towards the edge)
     const focusX = x + width * (effect.centerX || 0.5);
     const focusY = y + height * (effect.centerY || 0.5);
 
-    // コマ枠内にクリッピング
+    // 
     ctx.save();
     ctx.beginPath();
     ctx.rect(x, y, width, height);
@@ -291,11 +291,11 @@ export const useCanvasDrawing = ({
     for (let i = 0; i < lineCount; i++) {
       const angle = (i / lineCount) * 2 * Math.PI;
       
-      // 焦点から線を伸ばす方向のコマ端を計算
+      // Calculate the edge of the frame in the direction of extending the line from the focus
       const cos = Math.cos(angle);
       const sin = Math.sin(angle);
       
-      // 焦点からコマ端までの距離を計算
+      // Calculate the distance from the focus to the end of the frame
       let endX, endY;
       const t1 = cos > 0 ? (x + width - focusX) / cos : cos < 0 ? (x - focusX) / cos : Infinity;
       const t2 = sin > 0 ? (y + height - focusY) / sin : sin < 0 ? (y - focusY) / sin : Infinity;
@@ -304,12 +304,12 @@ export const useCanvasDrawing = ({
       endX = focusX + cos * t;
       endY = focusY + sin * t;
       
-      // 焦点近くの開始点
+      // 
       const startRadius = Math.min(width, height) * 0.05;
       const startX = focusX + cos * startRadius;
       const startY = focusY + sin * startRadius;
 
-      // 距離に応じて線の太さを調整（中心が太く端が細い）
+      // Adjust the thickness of the line according to the distance (the center is thick and the edges are thin)
       const distance = Math.sqrt((endX - focusX) ** 2 + (endY - focusY) ** 2);
       const maxDistance = Math.sqrt(width ** 2 + height ** 2) / 2;
       const lineWidth = Math.max(0.3, effect.intensity * 3 * (1 - distance / maxDistance));
@@ -325,7 +325,7 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 🆕 爆発線描画（コマ全体・中心からの激しい放射）
+   * 🆕 Explosion line drawing (intense radiation from the whole frame and center)
    */
   const drawExplosionLines = (
     ctx: CanvasRenderingContext2D,
@@ -342,7 +342,7 @@ export const useCanvasDrawing = ({
     const centerX = x + width * (effect.centerX || 0.5);
     const centerY = y + height * (effect.centerY || 0.5);
 
-    // コマ枠内にクリッピング
+    // 
     ctx.save();
     ctx.beginPath();
     ctx.rect(x, y, width, height);
@@ -351,12 +351,12 @@ export const useCanvasDrawing = ({
     for (let i = 0; i < lineCount; i++) {
       const angle = (i / lineCount) * 2 * Math.PI;
       
-      // より激しく不規則な爆発線
+      // 
       const randomFactor = 0.7 + Math.random() * 0.6;
       const cos = Math.cos(angle) * randomFactor;
       const sin = Math.sin(angle) * randomFactor;
       
-      // 中心からコマ端を超えて伸びる線
+      // Line extending beyond the frame edge from the center
       const baseLength = Math.max(width, height) * effect.length;
       const length = baseLength * (0.8 + Math.random() * 0.5);
       
@@ -378,7 +378,7 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 🆕 フラッシュ線描画（コマ全体・十字＋斜めの主要光線）
+   * 🆕 Flash line drawing (whole frame, cross + diagonal main ray)
    */
   const drawFlashLines = (
     ctx: CanvasRenderingContext2D,
@@ -393,20 +393,20 @@ export const useCanvasDrawing = ({
     const centerX = x + width * (effect.centerX || 0.5);
     const centerY = y + height * (effect.centerY || 0.5);
 
-    // コマ枠内にクリッピング
+    // 
     ctx.save();
     ctx.beginPath();
     ctx.rect(x, y, width, height);
     ctx.clip();
 
-    // 主要な8方向の強い光線
+    // 8
     const mainDirections = [0, 45, 90, 135, 180, 225, 270, 315];
     mainDirections.forEach((angle) => {
       const angleRad = (angle * Math.PI) / 180;
       const cos = Math.cos(angleRad);
       const sin = Math.sin(angleRad);
       
-      // コマ端まで伸びる長い光線
+      // 
       const length = Math.max(width, height) * effect.length * 1.2;
       const x2 = centerX + cos * length;
       const y2 = centerY + sin * length;
@@ -420,7 +420,7 @@ export const useCanvasDrawing = ({
       ctx.stroke();
     });
 
-    // 追加の細かい光線
+    // 
     const subLineCount = Math.floor(effect.density * 40);
     for (let i = 0; i < subLineCount; i++) {
       const angle = Math.random() * 2 * Math.PI;
@@ -441,7 +441,7 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 🆕 効果線選択状態の描画
+   * 🆕 
    */
   const drawEffectSelection = (
     ctx: CanvasRenderingContext2D,
@@ -453,19 +453,19 @@ export const useCanvasDrawing = ({
     ctx.save();
     ctx.globalAlpha = 0.8;
     
-    // 選択枠
+    // 
     ctx.strokeStyle = '#007AFF';
     ctx.lineWidth = 2;
     ctx.setLineDash([4, 4]);
     ctx.strokeRect(x, y, width, height);
     
-    // リサイズハンドル
+    // 
     const handleSize = 8;
     const handles = [
-      { x: x - handleSize/2, y: y - handleSize/2 }, // 左上
-      { x: x + width - handleSize/2, y: y - handleSize/2 }, // 右上
-      { x: x - handleSize/2, y: y + height - handleSize/2 }, // 左下
-      { x: x + width - handleSize/2, y: y + height - handleSize/2 }, // 右下
+      { x: x - handleSize/2, y: y - handleSize/2 }, // 
+      { x: x + width - handleSize/2, y: y - handleSize/2 }, // 
+      { x: x - handleSize/2, y: y + height - handleSize/2 }, // 
+      { x: x + width - handleSize/2, y: y + height - handleSize/2 }, // 
     ];
     
     ctx.setLineDash([]);
@@ -482,7 +482,7 @@ export const useCanvasDrawing = ({
   };
 
   /**
-   * 選択された背景のハンドルを描画
+   * Draw handles for selected backgrounds
    */
   const drawBackgroundHandles = (ctx: CanvasRenderingContext2D) => {
     if (!selectedBackground) return;
@@ -499,16 +499,16 @@ export const useCanvasDrawing = ({
 
 
 
-  // src/components/CanvasComponent/hooks/useCanvasDrawing.ts 内に追加
+  // src/components/CanvasComponent/hooks/useCanvasDrawing.ts 
 
-  // useCanvasDrawing.ts に追加する Canvas版ラベル描画関数
+  // useCanvasDrawing.ts  Canvas
 
   /**
-   * 🆕 要素ラベルを描画（Canvas版）
+   * 🆕 Canvas
    */
   const drawElementLabels = (ctx: CanvasRenderingContext2D) => {
-    // 背景ラベル描画
-    // 背景ラベル描画（統合版）
+    // 
+    // 
     const drawnPanels = new Set<number>();
       backgrounds.forEach((bg) => {
     const panel = panels.find(p => p.id === bg.panelId);
@@ -516,7 +516,7 @@ export const useCanvasDrawing = ({
     
     drawnPanels.add(panel.id);
 
-    // 座標変換（相対座標→絶対座標）
+    // →
     let absoluteX, absoluteY, absoluteWidth, absoluteHeight;
     if (bg.x <= 1 && bg.y <= 1) {
       absoluteX = panel.x + (bg.x * panel.width);
@@ -530,73 +530,73 @@ export const useCanvasDrawing = ({
       absoluteHeight = bg.height;
     }
 
-    // 背景名前を優先、フォールバック付き
+    // Preferred background name with fallback
     let label = "🎨 ";
     if (bg.name) {
       label += bg.name;
     } else {
       switch (bg.type) {
         case 'solid':
-          label += `単色背景`;
+          label += ``;
           break;
         case 'gradient':
-          const gradientType = bg.gradientType === 'radial' ? '放射状' : '線形';
-          label += `${gradientType}グラデーション`;
+          const gradientType = bg.gradientType === 'radial' ? '' : '';
+          label += `${gradientType}`;
           break;
         case 'pattern':
-          label += `パターン背景`;
+          label += ``;
           break;
         case 'image':
-          label += `画像背景`;
+          label += ``;
           break;
         default:
           label += bg.type;
       }
     }
 
-    // ラベル描画（左上）
+    // 
     drawLabel(ctx, absoluteX + 10, absoluteY + 10, label, 'rgba(0, 0, 0, 0.8)', 150);
   });
 
-    // 効果線ラベル描画
+    // 
     effects.forEach((effect) => {
       const panel = panels.find(p => p.id === effect.panelId);
       if (!panel) return;
 
-      // 座標変換
+      // 
       const absoluteX = panel.x + (effect.x * panel.width);
       const absoluteY = panel.y + (effect.y * panel.height);
       const absoluteWidth = effect.width * panel.width;
       const absoluteHeight = effect.height * panel.height;
 
-      // 効果線タイプのラベル作成
+      // 
       const typeNames = {
-        'speed': 'スピード線',
-        'focus': '集中線', 
-        'explosion': '爆発線',
-        'flash': 'フラッシュ線'
+        'speed': '',
+        'focus': '', 
+        'explosion': '',
+        'flash': ''
       };
       const directionNames = {
-        'horizontal': '水平',
-        'vertical': '垂直',
-        'radial': '放射状',
-        'custom': 'カスタム'
+        'horizontal': '',
+        'vertical': '',
+        'radial': '',
+        'custom': ''
       };
       
       const typeName = typeNames[effect.type] || effect.type;
       const directionName = directionNames[effect.direction] || effect.direction;
       const label = `⚡ ${typeName} (${directionName})`;
 
-      // ラベル描画（右下）
+      // 
       drawLabel(ctx, absoluteX + 10, absoluteY + absoluteHeight - 34, label, 'rgba(255, 0, 0, 0.8)', 140);
     });
 
-    // トーンラベル描画
+    // 
     tones.filter(tone => tone.visible !== false).forEach((tone) => {
       const panel = panels.find(p => p.id === tone.panelId);
       if (!panel) return;
 
-      // 座標変換
+      // 
       let absoluteX, absoluteY, absoluteWidth, absoluteHeight;
       if (tone.x <= 1 && tone.y <= 1) {
         absoluteX = panel.x + (tone.x * panel.width);
@@ -610,33 +610,33 @@ export const useCanvasDrawing = ({
         absoluteHeight = tone.height;
       }
 
-      // トーンパターンのラベル作成
+      // 
       const patternNames = {
-        'dots_60': 'ドット60%',
-        'dots_85': 'ドット85%',
-        'dots_100': 'ドット100%',
-        'dots_120': 'ドット120%',
-        'dots_150': 'ドット150%',
-        'lines_horizontal': '水平線',
-        'lines_vertical': '垂直線',
-        'lines_diagonal': '斜線',
-        'lines_cross': 'クロス線',
-        'gradient_linear': '線形グラデーション',
-        'gradient_radial': '放射状グラデーション',
-        'noise_fine': '細かいノイズ',
-        'noise_coarse': '粗いノイズ'
+        'dots_60': '60%',
+        'dots_85': '85%',
+        'dots_100': '100%',
+        'dots_120': '120%',
+        'dots_150': '150%',
+        'lines_horizontal': '',
+        'lines_vertical': '',
+        'lines_diagonal': '',
+        'lines_cross': '',
+        'gradient_linear': '',
+        'gradient_radial': '',
+        'noise_fine': '',
+        'noise_coarse': ''
       };
       
       const patternName = patternNames[tone.pattern as keyof typeof patternNames] || tone.pattern;
-      const label = `🎯 ${patternName}トーン`;
+      const label = `🎯 ${patternName}`;
 
-      // ラベル描画（右上）
+      // 
       drawLabel(ctx, absoluteX + absoluteWidth - 140, absoluteY + 10, label, 'rgba(0, 128, 255, 0.8)', 130);
     });
   };
 
   /**
-   * 🆕 ラベル描画のヘルパー関数
+   * 🆕 
    */
   const drawLabel = (
     ctx: CanvasRenderingContext2D,
@@ -648,16 +648,16 @@ export const useCanvasDrawing = ({
   ) => {
     ctx.save();
     
-    // 背景矩形
+    // 
     ctx.fillStyle = bgColor;
     ctx.fillRect(x, y, width, 24);
     
-    // 白い境界線
+    // 
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1;
     ctx.strokeRect(x, y, width, 24);
     
-    // テキスト
+    // 
     ctx.fillStyle = 'white';
     ctx.font = 'bold 12px Arial, sans-serif';
     ctx.textAlign = 'center';
@@ -667,100 +667,100 @@ export const useCanvasDrawing = ({
     ctx.restore();
   };
   /**
-   * グリッド表示判定
+   * 
    */
   const showGrid = snapSettings.gridDisplay === 'always' || 
                   (snapSettings.gridDisplay === 'edit-only' && isPanelEditMode);
 
 /**
-   * Canvas描画関数（効果線+トーン描画統合版 + ラベル表示対応）
+   * Canvas+ + 
    */
     const drawCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) {
-      console.warn("⚠️ Canvas要素が見つかりません");
+      console.warn("⚠️ Canvas");
       return;
     }
     
     const ctx = canvas.getContext("2d");
     if (!ctx) {
-      console.warn("⚠️ Canvas 2Dコンテキストが取得できません");
+      console.warn("⚠️ Canvas 2DUnable to get context");
       return;
     }
 
-    // ダークモード判定
+    // 
     const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
 
     try {
-      // 1. キャンバスクリア
+      // 1. 
       CanvasDrawing.clearCanvas(ctx, canvas.width, canvas.height);
       
-      // 2. 背景描画（最初に描画）
+      // 2. 
       CanvasDrawing.drawBackground(ctx, canvas.width, canvas.height, isDarkMode);
 
-      // 3. グリッド描画（設定に応じて）
+      // 3. Grid Drawing (depending on settings)
       if (showGrid) {
         CanvasDrawing.drawGrid(ctx, canvas.width, canvas.height, snapSettings.gridSize, isDarkMode);
       }
 
-      // 4. パネル描画
+      // 4. 
       CanvasDrawing.drawPanels(ctx, panels, state.selectedPanel, isDarkMode, isPanelEditMode, swapPanel1, swapPanel2);
       
-      // 5. 背景要素描画（パネル内で zIndex 順）
+      // 5.  zIndex 
       drawBackgrounds(ctx);
       
-      // 🆕 6. トーン描画（背景の後、効果線の前）- ToneRenderer使用
+      // 🆕 6. Tone drawing (after background, before effect lines)- ToneRenderer
       drawTones(ctx);
       
-      // 🆕 7. 効果線描画（トーンの後、吹き出しの前）
+      // 🆕 7. Effect line drawing (after tone, before callout)
       drawEffects(ctx);
       
-      // 8. 吹き出し描画
+      // 8. 
       BubbleRenderer.drawBubbles(ctx, speechBubbles, panels, state.selectedBubble);
 
       
-      // 🔧 9. キャラクター描画 - getCharacterDisplayName を渡す
+      // 🔧 9.  - getCharacterDisplayName 
       CharacterRenderer.drawCharacters(ctx, characters, panels, state.selectedCharacter, getCharacterDisplayName);
 
-      // 10. スナップライン描画
+      // 10. 
       if (state.snapLines.length > 0) {
         CanvasDrawing.drawSnapLines(ctx, state.snapLines, isDarkMode);
       }
 
-      // 11. 背景ハンドル描画
+      // 11. 
       drawBackgroundHandles(ctx);
 
-      // 12. 要素ラベル描画
+      // 12. 
       drawElementLabels(ctx);
       
-      // 効果線ラベル（座標修正版）
+      // 
       effects.forEach((effect, index) => {
         const panel = panels.find(p => p.id === effect.panelId);
         if (!panel) return;
         
-        // 🔧 座標判定修正
+        // 🔧 
         let absoluteX, absoluteY, absoluteHeight;
         
         if (effect.x <= 1 && effect.y <= 1 && effect.width <= 1 && effect.height <= 1) {
-          // 相対座標の場合
+          // 
           absoluteX = panel.x + (effect.x * panel.width);
           absoluteY = panel.y + (effect.y * panel.height);
           absoluteHeight = effect.height * panel.height;
         } else {
-          // 絶対座標の場合
+          // 
           absoluteX = effect.x;
           absoluteY = effect.y;
           absoluteHeight = effect.height;
         }
         
-        // 🔧 異常な座標チェック
+        // 🔧 
         if (absoluteX < 0 || absoluteX > 1000 || absoluteY < 0 || absoluteY > 1000) {
-          console.warn(`⚠️ 効果線${index}: 異常座標(${absoluteX}, ${absoluteY}) - スキップ`);
+          console.warn(`⚠️ ${index}: (${absoluteX}, ${absoluteY}) - `);
           return;
         }
         
-        const typeNames = { 'speed': 'スピード線', 'focus': '集中線', 'explosion': '爆発線', 'flash': 'フラッシュ線' };
-        const directionNames = { 'horizontal': '水平', 'vertical': '垂直', 'radial': '放射状', 'custom': 'カスタム' };
+        const typeNames = { 'speed': '', 'focus': '', 'explosion': '', 'flash': '' };
+        const directionNames = { 'horizontal': '', 'vertical': '', 'radial': '', 'custom': '' };
         const typeName = typeNames[effect.type] || effect.type;
         const directionName = directionNames[effect.direction] || effect.direction;
         const label = `⚡ ${typeName}(${directionName})`;
@@ -780,7 +780,7 @@ export const useCanvasDrawing = ({
         ctx.fillText(label, labelX + 70, labelY + 14);
       });
       
-      // トーンラベル（簡潔版）
+      // 
       const visibleTones = tones.filter(tone => tone.visible !== false);
       visibleTones.forEach((tone, index) => {
         const panel = panels.find(p => p.id === tone.panelId);
@@ -798,8 +798,8 @@ export const useCanvasDrawing = ({
         }
         
         const patternNames = {
-          'dots_60': '網点60%', 'dots_85': '網点85%', 'dots_100': '網点100%',
-          'lines_horizontal': '水平線', 'lines_vertical': '垂直線', 'lines_diagonal': '斜線'
+          'dots_60': '60%', 'dots_85': '85%', 'dots_100': '100%',
+          'lines_horizontal': '', 'lines_vertical': '', 'lines_diagonal': ''
         };
         const patternName = patternNames[tone.pattern as keyof typeof patternNames] || tone.pattern;
         const label = `🎯 ${patternName}`;
@@ -816,18 +816,18 @@ export const useCanvasDrawing = ({
         ctx.fillText(label, absoluteX + absoluteWidth - 150 + 70, absoluteY + 10 + 14);
       });
       
-      // コンソールログは無効化
+      // 
     } catch (error) {
-      console.error("❌ Canvas描画エラー:", error);
+      console.error("❌ Canvas:", error);
     }
   };
 
   /**
-   * テーマ変更監視
+   * 
    */
   const observeThemeChange = () => {
     const handleThemeChange = () => {
-      // コンソールログは無効化
+      // 
       drawCanvas();
     };
     
@@ -839,17 +839,17 @@ export const useCanvasDrawing = ({
     
     return () => {
       observer.disconnect();
-      // コンソールログは無効化
+      // 
     };
   };
 
   /**
-   * 描画トリガー監視useEffect（効果線+トーン対応版）
+   * useEffect+
    */
-  // 1. 🔧 useEffect の依存配列に characterNames を追加
+  // 1. 🔧 useEffect  characterNames 
   useEffect(() => {
     drawCanvas();
-    // コンソールログは無効化
+    // 
   }, [
     panels.length,
     state.selectedPanel,
@@ -868,9 +868,9 @@ export const useCanvasDrawing = ({
     showGrid,
     snapSettings.gridSize,
     snapSettings.gridDisplay,
-    // 🆕 getCharacterDisplayName関数の変更を監視
-    getCharacterDisplayName, // ← この行を追加
-    // JSON.stringify も効果線+トーン対応
+    // 🆕 getCharacterDisplayName
+    getCharacterDisplayName, // ← 
+    // JSON.stringify +
     JSON.stringify(panels.map(p => ({ id: p.id, x: p.x, y: p.y, width: p.width, height: p.height }))),
     JSON.stringify(characters.map(c => ({ id: c.id, x: c.x, y: c.y, scale: c.scale, width: c.width, height: c.height }))),
     JSON.stringify(speechBubbles.map(b => ({ id: b.id, x: b.x, y: b.y, width: b.width, height: b.height }))),
@@ -880,14 +880,14 @@ export const useCanvasDrawing = ({
   ]);
 
   /**
-   * テーマ変更監視useEffect
+   * useEffect
    */
   useEffect(() => {
     return observeThemeChange();
   }, []);
 
   /**
-   * 手動再描画関数を返す（必要に応じて外部から呼び出し可能）
+   * Returns a manual redraw function (can be called externally if necessary)
    */
   return {
     drawCanvas,

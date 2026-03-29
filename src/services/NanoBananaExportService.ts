@@ -1,5 +1,5 @@
 // src/services/NanoBananaExportService.ts
-// NanoBanana連携用エクスポートサービス
+// NanoBanana
 
 import { 
   Panel, 
@@ -32,7 +32,7 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 🍌 NanoBanana用パッケージエクスポート
+   * 🍌 NanoBanana
    */
   async exportForNanoBanana(
     panels: Panel[],
@@ -48,49 +48,49 @@ export class NanoBananaExportService {
       const zip = new JSZip();
       const startTime = Date.now();
 
-      // 進行状況更新
+      // 
       const updateProgress = (step: NanoBananaExportProgress['step'], progress: number, message: string, currentFile?: string) => {
         if (onProgress) {
           onProgress({ step, progress, message, currentFile });
         }
       };
 
-      updateProgress('initialize', 0, 'NanoBananaエクスポートを初期化中...');
+      updateProgress('initialize', 0, 'NanoBanana...');
 
-      // 1. レイアウト画像生成
-      updateProgress('generate_layout', 10, 'レイアウト画像を生成中...', 'layout.png');
+      // 1. 
+      updateProgress('generate_layout', 10, '...', 'layout.png');
       const layoutImage = await this.generateLayoutImage(panels, paperSize, DEFAULT_LAYOUT_IMAGE_OPTIONS);
       zip.file('layout.png', layoutImage);
 
-      // 2. プロンプト生成
-      updateProgress('generate_prompt', 30, 'AIプロンプトを生成中...', 'prompt.txt');
+      // 2. Prompt generation
+      updateProgress('generate_prompt', 30, 'AI...', 'prompt.txt');
       const promptText = this.generatePromptText(panels, characters, bubbles, options.promptLanguage || 'english');
       zip.file('prompt.txt', promptText);
 
-      // 3. キャラクター名対応表生成
+      // 3. 
       if (options.includeCharacterMapping !== false) {
-        updateProgress('create_mapping', 50, 'キャラクター名対応表を作成中...', 'character_mapping.txt');
+        updateProgress('create_mapping', 50, 'Creating character name correspondence table...', 'character_mapping.txt');
       const characterMapping = this.generateCharacterMapping(characters, characterNames);
         zip.file('character_mapping.txt', characterMapping);
       }
 
-      // 4. 使用方法ガイド生成
+      // 4. 
       if (options.includeInstructions !== false) {
-        updateProgress('create_instructions', 70, '使用方法ガイドを作成中...', 'instructions.txt');
+        updateProgress('create_instructions', 70, '...', 'instructions.txt');
         const instructions = this.generateInstructions(options.promptLanguage || 'english');
         zip.file('instructions.txt', instructions);
       }
 
-      // 5. メタデータ生成
-      updateProgress('package_files', 90, 'パッケージを最終化中...', 'metadata.json');
+      // 5. 
+      updateProgress('package_files', 90, '...', 'metadata.json');
       const metadata = this.generateMetadata(panels, characters, bubbles, paperSize, startTime);
       zip.file('metadata.json', JSON.stringify(metadata, null, 2));
 
-      // 6. ZIPファイル生成
-      updateProgress('package_files', 95, 'ZIPファイルを作成中...');
+      // 6. ZIP
+      updateProgress('package_files', 95, 'ZIP...');
       const zipBlob = await zip.generateAsync({ type: 'blob' });
 
-      updateProgress('complete', 100, 'エクスポート完了！');
+      updateProgress('complete', 100, '');
 
       return {
         success: true,
@@ -113,25 +113,25 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 🎨 レイアウト画像生成
+   * 🎨 
    */
   private async generateLayoutImage(
     panels: Panel[], 
     paperSize: PaperSize, 
     options: LayoutImageOptions
   ): Promise<Blob> {
-    // 仮実装: 実際にはCanvasを使ってレイアウト画像を生成
-    // ここでは簡単なテキストベースの画像を生成
+    // : CanvasGenerate layout images using
+    // Here we generate a simple text-based image
     const canvas = document.createElement('canvas');
     canvas.width = 800;
     canvas.height = 600;
     const ctx = canvas.getContext('2d')!;
 
-    // 背景
+    // 
     ctx.fillStyle = options.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // パネル描画
+    // 
     ctx.strokeStyle = options.borderColor;
     ctx.lineWidth = options.borderWidth;
     panels.forEach((panel, index) => {
@@ -157,7 +157,7 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 📝 プロンプトテキスト生成
+   * 📝 
    */
   private generatePromptText(
     panels: Panel[],
@@ -186,7 +186,7 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 🇺🇸 英語プロンプト生成
+   * 🇺🇸 Prompt generation
    */
   private generateEnglishPrompt(panels: Panel[], characters: Character[], bubbles: SpeechBubble[]): string {
     let prompt = '=== AI Manga Generation Prompt ===\n\n';
@@ -195,7 +195,7 @@ export class NanoBananaExportService {
     prompt += 'Characters: ' + characters.length + '\n';
     prompt += 'Dialogue bubbles: ' + bubbles.length + '\n\n';
 
-    // Panel別プロンプト（キャラ＋動作の分離システム）
+    // PanelSeparate prompts (character + motion separation system)
     prompt += '=== Panel Prompts ===\n';
     panels.forEach((panel, index) => {
       prompt += `Panel ${index + 1}:\n`;
@@ -203,7 +203,7 @@ export class NanoBananaExportService {
         prompt += `  Note: ${panel.note}\n`;
       }
       
-      // 分離プロンプトシステム
+      // 
       const parts: string[] = [];
       if (panel.characterPrompt) parts.push(panel.characterPrompt.trim());
       if (panel.actionPrompt) parts.push(panel.actionPrompt.trim());
@@ -213,7 +213,7 @@ export class NanoBananaExportService {
         if (panel.characterPrompt) prompt += `    - Character: ${panel.characterPrompt}\n`;
         if (panel.actionPrompt) prompt += `    - Action: ${panel.actionPrompt}\n`;
       } else if (panel.prompt) {
-        // フォールバック
+        // 
         prompt += `  Prompt: ${panel.prompt}\n`;
       } else {
         prompt += `  Size: ${Math.round(panel.width * 100)}% x ${Math.round(panel.height * 100)}%\n`;
@@ -221,7 +221,7 @@ export class NanoBananaExportService {
       prompt += '\n';
     });
 
-    // キャラクター詳細（キャラクターがいる場合のみ）
+    // Character details (only if there is a character)
     if (characters.length > 0) {
       prompt += '=== Character Details ===\n';
       characters.forEach((char, index) => {
@@ -251,72 +251,72 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 🇯🇵 日本語プロンプト生成
+   * 🇯🇵 Prompt generation
    */
   private generateJapanesePrompt(panels: Panel[], characters: Character[], bubbles: SpeechBubble[]): string {
-    let prompt = '=== AI漫画生成用プロンプト ===\n\n';
+    let prompt = '=== AI ===\n\n';
     
-    prompt += 'レイアウト: ' + panels.length + 'コマ\n';
-    prompt += 'キャラクター: ' + characters.length + '人\n';
-    prompt += '吹き出し: ' + bubbles.length + '個\n\n';
+    prompt += ': ' + panels.length + '\n';
+    prompt += ': ' + characters.length + '\n';
+    prompt += ': ' + bubbles.length + '\n\n';
 
-    // コマ別プロンプト（キャラ＋動作の分離システム）
-    prompt += '=== コマ別プロンプト ===\n';
+    // Prompts by frame (character + motion separation system)
+    prompt += '===  ===\n';
     panels.forEach((panel, index) => {
-      prompt += `コマ${index + 1}:\n`;
+      prompt += `${index + 1}:\n`;
       if (panel.note) {
-        prompt += `  メモ: ${panel.note}\n`;
+        prompt += `  : ${panel.note}\n`;
       }
       
-      // 分離プロンプトシステム
+      // 
       const parts: string[] = [];
       if (panel.characterPrompt) parts.push(panel.characterPrompt.trim());
       if (panel.actionPrompt) parts.push(panel.actionPrompt.trim());
       
       if (parts.length > 0) {
-        prompt += `  合成プロンプト: ${parts.join(', ')}\n`;
-        if (panel.characterPrompt) prompt += `    - キャラ: ${panel.characterPrompt}\n`;
-        if (panel.actionPrompt) prompt += `    - 動作: ${panel.actionPrompt}\n`;
+        prompt += `  : ${parts.join(', ')}\n`;
+        if (panel.characterPrompt) prompt += `    - : ${panel.characterPrompt}\n`;
+        if (panel.actionPrompt) prompt += `    - : ${panel.actionPrompt}\n`;
       } else if (panel.prompt) {
-        // フォールバック
-        prompt += `  プロンプト: ${panel.prompt}\n`;
+        // 
+        prompt += `  : ${panel.prompt}\n`;
       } else {
-        prompt += `  サイズ: ${Math.round(panel.width * 100)}% x ${Math.round(panel.height * 100)}%\n`;
+        prompt += `  : ${Math.round(panel.width * 100)}% x ${Math.round(panel.height * 100)}%\n`;
       }
       prompt += '\n';
     });
 
-    // キャラクター詳細（キャラクターがいる場合のみ）
+    // Character details (only if there is a character)
     if (characters.length > 0) {
-      prompt += '=== キャラクター詳細 ===\n';
+      prompt += '===  ===\n';
       characters.forEach((char, index) => {
-        prompt += `キャラクター${index + 1}: ${char.name}\n`;
-        prompt += `  - 表示範囲: ${char.viewType}\n`;
-        prompt += `  - 表情: ${char.expression || '通常'}\n`;
-        prompt += `  - 動作: ${char.action || '立っている'}\n`;
-        if (char.facing) prompt += `  - 向き: ${char.facing}\n`;
-        if ((char as any).eyeState) prompt += `  - 目の状態: ${(char as any).eyeState}\n`;
-        if ((char as any).mouthState) prompt += `  - 口の状態: ${(char as any).mouthState}\n`;
-        if ((char as any).handGesture) prompt += `  - 手の動作: ${(char as any).handGesture}\n`;
-        if ((char as any).emotion_primary) prompt += `  - 感情: ${(char as any).emotion_primary}\n`;
-        if ((char as any).physical_state) prompt += `  - 体調・状態: ${(char as any).physical_state}\n`;
+        prompt += `${index + 1}: ${char.name}\n`;
+        prompt += `  - : ${char.viewType}\n`;
+        prompt += `  - : ${char.expression || ''}\n`;
+        prompt += `  - : ${char.action || ''}\n`;
+        if (char.facing) prompt += `  - : ${char.facing}\n`;
+        if ((char as any).eyeState) prompt += `  - : ${(char as any).eyeState}\n`;
+        if ((char as any).mouthState) prompt += `  - : ${(char as any).mouthState}\n`;
+        if ((char as any).handGesture) prompt += `  - : ${(char as any).handGesture}\n`;
+        if ((char as any).emotion_primary) prompt += `  - : ${(char as any).emotion_primary}\n`;
+        if ((char as any).physical_state) prompt += `  - : ${(char as any).physical_state}\n`;
         prompt += '\n';
       });
     }
 
-    prompt += '\n=== スタイル指示 ===\n';
-    prompt += '高品質な漫画を作成してください：\n';
-    prompt += '- クリーンな線画\n';
-    prompt += '- キャラクターの一貫性\n';
-    prompt += '- ダイナミックなコマ構成\n';
-    prompt += '- 明確なセリフ配置\n';
-    prompt += '- プロフェッショナルな漫画スタイル\n';
+    prompt += '\n===  ===\n';
+    prompt += 'Create high-quality cartoons:\n';
+    prompt += '- \n';
+    prompt += '- \n';
+    prompt += '- \n';
+    prompt += '- \n';
+    prompt += '- Professional cartoon style\n';
 
     return prompt;
   }
 
   /**
-   * 👥 キャラクター名対応表生成
+   * 👥 
    */
   private generateCharacterMapping(
     characters: Character[],
@@ -349,7 +349,7 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 📖 使用方法ガイド生成
+   * 📖 
    */
   private generateInstructions(language: 'english' | 'japanese' | 'both'): string {
     if (language === 'japanese') {
@@ -362,7 +362,7 @@ export class NanoBananaExportService {
   }
 
   /**
-   * 🇺🇸 英語使用方法ガイド
+   * 🇺🇸 
    */
   private generateEnglishInstructions(): string {
     return `=== NanoBanana Usage Guide ===
@@ -394,39 +394,39 @@ For support, visit: https://github.com/your-repo/name-tool-react
   }
 
   /**
-   * 🇯🇵 日本語使用方法ガイド
+   * 🇯🇵 
    */
   private generateJapaneseInstructions(): string {
-    return `=== NanoBanana使用方法ガイド ===
+    return `=== NanoBanana ===
 
-このパッケージには、Google AI StudioのNanoBananaを使用して漫画を生成するために必要なすべてが含まれています。
+Google AI StudioNanoBananaContains everything you need to use to generate comics.
 
-含まれるファイル：
-- layout.png: コマの視覚的レイアウト
-- prompt.txt: 詳細な生成プロンプト
-- character_mapping.txt: キャラクター参照ガイド
-- metadata.json: プロジェクト情報
 
-使用方法：
-1. Google AI Studioを開く
-2. NanoBananaモデルを選択
-3. layout.pngを参照画像としてアップロード
-4. prompt.txtの内容をコピー＆ペースト
-5. 漫画を生成！
+- layout.png: 
+- prompt.txt: 
+- character_mapping.txt: 
+- metadata.json: 
 
-最良の結果を得るためのコツ：
-- キャラクターの一貫性を保つためにキャラクター対応表を使用
-- 特定のニーズに基づいてプロンプトを調整
-- 異なるスタイルと設定を試してみる
-- お気に入りの結果を保存して将来の参考にする
 
-Name Tool v1.2.0で生成
-サポート: https://github.com/your-repo/name-tool-react
+1. Google AI Studio
+2. NanoBanana
+3. layout.pngUpload as reference image
+4. prompt.txt
+5. 
+
+Tips to get the best results:
+- Use character support charts to ensure character consistency
+- Adjust prompts based on specific needs
+- Try different styles and settings
+- Save your favorite results for future reference
+
+Name Tool v1.2.0
+: https://github.com/your-repo/name-tool-react
 `;
   }
 
   /**
-   * 📊 メタデータ生成
+   * 📊 
    */
   private generateMetadata(
     panels: Panel[],
@@ -438,7 +438,7 @@ Name Tool v1.2.0で生成
     return {
       exportedAt: new Date().toISOString(),
       toolVersion: '1.2.0',
-      pageCount: 1, // 現在は1ページのみ対応
+      pageCount: 1, // 1
       panelCount: panels.length,
       characterCount: characters.length,
       paperSize: `${paperSize.name} (${paperSize.width}x${paperSize.height})`,
@@ -448,5 +448,5 @@ Name Tool v1.2.0で生成
 
 }
 
-// シングルトンインスタンスをエクスポート
+// Export Singleton Instance
 export const nanoBananaExportService = NanoBananaExportService.getInstance();

@@ -10,7 +10,7 @@ interface PanelRendererProps {
   onPanelUpdate: (panel: Panel) => void;
   onPanelDelete: (panelId: string) => void;
   onPanelSplit: (panelId: string, direction: 'horizontal' | 'vertical') => void;
-  onPanelAdd: (targetPanelId: string, position: 'above' | 'below' | 'left' | 'right') => void; // 🆕 追加
+  onPanelAdd: (targetPanelId: string, position: 'above' | 'below' | 'left' | 'right') => void; // 🆕 
   onRightClick: (e: React.MouseEvent, panel: Panel) => void;
   isDarkMode: boolean;
 }
@@ -32,7 +32,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
   const [startPos, setStartPos] = React.useState({ x: 0, y: 0 });
   const [startPanel, setStartPanel] = React.useState<Panel | null>(null);
 
-  // 🆕 右クリックメニューの状態管理
+  // 🆕 Right-click menu state management
   const [contextMenu, setContextMenu] = React.useState<{
     visible: boolean;
     x: number;
@@ -40,7 +40,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
     panel: Panel | null;
   }>({ visible: false, x: 0, y: 0, panel: null });
 
-  // リサイズハンドル描画
+  // 
   const renderResizeHandles = () => {
     if (!isSelected || !isEditMode) return null;
 
@@ -57,7 +57,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
 
     return (
       <>
-        {/* 四隅のハンドル */}
+        {/*  */}
         <div
           style={{ ...handleStyle, top: '-4px', left: '-4px', cursor: 'nw-resize' }}
           onMouseDown={(e) => handleResizeStart(e, 'nw')}
@@ -75,7 +75,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
           onMouseDown={(e) => handleResizeStart(e, 'se')}
         />
         
-        {/* 辺の中央のハンドル */}
+        {/*  */}
         <div
           style={{ ...handleStyle, top: '-4px', left: '50%', transform: 'translateX(-50%)', cursor: 'n-resize' }}
           onMouseDown={(e) => handleResizeStart(e, 'n')}
@@ -93,7 +93,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
           onMouseDown={(e) => handleResizeStart(e, 'e')}
         />
 
-        {/* 🆕 コマ分割ボタン */}
+        {/* 🆕  */}
         <div
           style={{
             position: 'absolute',
@@ -112,7 +112,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
             zIndex: 1001
           }}
           onClick={() => onPanelSplit(panel.id.toString(), 'horizontal')}
-          title="コマを分割"
+          title=""
         >
           ✂️
         </div>
@@ -120,7 +120,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
     );
   };
 
-  // 🆕 右クリックメニュー表示
+  // 🆕 
   const handleRightClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -132,17 +132,17 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
       panel: panel
     });
 
-    // 他の右クリックメニューを閉じる
+    // Close other right-click menus
     document.addEventListener('click', closeContextMenu);
   };
 
-  // 🆕 右クリックメニューを閉じる
+  // 🆕 
   const closeContextMenu = () => {
     setContextMenu({ visible: false, x: 0, y: 0, panel: null });
     document.removeEventListener('click', closeContextMenu);
   };
 
-  // 🆕 右クリックメニューアクション
+  // 🆕 Right-click menu action
   const handleContextMenuAction = (action: string, position?: string) => {
     if (!contextMenu.panel) return;
     
@@ -151,7 +151,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
         onPanelSelect(contextMenu.panel);
         break;
       case 'delete':
-        if (window.confirm(`コマ${contextMenu.panel.id}を削除しますか？`)) {
+        if (window.confirm(`${contextMenu.panel.id}`)) {
           onPanelDelete(contextMenu.panel.id.toString())
         }
         break;
@@ -171,7 +171,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
     closeContextMenu();
   };
 
-  // リサイズ開始
+  // 
   const handleResizeStart = (e: React.MouseEvent, type: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -184,7 +184,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
     document.addEventListener('mouseup', handleResizeEnd);
   };
 
-  // リサイズ中
+  // 
   const handleResizeMove = (e: MouseEvent) => {
     if (!isResizing || !startPanel) return;
 
@@ -233,7 +233,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
     onPanelUpdate(newPanel);
   };
 
-  // リサイズ終了
+  // 
   const handleResizeEnd = () => {
     setIsResizing(false);
     setResizeType('');
@@ -264,9 +264,9 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
         style={panelStyle}
         onClick={() => onPanelSelect(panel)}
         onContextMenu={handleRightClick}
-        title={`コマ ${panel.id}`}
+        title={` ${panel.id}`}
       >
-        {/* パネル番号表示 */}
+        {/*  */}
         <div
           style={{
             position: 'absolute',
@@ -284,7 +284,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
         {renderResizeHandles()}
       </div>
 
-      {/* 🆕 右クリックコンテキストメニュー */}
+      {/* 🆕 Right click context menu */}
       {contextMenu.visible && (
         <div
           style={{
@@ -301,7 +301,7 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
           }}
           onClick={e => e.stopPropagation()}
         >
-          {/* コマ選択 */}
+          {/*  */}
           <div
             style={{
               padding: '8px 16px',
@@ -310,14 +310,14 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
               borderBottom: '1px solid #e5e7eb'
             }}
             onClick={() => handleContextMenuAction('select')}
-            // すべての onMouseEnter/onMouseLeave を以下に修正
+            //  onMouseEnter/onMouseLeave 
             onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = isDarkMode ? '#374151' : '#f3f4f6'}
             onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
           >
-            📍 コマを選択
+            📍 
           </div>
 
-          {/* コマ追加メニュー */}
+          {/*  */}
           <div
             style={{
               padding: '8px 16px',
@@ -327,13 +327,13 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
             }}
             onMouseEnter={(e) => {
               (e.target as HTMLElement).style.backgroundColor = isDarkMode ? '#374151' : '#f3f4f6';
-              // サブメニュー表示ロジック（簡易版）
+              // Submenu display logic (simplified version)
             }}
             onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
           >
-            ➕ コマを追加 ▶
+            ➕  ▶
             
-            {/* サブメニュー（簡易実装） */}
+            {/*  */}
             <div
               style={{
                 position: 'absolute',
@@ -344,18 +344,18 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
                 borderRadius: '8px',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 minWidth: '120px',
-                display: 'none' // ホバー時に表示（CSS で制御）
+                display: 'none' // CSS 
               }}
               className="submenu"
             >
-              <div onClick={() => handleContextMenuAction('add', 'above')} style={{ padding: '6px 12px', cursor: 'pointer' }}>⬆️ 上に追加</div>
-              <div onClick={() => handleContextMenuAction('add', 'below')} style={{ padding: '6px 12px', cursor: 'pointer' }}>⬇️ 下に追加</div>
-              <div onClick={() => handleContextMenuAction('add', 'left')} style={{ padding: '6px 12px', cursor: 'pointer' }}>⬅️ 左に追加</div>
-              <div onClick={() => handleContextMenuAction('add', 'right')} style={{ padding: '6px 12px', cursor: 'pointer' }}>➡️ 右に追加</div>
+              <div onClick={() => handleContextMenuAction('add', 'above')} style={{ padding: '6px 12px', cursor: 'pointer' }}>⬆️ </div>
+              <div onClick={() => handleContextMenuAction('add', 'below')} style={{ padding: '6px 12px', cursor: 'pointer' }}>⬇️ </div>
+              <div onClick={() => handleContextMenuAction('add', 'left')} style={{ padding: '6px 12px', cursor: 'pointer' }}>⬅️ </div>
+              <div onClick={() => handleContextMenuAction('add', 'right')} style={{ padding: '6px 12px', cursor: 'pointer' }}>➡️ </div>
             </div>
           </div>
 
-          {/* コマ分割 */}
+          {/*  */}
           <div
             style={{
               padding: '8px 16px',
@@ -363,11 +363,11 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
               color: isDarkMode ? '#f9fafb' : '#111827'
             }}
             onClick={() => handleContextMenuAction('split-horizontal')}
-            // すべての onMouseEnter/onMouseLeave を以下に修正
+            //  onMouseEnter/onMouseLeave 
             onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = isDarkMode ? '#374151' : '#f3f4f6'}
             onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
           >
-            ✂️ 横に分割
+            ✂️ 
           </div>
 
           <div
@@ -378,14 +378,14 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
               borderBottom: '1px solid #e5e7eb'
             }}
             onClick={() => handleContextMenuAction('split-vertical')}
-            // すべての onMouseEnter/onMouseLeave を以下に修正
+            //  onMouseEnter/onMouseLeave 
             onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = isDarkMode ? '#374151' : '#f3f4f6'}
             onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
           >
-            ✂️ 縦に分割
+            ✂️ 
           </div>
 
-          {/* コマ削除 */}
+          {/*  */}
           <div
             style={{
               padding: '8px 16px',
@@ -393,11 +393,11 @@ export const PanelRenderer: React.FC<PanelRendererProps> = ({
               color: '#dc2626'
             }}
             onClick={() => handleContextMenuAction('delete')}
-            // すべての onMouseEnter/onMouseLeave を以下に修正
+            //  onMouseEnter/onMouseLeave 
             onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = isDarkMode ? '#374151' : '#f3f4f6'}
             onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
           >
-            🗑️ コマを削除
+            🗑️ 
           </div>
         </div>
       )}

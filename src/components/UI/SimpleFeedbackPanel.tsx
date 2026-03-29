@@ -1,5 +1,5 @@
 /**
- * シンプルなGoogleフォーム埋め込みフィードバックパネル
+ * GoogleForms embedded feedback panel
  */
 
 import React from 'react';
@@ -35,13 +35,13 @@ export const SimpleFeedbackPanel: React.FC<SimpleFeedbackPanelProps> = ({
         border: `1px solid ${onDarkMode ? '#444' : '#ddd'}`,
         borderRadius: '12px',
         padding: '24px',
-        maxWidth: '800px', // 600px → 800px に拡大
-        width: '95%', // 90% → 95% に拡大
-        maxHeight: '85vh', // 80vh → 85vh に拡大
+        maxWidth: '800px', // 600px → 800px 
+        width: '95%', // 90% → 95% 
+        maxHeight: '85vh', // 80vh → 85vh 
         overflowY: 'auto',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
       }}>
-        {/* ヘッダー */}
+        {/*  */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -56,7 +56,7 @@ export const SimpleFeedbackPanel: React.FC<SimpleFeedbackPanelProps> = ({
             fontSize: '18px',
             fontWeight: 'bold'
           }}>
-            🧪 ベータ版フィードバック
+            🧪 
           </h3>
           <button
             onClick={onClose}
@@ -73,20 +73,20 @@ export const SimpleFeedbackPanel: React.FC<SimpleFeedbackPanelProps> = ({
           </button>
         </div>
 
-        {/* Googleフォーム埋め込み */}
+        {/* Google */}
         <div style={{
           marginBottom: '16px',
           color: onDarkMode ? '#ccc' : '#666',
           fontSize: '14px'
         }}>
-          以下のフォームからフィードバックをお送りください：
+          Please provide feedback using the form below:
         </div>
 
-        {/* 実際のGoogleフォームをここに埋め込み */}
+        {/* Google */}
         <iframe
           src="https://docs.google.com/forms/d/e/1FAIpQLSdQ_xNifC7yQTWQ_81upspPF3gAT0TK2LktLSib7_db4X33Lg/viewform?embedded=true"
           width="100%"
-          height="450" // 400px → 450px に拡大
+          height="450" // 400px → 450px 
           frameBorder="0"
           marginHeight={0}
           marginWidth={0}
@@ -95,10 +95,10 @@ export const SimpleFeedbackPanel: React.FC<SimpleFeedbackPanelProps> = ({
             borderRadius: '8px'
           }}
         >
-          読み込んでいます...
+          ...
         </iframe>
 
-        {/* 注意事項 */}
+        {/*  */}
         <div style={{
           marginTop: '16px',
           padding: '12px',
@@ -107,7 +107,7 @@ export const SimpleFeedbackPanel: React.FC<SimpleFeedbackPanelProps> = ({
           fontSize: '12px',
           color: onDarkMode ? '#ccc' : '#666'
         }}>
-          💡 フォーム送信後、このウィンドウを閉じてください
+          💡 Please close this window after form submission
         </div>
       </div>
     </div>

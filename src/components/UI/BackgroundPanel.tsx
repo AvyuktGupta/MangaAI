@@ -1,4 +1,4 @@
-// src/components/UI/BackgroundPanel.tsx - 共通ユーティリティ使用版
+// src/components/UI/BackgroundPanel.tsx - 
 import React, { useState } from 'react';
 import { BackgroundPanelProps, BackgroundTemplate, BackgroundElement } from '../../types';
 import { 
@@ -24,7 +24,7 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
 
   if (!isOpen) return null;
 
-  // 利用可能なパネルを取得
+  // 
   const getAvailablePanels = () => {
     if (selectedPanel) return [selectedPanel];
     
@@ -42,10 +42,10 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
   const availablePanels = getAvailablePanels();
   const currentPanel = selectedPanel || availablePanels[0] || null;
 
-  // 背景テンプレート適用
+  // 
   const applyBackgroundTemplate = (template: BackgroundTemplate) => {
     if (!currentPanel) {
-      alert('パネルを選択するか、既存の背景があるパネルから選択してください');
+      alert('Select a panel or choose from a panel with an existing background');
       return;
     }
 
@@ -55,7 +55,7 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
       const backgroundElement: BackgroundElement = {
         id: `bg_${Date.now()}_${index}`,
         panelId: currentPanel.id,
-        name: template.name,  // この行を追加
+        name: template.name,  // 
         ...element
       };
       return backgroundElement;
@@ -63,15 +63,15 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
 
     setBackgrounds([...filteredBackgrounds, ...newBackgrounds]);
     onBackgroundAdd(template);
-    console.log(`背景テンプレート「${template.name}」をパネル${currentPanel.id}に適用しました`);
+    console.log(`${template.name}${currentPanel.id}`);
   };
 
-  // 🔧 現在のパネルの背景情報を取得
+  // 🔧 Get background information for the current panel
   const panelBackgrounds = currentPanel 
     ? backgrounds.filter(bg => bg.panelId === currentPanel.id)
     : [];
 
-  // 🔧 共通ユーティリティを使用（重複コード削除）
+  // 🔧 Use common utility (remove duplicate codes)
   const backgroundName = currentPanel 
     ? getIntegratedBackgroundName(backgrounds, currentPanel.id)
     : '';
@@ -109,7 +109,7 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
           boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
         }}
       >
-        {/* ヘッダー */}
+        {/*  */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -119,10 +119,10 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
           paddingBottom: '16px'
         }}>
           <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>
-            🎨 背景設定
+            🎨 
             {currentPanel && (
               <span style={{ fontSize: '16px', fontWeight: 'normal', marginLeft: '12px', color: 'var(--text-muted)' }}>
-                パネル{currentPanel.id} ({panelBackgrounds.length})
+                {currentPanel.id} ({panelBackgrounds.length})
               </span>
             )}
           </h2>
@@ -139,11 +139,11 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
               fontSize: '14px'
             }}
           >
-            ✕ 閉じる
+            ✕ 
           </button>
         </div>
 
-        {/* パネル選択状況の表示 */}
+        {/*  */}
         {!currentPanel ? (
           <div style={{
             background: 'var(--bg-secondary)',
@@ -154,13 +154,13 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
             textAlign: 'center',
             color: 'var(--accent-color)'
           }}>
-            📢 背景を設定するパネルを先に選択してください
+            📢 Please select a panel to set the background first
           </div>
         ) : (
           <>
-            {/* デバッグ情報は無効化 */}
+            {/*  */}
 
-            {/* カテゴリタブ */}
+            {/*  */}
             <div style={{ marginBottom: '20px' }}>
               <div style={{ 
                 display: 'flex', 
@@ -190,14 +190,14 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
               </div>
             </div>
 
-            {/* 背景テンプレート一覧 */}
+            {/*  */}
             <div style={{ marginBottom: '24px' }}>
               <h3 style={{ 
                 margin: '0 0 12px 0', 
                 fontSize: '18px',
                 color: 'var(--text-primary)'
               }}>
-                📋 テンプレート ({getBackgroundsByCategory(activeCategory as any).length}個)
+                📋  ({getBackgroundsByCategory(activeCategory as any).length})
               </h3>
               
               <div style={{
@@ -250,7 +250,7 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
               </div>
             </div>
 
-            {/* 🆕 強制統合表示（必ず表示） */}
+            {/* 🆕  */}
             {panelBackgrounds.length > 0 && (
               <div>
                 <h3 style={{ 
@@ -258,7 +258,7 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
                   fontSize: '18px',
                   color: 'var(--text-primary)'
                 }}>
-                  🎯 現在の背景
+                  🎯 
                 </h3>
                 
                 <div style={{
@@ -275,7 +275,7 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
                     alignItems: 'center',
                     gap: '12px'
                   }}>
-                    {/* プレビューカラー */}
+                    {/*  */}
                     <div style={{
                       width: '40px',
                       height: '30px',
@@ -284,28 +284,28 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
                       border: '1px solid var(--border-color)'
                     }} />
                     
-                    {/* 背景名と詳細 */}
+                    {/*  */}
                     <div>
                       <div style={{ 
                         fontWeight: 'bold', 
                         fontSize: '18px',
                         color: 'var(--text-primary)'
                       }}>
-                        📍 {backgroundName || 'カスタム背景'}
+                        📍 {backgroundName || 'Custom background'}
                       </div>
                       <div style={{ 
                         fontSize: '12px', 
                         color: 'var(--text-muted)' 
                       }}>
-                        統合表示 ({panelBackgrounds.length}個の要素)
+                         ({panelBackgrounds.length})
                       </div>
                     </div>
                   </div>
                   
-                  {/* 削除ボタン */}
+                  {/*  */}
                   <button
                     onClick={() => {
-                      if (window.confirm(`背景「${backgroundName}」を削除しますか？`)) {
+                      if (window.confirm(`${backgroundName}`)) {
                         const filteredBackgrounds = backgrounds.filter(bg => bg.panelId !== currentPanel.id);
                         setBackgrounds(filteredBackgrounds);
                       }
@@ -321,11 +321,11 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
                       fontWeight: 'bold'
                     }}
                   >
-                    🗑️ 削除
+                    🗑️ 
                   </button>
                 </div>
                 
-                {/* 成功メッセージ */}
+                {/*  */}
                 <div style={{
                   marginTop: '8px',
                   padding: '8px',
@@ -335,12 +335,12 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
                   color: '#2e7d32',
                   border: '1px solid #c8e6c9'
                 }}>
-                  ✅ 統合表示ON: 個別要素は統合されています
+                  ✅ ON: 
                 </div>
               </div>
             )}
 
-            {/* 操作ガイド */}
+            {/*  */}
             <div style={{
               marginTop: '20px',
               padding: '12px',
@@ -350,10 +350,10 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({
               fontSize: '12px',
               color: 'var(--text-muted)'
             }}>
-              <strong>💡 操作ガイド:</strong><br/>
-              • テンプレートをクリックして背景を適用<br/>
-              • 🔧 修正版: 統合表示で背景名のみ表示<br/>
-              • デバッグ情報で動作確認可能<br/>
+              <strong>💡 :</strong><br/>
+              • Click on the template to apply the background<br/>
+              • 🔧 : <br/>
+              • <br/>
             </div>
           </>
         )}

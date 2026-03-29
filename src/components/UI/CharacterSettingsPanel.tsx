@@ -1,4 +1,4 @@
-// src/components/UI/CharacterSettingsPanel.tsx - 大幅シンプル化版
+// src/components/UI/CharacterSettingsPanel.tsx - 
 import React, { useState, useEffect } from 'react';
 import { CharacterSettings } from '../../types';
 
@@ -8,15 +8,15 @@ interface CharacterSettingsPanelProps {
   characterType: string;
   currentName?: string;
   currentSettings?: CharacterSettings;
-  onCharacterUpdate: (characterData: any) => void;  // 🔧 型を any に変更
+  onCharacterUpdate: (characterData: any) => void;  // 🔧  any 
   isDarkMode?: boolean;
 }
 
 const DEFAULT_NAMES: Record<string, string> = {
-  hero: '主人公',
-  heroine: 'ヒロイン',
-  rival: 'ライバル',
-  friend: '友人'
+  hero: '',
+  heroine: '',
+  rival: '',
+  friend: ''
 };
 
 export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
@@ -33,44 +33,44 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
   const [gender, setGender] = useState<'male' | 'female' | 'other'>('female');
   const [basePrompt, setBasePrompt] = useState('');
 
-  // 初期化
+  // 
   useEffect(() => {
     if (isOpen) {
-      console.log('🔍 CharacterSettingsPanel初期化:', {
+      console.log('🔍 CharacterSettingsPanel:', {
         characterType,
         currentSettings,
         currentName
       });
 
-      const defaultName = currentSettings?.name || currentName || DEFAULT_NAMES[characterType] || 'キャラクター';
-      const defaultRole = currentSettings?.role || DEFAULT_NAMES[characterType] || '主人公';
+      const defaultName = currentSettings?.name || currentName || DEFAULT_NAMES[characterType] || '';
+      const defaultRole = currentSettings?.role || DEFAULT_NAMES[characterType] || '';
       
       setName(defaultName);
       setRole(defaultRole);
       setGender(currentSettings?.gender || 'female');
       
-      // 🔧 basePrompt の取得方法を修正（型安全）
+      // 🔧 basePrompt 
       let initialBasePrompt = '';
       
-      // 1. currentSettings.basePrompt から取得
+      // 1. currentSettings.basePrompt 
       if (currentSettings?.basePrompt) {
         initialBasePrompt = currentSettings.basePrompt;
-        console.log('📥 basePrompt取得（currentSettings）:', initialBasePrompt.substring(0, 50));
+        console.log('📥 basePromptcurrentSettings:', initialBasePrompt.substring(0, 50));
       }
-      // 2. currentSettings を any として扱って appearance をチェック
+      // 2. currentSettings  any  appearance 
       else if ((currentSettings as any)?.appearance?.basePrompt) {
         initialBasePrompt = (currentSettings as any).appearance.basePrompt;
-        console.log('📥 basePrompt取得（appearance）:', initialBasePrompt.substring(0, 50));
+        console.log('📥 basePromptappearance:', initialBasePrompt.substring(0, 50));
       }
-      // 3. デフォルト値
+      // 3. 
       else {
         initialBasePrompt = '';
-        console.log('📥 basePrompt取得（デフォルト）: 空文字');
+        console.log('📥 basePrompt: ');
       }
       
       setBasePrompt(initialBasePrompt);
       
-      console.log('✅ CharacterSettingsPanel初期化完了:', {
+      console.log('✅ CharacterSettingsPanel:', {
         name: defaultName,
         role: defaultRole,
         gender: currentSettings?.gender || 'female',
@@ -80,7 +80,7 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
   }, [isOpen, currentSettings, currentName, characterType]);
 
   const handleSave = () => {
-    console.log('💾 CharacterSettingsPanel保存開始:', {
+    console.log('💾 CharacterSettingsPanel:', {
       characterType,
       name,
       role,
@@ -88,7 +88,7 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
       basePrompt: basePrompt.substring(0, 50) + (basePrompt.length > 50 ? '...' : '')
     });
 
-    // 🔧 App.tsx の handleCharacterSettingsUpdate が期待する形式
+    // 🔧 App.tsx  handleCharacterSettingsUpdate 
     const characterData = {
       name,
       role,
@@ -98,17 +98,17 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
       }
     };
 
-    console.log('📤 送信データ:', characterData);
+    console.log('📤 :', characterData);
     
-    onCharacterUpdate(characterData);  // ✅ 型エラー解消
+    onCharacterUpdate(characterData);  // ✅ 
     onClose();
     
-    console.log('✅ CharacterSettingsPanel保存完了');
+    console.log('✅ CharacterSettingsPanel');
   };
 
   const handleReset = () => {
-    const defaultName = DEFAULT_NAMES[characterType] || 'キャラクター';
-    const defaultRole = DEFAULT_NAMES[characterType] || '主人公';
+    const defaultName = DEFAULT_NAMES[characterType] || '';
+    const defaultRole = DEFAULT_NAMES[characterType] || '';
     
     setName(defaultName);
     setRole(defaultRole);
@@ -181,62 +181,62 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
     <div style={modalStyle} onClick={onClose}>
       <div style={panelStyle} onClick={(e) => e.stopPropagation()}>
         <h2 style={{ margin: '0 0 20px 0', fontSize: '20px' }}>
-          👥 キャラクター設定
+          👥 
         </h2>
 
         <div style={sectionStyle}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>📝 基本情報</h3>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>📝 </h3>
           
           <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>
-            キャラクター名：
+            
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="キャラクター名"
+            placeholder=""
             style={inputStyle}
           />
 
           <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>
-            役割：
+            
           </label>
           <input
             type="text"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            placeholder="主人公、ヒロインなど"
+            placeholder=""
             style={inputStyle}
           />
 
           <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>
-            性別：
+            
           </label>
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value as 'male' | 'female' | 'other')}
             style={inputStyle}
           >
-            <option value="female">女性</option>
-            <option value="male">男性</option>
-            <option value="other">その他</option>
+            <option value="female"></option>
+            <option value="male"></option>
+            <option value="other"></option>
           </select>
         </div>
 
         <div style={sectionStyle}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>🤖 プロンプト設定</h3>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>🤖 </h3>
           
           <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>
-            基本プロンプト：
+            
           </label>
           <textarea
             value={basePrompt}
             onChange={(e) => setBasePrompt(e.target.value)}
-            placeholder="プロンプトメーカーで作成した英語プロンプトをここに貼り付けてください&#10;例: 1girl, long black hair, school uniform, blue eyes, detailed face"
+            placeholder="Paste the English prompt created by the prompt maker here&#10;: 1girl, long black hair, school uniform, blue eyes, detailed face"
             style={textareaStyle}
           />
           <div style={{ fontSize: '12px', color: isDarkMode ? '#aaa' : '#666', marginTop: '4px' }}>
-            💡 プロンプトメーカーで作成した英語プロンプトをそのまま貼り付けられます
+            💡 You can paste the English prompt created by the prompt maker as it is
           </div>
         </div>
 
@@ -249,7 +249,7 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
               color: 'white',
             }}
           >
-            リセット
+            
           </button>
           <button
             onClick={onClose}
@@ -259,7 +259,7 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
               color: isDarkMode ? '#ffffff' : '#333333',
             }}
           >
-            キャンセル
+            
           </button>
           <button
             onClick={handleSave}
@@ -269,7 +269,7 @@ export const CharacterSettingsPanel: React.FC<CharacterSettingsPanelProps> = ({
               color: 'white',
             }}
           >
-            保存
+            
           </button>
         </div>
       </div>

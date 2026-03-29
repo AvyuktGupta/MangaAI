@@ -1,4 +1,4 @@
-/* src/components/UI/PageManager.css - ページ管理用スタイル */
+/* src/components/UI/PageManager.css -  */
 
 .page-manager {
   background: var(--bg-secondary);
@@ -30,18 +30,18 @@
   margin-top: 2px;
 }
 
-/* ドラッグ中のスタイル */
+/*  */
 .page-tab[draggable="true"]:active {
   cursor: grabbing;
   transform: rotate(2deg);
 }
 
-/* タブの最大幅制限 */
+/*  */
 .page-tab span {
   max-width: 160px;
 }
 
-/* 右クリックメニューのスタイル */
+/*  */
 .page-tab div[style*="position: absolute"] {
   animation: fadeIn 0.15s ease-out;
 }
@@ -57,17 +57,17 @@
   }
 }
 
-/* 右クリックメニューボタンのホバー効果 */
+/*  */
 .page-tab div[style*="position: absolute"] button:hover {
   background: var(--bg-tertiary) !important;
 }
 
-/* ページ追加ボタンのスタイル */
+/*  */
 .page-manager button {
   flex-shrink: 0;
 }
 
-/* スクロールバーのスタイル */
+/*  */
 .page-manager::-webkit-scrollbar {
   height: 6px;
 }
@@ -85,7 +85,7 @@
   background: var(--text-muted);
 }
 
-/* ダークモード対応 */
+/*  */
 [data-theme="dark"] .page-tab {
   border-color: var(--border-color);
 }
@@ -95,7 +95,7 @@
   border-bottom-color: var(--accent-color) !important;
 }
 
-/* コンパクトモード */
+/*  */
 .page-manager.compact {
   min-height: 36px;
   padding: 4px 8px;
@@ -108,7 +108,7 @@
   max-width: 120px;
 }
 
-/* レスポンシブ対応 */
+/*  */
 @media (max-width: 768px) {
   .page-manager {
     gap: 4px;

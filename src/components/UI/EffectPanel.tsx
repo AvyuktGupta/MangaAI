@@ -1,13 +1,13 @@
-// src/components/UI/EffectPanel.tsx - 完全版（重複解消）
+// src/components/UI/EffectPanel.tsx - 
 import React, { useState } from 'react';
 import { EffectElement, EffectTemplate, Panel } from '../../types';
 
-// 効果線テンプレート定義
+// 
 const effectTemplates: EffectTemplate[] = [
-  // アクションカテゴリ
+  // 
   {
     id: 'speed_horizontal',
-    name: 'スピード線（水平）',
+    name: '',
     type: 'speed',
     direction: 'horizontal',
     intensity: 0.8,
@@ -17,12 +17,12 @@ const effectTemplates: EffectTemplate[] = [
     color: '#333333',
     opacity: 0.8,
     blur: 0,
-    description: '水平方向のスピード線',
+    description: '',
     category: 'action'
   },
   {
     id: 'speed_diagonal',
-    name: 'スピード線（斜め）',
+    name: '',
     type: 'speed',
     direction: 'custom',
     intensity: 0.7,
@@ -32,12 +32,12 @@ const effectTemplates: EffectTemplate[] = [
     color: '#444444',
     opacity: 0.9,
     blur: 0,
-    description: '斜め方向のスピード線',
+    description: '',
     category: 'action'
   },
   {
     id: 'explosion_impact',
-    name: '爆発（衝撃）',
+    name: '',
     type: 'explosion',
     direction: 'radial',
     intensity: 0.9,
@@ -47,13 +47,13 @@ const effectTemplates: EffectTemplate[] = [
     color: '#FF4444',
     opacity: 0.7,
     blur: 1,
-    description: '強烈な衝撃表現',
+    description: '',
     category: 'action'
   },
-  // 感情カテゴリ
+  // 
   {
     id: 'focus_attention',
-    name: '集中線（注目）',
+    name: '',
     type: 'focus',
     direction: 'radial',
     intensity: 0.6,
@@ -63,12 +63,12 @@ const effectTemplates: EffectTemplate[] = [
     color: '#222222',
     opacity: 0.6,
     blur: 0,
-    description: '注目ポイントの強調',
+    description: '',
     category: 'emotion'
   },
   {
     id: 'flash_realization',
-    name: 'フラッシュ（気づき）',
+    name: '',
     type: 'flash',
     direction: 'radial',
     intensity: 0.5,
@@ -78,13 +78,13 @@ const effectTemplates: EffectTemplate[] = [
     color: '#FFD700',
     opacity: 0.8,
     blur: 2,
-    description: 'ひらめき・気づきの表現',
+    description: '',
     category: 'emotion'
   },
-  // 環境カテゴリ
+  // 
   {
     id: 'speed_wind',
-    name: '風のスピード線',
+    name: '',
     type: 'speed',
     direction: 'custom',
     intensity: 0.4,
@@ -94,13 +94,13 @@ const effectTemplates: EffectTemplate[] = [
     color: '#87CEEB',
     opacity: 0.5,
     blur: 1,
-    description: '風の流れを表現',
+    description: '',
     category: 'environment'
   },
-  // 特殊カテゴリ
+  // 
   {
     id: 'focus_dramatic',
-    name: '集中線（ドラマチック）',
+    name: '',
     type: 'focus',
     direction: 'radial',
     intensity: 0.8,
@@ -110,7 +110,7 @@ const effectTemplates: EffectTemplate[] = [
     color: '#000000',
     opacity: 0.9,
     blur: 0,
-    description: 'ドラマチックな演出',
+    description: '',
     category: 'special'
   }
 ];
@@ -140,10 +140,10 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
 
   if (!isOpen) return null;
 
-  // テンプレートから効果線要素を作成（背景と同じ方式）
+  // Create an effect line element from the template (in the same way as the background)
   const createEffectFromTemplate = (template: EffectTemplate): EffectElement => {
     if (!selectedPanel) {
-      alert('効果線を追加するコマを選択してください');
+      alert('Please select a frame to add an effect line');
       return null as any;
     }
 
@@ -151,10 +151,10 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
       id: `effect_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
       panelId: selectedPanel.id,
       type: template.type,
-      x: 0, // パネル全体に適用（背景と同じ）
+      x: 0, // Apply to entire panel (same as background)
       y: 0,
-      width: 1, // パネル全体の幅
-      height: 1, // パネル全体の高さ
+      width: 1, // 
+      height: 1, // 
       direction: template.direction,
       intensity: template.intensity,
       density: template.density,
@@ -171,26 +171,26 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
     };
   };
 
-  // カテゴリ別テンプレート取得
+  // 
   const getTemplatesByCategory = (category: string) => {
     return effectTemplates.filter(template => template.category === category);
   };
 
-  // 選択中のコマの効果線を取得
+  // 
   const getPanelEffects = () => {
     if (!selectedPanel) return [];
     return effects.filter(effect => effect.panelId === selectedPanel.id);
   };
 
-  // カテゴリ情報
+  // 
   const categories = [
-    { id: 'action' as const, name: 'アクション', icon: '⚡', color: '#FF5722' },
-    { id: 'emotion' as const, name: '感情', icon: '💭', color: '#9C27B0' },
-    { id: 'environment' as const, name: '環境', icon: '🌪️', color: '#2196F3' },
-    { id: 'special' as const, name: '特殊', icon: '✨', color: '#FF9800' }
+    { id: 'action' as const, name: '', icon: '⚡', color: '#FF5722' },
+    { id: 'emotion' as const, name: '', icon: '💭', color: '#9C27B0' },
+    { id: 'environment' as const, name: '', icon: '🌪️', color: '#2196F3' },
+    { id: 'special' as const, name: '', icon: '✨', color: '#FF9800' }
   ];
 
-  // 効果線タイプのアイコン取得
+  // 
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'speed': return '💨';
@@ -234,7 +234,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ヘッダー */}
+        {/*  */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -245,7 +245,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
         }}>
           <div>
             <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--text-primary)' }}>
-              ⚡ 効果線設定
+              ⚡ 
             </h3>
             {selectedPanel ? (
               <div style={{ 
@@ -253,7 +253,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                 color: 'var(--text-muted)', 
                 marginTop: '4px' 
               }}>
-                📍 コマ{selectedPanel.id}に効果線を追加
+                📍 {selectedPanel.id}
               </div>
             ) : (
               <div style={{ 
@@ -261,7 +261,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                 color: '#ff6b6b', 
                 marginTop: '4px' 
               }}>
-                ⚠️ コマを選択してください
+                ⚠️ 
               </div>
             )}
           </div>
@@ -288,7 +288,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
           </button>
         </div>
 
-        {/* 現在のコマの効果線表示 */}
+        {/*  */}
         {selectedPanel && panelEffects.length > 0 && (
           <div style={{
             background: 'var(--bg-tertiary)',
@@ -302,7 +302,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
               fontSize: '14px',
               color: 'var(--text-primary)'
             }}>
-              コマ{selectedPanel.id}の効果線 ({panelEffects.length}個)
+              {selectedPanel.id} ({panelEffects.length})
             </h4>
             <div style={{
               display: 'flex',
@@ -331,14 +331,14 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
           </div>
         )}
 
-        {/* コンテンツ */}
+        {/*  */}
         <div style={{ 
           flex: 1, 
           display: 'flex', 
           flexDirection: 'column',
           overflow: 'hidden'
         }}>
-          {/* カテゴリタブ */}
+          {/*  */}
           <div style={{
             display: 'flex',
             borderBottom: '1px solid var(--border-color)',
@@ -381,14 +381,14 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
             ))}
           </div>
 
-          {/* テンプレートグリッド */}
+          {/*  */}
           <div style={{ 
             flex: 1, 
             padding: '16px', 
             overflowY: 'auto'
           }}>
             {!selectedPanel ? (
-              // コマ未選択時のメッセージ
+              // 
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -399,10 +399,10 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                 textAlign: 'center'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>📐</div>
-                <div style={{ fontSize: '16px', marginBottom: '8px' }}>コマを選択してください</div>
+                <div style={{ fontSize: '16px', marginBottom: '8px' }}></div>
                 <div style={{ fontSize: '12px', lineHeight: 1.4 }}>
-                  Canvas上のコマをクリックしてから<br/>
-                  効果線テンプレートを選択できます
+                  Canvas<br/>
+                  You can select an effect line template
                 </div>
               </div>
             ) : (
@@ -442,7 +442,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                       e.currentTarget.style.borderColor = 'var(--border-color)';
                     }}
                   >
-                    {/* テンプレートヘッダー */}
+                    {/*  */}
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -463,7 +463,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                       </div>
                     </div>
 
-                    {/* テンプレートプレビュー */}
+                    {/*  */}
                     <div style={{
                       background: 'var(--bg-primary)',
                       borderRadius: '4px',
@@ -475,7 +475,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                       {template.description}
                     </div>
 
-                    {/* パラメータ表示 */}
+                    {/*  */}
                     <div style={{
                       display: 'flex',
                       gap: '8px',
@@ -488,7 +488,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                         fontSize: '10px',
                         color: 'var(--text-muted)'
                       }}>
-                        強度: {Math.round(template.intensity * 100)}%
+                        : {Math.round(template.intensity * 100)}%
                       </span>
                       <span style={{
                         background: 'var(--bg-tertiary)',
@@ -497,7 +497,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                         fontSize: '10px',
                         color: 'var(--text-muted)'
                       }}>
-                        密度: {Math.round(template.density * 100)}%
+                        : {Math.round(template.density * 100)}%
                       </span>
                     </div>
                   </div>
@@ -506,7 +506,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
             )}
           </div>
 
-          {/* 選択中の効果線編集エリア */}
+          {/*  */}
           {selectedEffect && (
             <div style={{
               borderTop: '1px solid var(--border-color)',
@@ -518,7 +518,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                 fontSize: '14px',
                 color: 'var(--text-primary)'
               }}>
-                選択中の効果線: {getTypeIcon(selectedEffect.type)} {selectedEffect.type}
+                : {getTypeIcon(selectedEffect.type)} {selectedEffect.type}
               </h4>
               
               <div style={{
@@ -533,7 +533,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                     color: 'var(--text-muted)',
                     marginBottom: '4px'
                   }}>
-                    強度: {Math.round(selectedEffect.intensity * 100)}%
+                    : {Math.round(selectedEffect.intensity * 100)}%
                   </label>
                   <input
                     type="range"
@@ -562,7 +562,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
                     color: 'var(--text-muted)',
                     marginBottom: '4px'
                   }}>
-                    密度: {Math.round(selectedEffect.density * 100)}%
+                    : {Math.round(selectedEffect.density * 100)}%
                   </label>
                   <input
                     type="range"
@@ -587,7 +587,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
             </div>
           )}
 
-          {/* フッター */}
+          {/*  */}
           <div style={{
             borderTop: '1px solid var(--border-color)',
             background: 'var(--bg-secondary)',
@@ -596,7 +596,7 @@ const EffectPanel: React.FC<EffectPanelProps> = ({
             color: 'var(--text-muted)',
             textAlign: 'center'
           }}>
-            💡 コマを選択してテンプレートをクリック • Canvas上で効果線を選択して編集
+            💡 Select a frame and click on the template • Canvas
           </div>
         </div>
       </div>

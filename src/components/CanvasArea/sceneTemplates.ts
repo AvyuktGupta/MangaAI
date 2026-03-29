@@ -1,4 +1,4 @@
-// src/components/CanvasArea/sceneTemplates.ts - 統一ファクトリー版（超簡素化）
+// src/components/CanvasArea/sceneTemplates.ts - Unified Factory Edition (Super Simplified)
 
 import { Character, SpeechBubble, BackgroundElement, EffectElement, ToneElement } from "../../types";
 import { 
@@ -20,17 +20,17 @@ export interface EnhancedSceneTemplate {
   category: 'emotion' | 'action' | 'daily' | 'special';
   characters: Omit<Character, "id" | "panelId">[];
   speechBubbles: Omit<SpeechBubble, "id" | "panelId">[];
-  background?: Omit<BackgroundElement, "id" | "panelId">; // 単数形（統合テンプレート用）
-  backgrounds?: Omit<BackgroundElement, "id" | "panelId">[]; // 複数形（従来用）
+  background?: Omit<BackgroundElement, "id" | "panelId">; // Singular (for integrated templates)
+  backgrounds?: Omit<BackgroundElement, "id" | "panelId">[]; // 
   effects?: Omit<EffectElement, "id" | "panelId">[];
   tones?: Omit<ToneElement, "id" | "panelId">[];
 }
 
 // ==========================================
-// 🎯 統一ファクトリー版シーンテンプレート
+// 🎯 Unified Factory Edition Scene Template
 // ==========================================
 
-// 🔧 統一ファクトリーを使用したシーン生成（超簡素版）
+// 🔧 Scene generation using a unified factory (ultra-simple version)
 const createFactoryScene = (
   name: string,
   description: string,
@@ -52,54 +52,54 @@ const createFactoryScene = (
 };
 
 // ==========================================
-// 🎭 感情カテゴリのシーン（統一ファクトリー版）
+// 🎭 Emotion Category Scene (Unified Factory Edition)
 // ==========================================
 export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => {
   return {
-    // 😊 基本的な嬉しいシーン
+    // 😊 
     happy_basic: createFactoryScene(
-      "😊 嬉しい表情",
-      "キャラクターの基本的な喜びの表現",
+      "😊 ",
+      "Expression of the basic joy of the character",
       'emotion',
       {
         characters: [{ preset: 'happy' }],
-        bubbles: [{ preset: 'normal', text: 'やったー！' }],
+        bubbles: [{ preset: 'normal', text: '' }],
         background: { preset: 'excitement' },
         effects: [{ preset: 'flash' }]
       }
     ),
 
 
-    // 😢 悲しい・落ち込みシーン  
+    // 😢   
     sad_basic: createFactoryScene(
-      "😢 悲しみ・落ち込み",
-      "キャラクターの悲しい感情表現",
+      "😢 ",
+      "Character's Sad Emotional Expressions",
       'emotion',
       {
         characters: [{ preset: 'sad' }],
-        bubbles: [{ preset: 'thought', text: 'つらい...' }],
+        bubbles: [{ preset: 'thought', text: '...' }],
         background: { preset: 'cloudy' }
       }
     ),
 
 
-    // 😡 怒り・イライラシーン
+    // 😡 
     angry_basic: createFactoryScene(
-      "😡 怒り・イライラ",
-      "キャラクターの怒りの感情表現",
+      "😡 ",
+      "Emotional expression of the character's anger",
       'emotion',
       {
         characters: [{ preset: 'angry' }],
-        bubbles: [{ preset: 'shout', text: 'もう！' }],
+        bubbles: [{ preset: 'shout', text: '' }],
         background: { preset: 'tension' },
         effects: [{ preset: 'explosion' }]
       }
     ),
 
-    // 😲 驚き・ショックシーン
+    // 😲 
     surprise_basic: createFactoryScene(
-      "😲 驚き・ショック", 
-      "キャラクターの驚きの表現",
+      "😲 ", 
+      "",
       'emotion',
       {
         characters: [{ 
@@ -108,33 +108,33 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: 'えっ！？',
+          text: '',
           overrides: { x: 0.1, y: 0.05, width: 100, height: 80 }
         }],
         effects: [{ preset: 'focus' }]
       }
     ),
 
-    // 😰 心配・不安シーン
+    // 😰 
     worried_basic: createFactoryScene(
-      "😰 心配・不安",
-      "キャラクターの心配している表現", 
+      "😰 ",
+      "The character's anxious expression", 
       'emotion',
       {
         characters: [{ preset: 'worried' }],
         bubbles: [{ 
           preset: 'thought', 
-          text: '大丈夫かな...',
+          text: '...',
           overrides: { width: 85, height: 65 }
         }],
         background: { preset: 'anxiety' }
       }
     ),
 
-    // 😍 恋愛・愛情シーン
+    // 😍 
     love_basic: createFactoryScene(
-      "😍 恋愛・愛情",
-      "キャラクターの恋愛感情表現",
+      "😍 ",
+      "",
       'emotion',
       {
         characters: [{ 
@@ -143,7 +143,7 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'thought', 
-          text: '好き...',
+          text: '...',
           overrides: { width: 80, height: 60 }
         }],
         background: { preset: 'happy' },
@@ -151,10 +151,10 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 😤 悔しさ・不満シーン
+    // 😤 
     frustrated_basic: createFactoryScene(
-      "😤 悔しさ・不満",
-      "キャラクターの悔しい感情表現",
+      "😤 ",
+      "Character's expressions of frustration",
       'emotion',
       {
         characters: [{ 
@@ -163,17 +163,17 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: 'くそー！',
+          text: '',
           overrides: { width: 90, height: 70 }
         }],
         background: { preset: 'angry' }
       }
     ),
 
-    // 😅 照れ・恥ずかしさシーン
+    // 😅 
     embarrassed_basic: createFactoryScene(
-      "😅 照れ・恥ずかしさ",
-      "キャラクターの照れている表現",
+      "😅 ",
+      "Character's shining expression",
       'emotion',
       {
         characters: [{ 
@@ -182,17 +182,17 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'thought', 
-          text: '恥ずかしい...',
+          text: '...',
           overrides: { width: 85, height: 65 }
         }],
         background: { preset: 'happy' }
       }
     ),
 
-    // 😭 号泣・大泣きシーン
+    // 😭 
     crying_basic: createFactoryScene(
-      "😭 号泣・大泣き",
-      "キャラクターの激しい悲しみ表現",
+      "😭 ",
+      "Character's Intense Sadness Expression",
       'emotion',
       {
         characters: [{ 
@@ -201,7 +201,7 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: 'うわーん！',
+          text: '',
           overrides: { width: 100, height: 80 }
         }],
         background: { preset: 'sad' },
@@ -209,10 +209,10 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 🤩 興奮・テンションシーン
+    // 🤩 
     excited_basic: createFactoryScene(
-      "🤩 興奮・テンション",
-      "キャラクターの興奮状態表現",
+      "🤩 ",
+      "",
       'emotion',
       {
         characters: [{ 
@@ -221,7 +221,7 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: 'やったー！',
+          text: '',
           overrides: { width: 95, height: 75 }
         }],
         background: { preset: 'happy' },
@@ -229,10 +229,10 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 😵 困惑・混乱シーン
+    // 😵 
     confused_basic: createFactoryScene(
-      "😵 困惑・混乱",
-      "キャラクターの困惑している表現",
+      "😵 ",
+      "Character's puzzling expressions",
       'emotion',
       {
         characters: [{ 
@@ -241,7 +241,7 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'thought', 
-          text: 'え？何？',
+          text: '',
           overrides: { width: 80, height: 60 }
         }],
         background: { preset: 'neutral' },
@@ -249,10 +249,10 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 😌 安堵・ほっとシーン
+    // 😌 
     relieved_basic: createFactoryScene(
-      "😌 安堵・ほっと",
-      "キャラクターの安堵している表現",
+      "😌 ",
+      "Relieved expression of the character",
       'emotion',
       {
         characters: [{ 
@@ -261,17 +261,17 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'normal', 
-          text: 'よかった...',
+          text: '...',
           overrides: { width: 85, height: 65 }
         }],
         background: { preset: 'happy' }
       }
     ),
 
-    // 😨 恐怖・怯えシーン
+    // 😨 
     scared_basic: createFactoryScene(
-      "😨 恐怖・怯え",
-      "キャラクターの怖がっている表現",
+      "😨 ",
+      "Character's Frightening Expressions",
       'emotion',
       {
         characters: [{ 
@@ -280,7 +280,7 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: 'きゃー！',
+          text: '',
           overrides: { width: 90, height: 70 }
         }],
         background: { preset: 'angry' },
@@ -288,10 +288,10 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 😏 ニヤリ・自信シーン
+    // 😏 
     confident_basic: createFactoryScene(
-      "😏 ニヤリ・自信",
-      "キャラクターの自信に満ちた表現",
+      "😏 ",
+      "Character Confident Expressions",
       'emotion',
       {
         characters: [{ 
@@ -300,7 +300,7 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'normal', 
-          text: '当然だ',
+          text: '',
           overrides: { width: 80, height: 60 }
         }],
         background: { preset: 'happy' }
@@ -310,20 +310,20 @@ export const createEmotionScenes = (): Record<string, EnhancedSceneTemplate> => 
 };
 
 // ==========================================
-// ⚡ アクションカテゴリのシーン（統一ファクトリー版）
+// ⚡ Scenes in Action Categories (Unified Factory Edition)
 // ==========================================
 export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
   return {
-    // 🏃 走る・急ぐシーン
+    // 🏃 
     running_basic: createFactoryScene(
-      "🏃 走る・急ぐ",
-      "キャラクターが急いでいるシーン",
+      "🏃 ",
+      "Scene with character in a hurry",
       'action',
       {
         characters: [{ preset: 'running' }],
         bubbles: [{ 
           preset: 'shout', 
-          text: '急がなきゃ！',
+          text: '',
           overrides: { x: 0.1, y: 0.1, width: 85, height: 60 }
         }],
         background: { preset: 'city' },
@@ -331,10 +331,10 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
       }
     ),
 
-    // 👉 指差し・発見シーン
+    // 👉 
     pointing_basic: createFactoryScene(
-      "👉 指差し・発見",
-      "何かを指差して発見するシーン",
+      "👉 ",
+      "Scene of pointing and discovering something",
       'action',
       {
         characters: [{ 
@@ -343,7 +343,7 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
         }],
         bubbles: [{ 
           preset: 'normal', 
-          text: 'あそこだ！',
+          text: '',
           overrides: { x: 0.1, y: 0.15, width: 75, height: 55 }
         }],
         background: { preset: 'excitement' },
@@ -351,10 +351,10 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
       }
     ),
 
-    // 💥 衝撃・ぶつかるシーン
+    // 💥 
     impact_basic: createFactoryScene(
-      "💥 衝撃・ぶつかる",
-      "衝撃や衝突の表現",
+      "💥 ",
+      "",
       'action',
       {
         characters: [{ 
@@ -363,7 +363,7 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: 'うわー！',
+          text: '',
           overrides: { x: 0.15, y: 0.1, width: 80, height: 65 }
         }],
         background: { preset: 'explosion' },
@@ -371,10 +371,10 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
       }
     ),
 
-    // 🤝 二人の会話・対話シーン
+    // 🤝 
     dialogue_basic: createFactoryScene(
-      "🤝 二人の対話",
-      "二人のキャラクターの会話シーン",
+      "🤝 ",
+      "Conversation scene between two characters",
       'action',
       {
         characters: [
@@ -382,8 +382,8 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
           { preset: 'dialogue_right' }
         ],
         bubbles: [
-          { preset: 'left', text: 'こんにちは' },
-          { preset: 'right', text: 'こんにちは！' }
+          { preset: 'left', text: '' },
+          { preset: 'right', text: '' }
         ],
         background: { preset: 'neutral' }
       }
@@ -392,66 +392,66 @@ export const createActionScenes = (): Record<string, EnhancedSceneTemplate> => {
 };
 
 // ==========================================
-// 🏠 日常カテゴリのシーン（統一ファクトリー版）
+// 🏠 Scenes in Daily Categories (Unified Factory Edition)
 // ==========================================
 export const createDailyScenes = (): Record<string, EnhancedSceneTemplate> => {
   return {
-    // 🍽️ 食べる・飲むシーン
+    // 🍽️ 
     eating_basic: createFactoryScene(
-      "🍽️ 食べる・飲む",
-      "食事や飲み物のシーン",
+      "🍽️ ",
+      "",
       'daily',
       {
         characters: [{ preset: 'eating' }],
         bubbles: [{ 
           preset: 'normal', 
-          text: '美味しい♪',
+          text: '♪',
           overrides: { x: 0.15, y: 0.15 }
         }],
         background: { preset: 'home' }
       }
     ),
 
-    // 📱 電話・スマホシーン
+    // 📱 
     phone_basic: createFactoryScene(
-      "📱 電話・スマホ",
-      "電話やスマホを使うシーン",
+      "📱 ",
+      "",
       'daily',
       {
         characters: [{ preset: 'phone' }],
         bubbles: [{ 
           preset: 'normal', 
-          text: 'もしもし',
+          text: '',
           overrides: { x: 0.65, y: 0.2, width: 70, height: 50 }
         }],
         background: { preset: 'neutral' }
       }
     ),
 
-    // 🚶 歩く・移動シーン
+    // 🚶 
     walking_basic: createFactoryScene(
-      "🚶 歩く・移動",
-      "歩いたり移動したりするシーン",
+      "🚶 ",
+      "Scenes of walking and moving",
       'daily',
       {
         characters: [{ preset: 'walking' }],
         bubbles: [{ 
           preset: 'thought', 
-          text: 'さて...',
+          text: '...',
           overrides: { width: 60, height: 45 }
         }],
         background: { preset: 'city' }
       }
     ),
 
-    // 💭 考える・悩むシーン
+    // 💭 
     thinking_basic: createFactoryScene(
-      "💭 考える・悩む",
-      "考え事や悩んでいるシーン",
+      "💭 ",
+      "",
       'daily',
       {
         characters: [{ preset: 'thoughtful' }],
-        bubbles: [{ preset: 'thought', text: 'うーん...' }],
+        bubbles: [{ preset: 'thought', text: '...' }],
         background: { preset: 'neutral' }
       }
     )
@@ -459,20 +459,20 @@ export const createDailyScenes = (): Record<string, EnhancedSceneTemplate> => {
 };
 
 // ==========================================
-// ✨ 特殊カテゴリのシーン（統一ファクトリー版）
+// ✨ Special Category Scenes (Unified Factory Edition)
 // ==========================================
 export const createSpecialScenes = (): Record<string, EnhancedSceneTemplate> => {
   return {
-    // ✨ 決意・やる気シーン
+    // ✨ 
     determination_basic: createFactoryScene(
-      "✨ 決意・やる気",
-      "決意を固めたりやる気を出すシーン",
+      "✨ ",
+      "Moments of determination and motivation",
       'special',
       {
         characters: [{ preset: 'determined' }],
         bubbles: [{ 
           preset: 'thought', 
-          text: 'よし！',
+          text: '',
           overrides: { width: 60, height: 50 }
         }],
         background: { preset: 'determination' },
@@ -480,10 +480,10 @@ export const createSpecialScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 🌟 ひらめき・発見シーン
+    // 🌟 
     idea_basic: createFactoryScene(
-      "🌟 ひらめき・発見",
-      "何かをひらめいたり発見したりするシーン",
+      "🌟 ",
+      "A scene that inspires or discovers something",
       'special',
       {
         characters: [{ 
@@ -496,7 +496,7 @@ export const createSpecialScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'normal', 
-          text: 'そうか！',
+          text: '',
           overrides: { x: 0.15, y: 0.1, width: 70, height: 55 }
         }],
         background: { preset: 'flash' },
@@ -504,29 +504,29 @@ export const createSpecialScenes = (): Record<string, EnhancedSceneTemplate> => 
       }
     ),
 
-    // 😴 疲れ・眠いシーン
+    // 😴 
     tired_basic: createFactoryScene(
-      "😴 疲れ・眠い",
-      "疲れていたり眠かったりするシーン",
+      "😴 ",
+      "Situations where you are tired or sleepy",
       'special',
       {
         characters: [{ 
-          preset: 'sad', // 疲れた表情として代用
+          preset: 'sad', // 
           overrides: { action: 'sitting', y: 0.65 }
         }],
         bubbles: [{ 
           preset: 'thought', 
-          text: '眠い...',
+          text: '...',
           overrides: { width: 65, height: 50 }
         }],
         background: { preset: 'night' }
       }
     ),
 
-    // 💪 頑張る・努力シーン
+    // 💪 
     effort_basic: createFactoryScene(
-      "💪 頑張る・努力",
-      "頑張ったり努力したりするシーン",
+      "💪 ",
+      "Scenes of hard work and effort",
       'special',
       {
         characters: [{ 
@@ -535,7 +535,7 @@ export const createSpecialScenes = (): Record<string, EnhancedSceneTemplate> => 
         }],
         bubbles: [{ 
           preset: 'shout', 
-          text: '頑張る！',
+          text: '',
           overrides: { x: 0.15, y: 0.1, width: 80, height: 60 }
         }],
         background: { preset: 'tension' }
@@ -545,10 +545,10 @@ export const createSpecialScenes = (): Record<string, EnhancedSceneTemplate> => 
 };
 
 // ==========================================
-// 🔧 統合・管理関数（統一ファクトリー版）
+// 🔧 Integration and management functions (unified factory version)
 // ==========================================
 
-// 全シーンテンプレート取得（統一ファクトリー版）
+// Get all scene templates (unified factory version)
 export const getAllSceneTemplates = (): Record<string, EnhancedSceneTemplate> => {
   const emotionScenes = createEmotionScenes();
   const actionScenes = createActionScenes();
@@ -556,7 +556,7 @@ export const getAllSceneTemplates = (): Record<string, EnhancedSceneTemplate> =>
   const specialScenes = createSpecialScenes();
   
   return {
-    // 統一ファクトリー版テンプレート
+    // Unified Factory Edition Template
     ...emotionScenes,
     ...actionScenes,
     ...dailyScenes,
@@ -564,7 +564,7 @@ export const getAllSceneTemplates = (): Record<string, EnhancedSceneTemplate> =>
   };
 };
 
-// カテゴリ別取得（統一ファクトリー版）
+// Acquisition by Category (Unified Factory Edition)
 export const getTemplatesByCategory = (category: EnhancedSceneTemplate['category']): Record<string, EnhancedSceneTemplate> => {
   const allTemplates = getAllSceneTemplates();
   const filtered: Record<string, EnhancedSceneTemplate> = {};
@@ -578,19 +578,19 @@ export const getTemplatesByCategory = (category: EnhancedSceneTemplate['category
   return filtered;
 };
 
-// 背景テンプレート名を取得する関数（背景テンプレートの実際の名前を使用）
+// Function to get the background template name (use the actual name of the background template)
 const getBackgroundTemplateName = (preset: string): string => {
-  // 背景テンプレートから実際の名前を取得
+  // Get real name from background template
   const backgroundTemplate = backgroundTemplates.find(template => template.id === preset);
   if (backgroundTemplate) {
     return backgroundTemplate.name;
   }
   
-  // フォールバック: プリセット名をそのまま使用
+  // : 
   return preset;
 };
 
-// 🔧 統一ファクトリー版シーンテンプレート適用関数（座標変換修正版）
+// 🔧 Unified Factory Edition Scene Template Application Function (Coordinate Transformation Revision)
 export const applyEnhancedSceneTemplate = (
   templateKey: string,
   panels: any[],
@@ -610,7 +610,7 @@ export const applyEnhancedSceneTemplate = (
 } => {
   const template = getAllSceneTemplates()[templateKey];
   if (!template || panels.length === 0) {
-    console.error(`❌ テンプレート適用失敗: ${templateKey}`);
+    console.error(`❌ : ${templateKey}`);
     return {
       characters: existingCharacters,
       speechBubbles: existingSpeechBubbles,
@@ -621,35 +621,35 @@ export const applyEnhancedSceneTemplate = (
   }
 
   const targetPanel = selectedPanel || panels[0];
-  console.log(`🎭 統一ファクトリー版テンプレート適用: ${template.name} → パネル${targetPanel.id}`);
-  console.log(`🎨 テンプレート背景情報:`, template.background);
-  console.log(`🎨 テンプレート背景s情報:`, template.backgrounds);
+  console.log(`🎭 Unified Factory Edition Template Apply: ${template.name} → ${targetPanel.id}`);
+  console.log(`🎨 :`, template.background);
+  console.log(`🎨 s:`, template.backgrounds);
 
-  // 既存のパネル内要素をクリア
+  // 
   const filteredCharacters = existingCharacters.filter(char => char.panelId !== targetPanel.id);
   const filteredBubbles = existingSpeechBubbles.filter(bubble => bubble.panelId !== targetPanel.id);
   const filteredBackgrounds = existingBackgrounds.filter(bg => bg.panelId !== targetPanel.id);
   const filteredEffects = existingEffects.filter(effect => effect.panelId !== targetPanel.id);
   const filteredTones = existingTones.filter(tone => tone.panelId !== targetPanel.id);
 
-  // 🔧 キャラクター生成（相対座標→絶対座標変換）
+  // 🔧 →
   const newCharacters = template.characters.map((char, index) => {
     const uniqueId = `char_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    // 🔧 相対座標→絶対座標変換
+    // 🔧 →
     const absoluteX = targetPanel.x + (char.x * targetPanel.width);
     const absoluteY = targetPanel.y + (char.y * targetPanel.height);
     
-    // 🔧 選択されたキャラクターの情報を使用
-    const characterName = selectedCharacter ? selectedCharacter.name : (char.name || 'キャラクター');
+    // 🔧 Use selected character information
+    const characterName = selectedCharacter ? selectedCharacter.name : (char.name || '');
     const characterId = selectedCharacter ? selectedCharacter.characterId : char.characterId;
     
-    console.log(`👤 キャラクター座標変換: ${characterName}`);
-    console.log(`   相対座標: (${char.x}, ${char.y}) → 絶対座標: (${absoluteX.toFixed(1)}, ${absoluteY.toFixed(1)})`);
-    console.log(`   選択されたキャラクター: ${selectedCharacter ? selectedCharacter.name : 'なし'}`);
+    console.log(`👤 : ${characterName}`);
+    console.log(`   : (${char.x}, ${char.y}) → : (${absoluteX.toFixed(1)}, ${absoluteY.toFixed(1)})`);
+    console.log(`   : ${selectedCharacter ? selectedCharacter.name : ''}`);
     
-    // 🔍 キャラクター設定値の詳細確認
-    console.log(`🔍 キャラクター設定値確認:`, {
+    // 🔍 Learn more about character settings
+    console.log(`🔍 :`, {
       name: characterName,
       characterId: characterId,
       expression: char.expression,
@@ -661,30 +661,30 @@ export const applyEnhancedSceneTemplate = (
       allProperties: Object.keys(char)
     });
     
-    // 🔍 選択されたキャラクターの詳細確認
-    console.log(`🔍 選択されたキャラクター詳細:`, {
+    // 🔍 Confirm details of the selected character
+    console.log(`🔍 :`, {
       selectedCharacterName: selectedCharacter ? selectedCharacter.name : 'null',
       selectedCharacterId: selectedCharacter ? selectedCharacter.characterId : 'null',
       selectedCharacterExpression: selectedCharacter ? selectedCharacter.expression : 'null',
       selectedCharacterAction: selectedCharacter ? selectedCharacter.action : 'null'
     });
     
-    // 🔧 選択されたキャラクターの基本情報を保持しつつ、テンプレートの詳細設定を適用
+    // 🔧 Apply template advanced settings while retaining basic information for selected characters
     const finalCharacter = {
-      ...char, // テンプレートの詳細設定（表情、動作など）
+      ...char, // Advanced template settings (facial expressions, behaviors, etc.)
       id: uniqueId,
-      name: characterName, // 選択されたキャラクターの名前
-      characterId: characterId, // 選択されたキャラクターのID
-      type: selectedCharacter ? selectedCharacter.type : char.type, // 🔧 選択されたキャラクターのtypeを使用
+      name: characterName, // The name of the selected character
+      characterId: characterId, // ID
+      type: selectedCharacter ? selectedCharacter.type : char.type, // 🔧 type
       panelId: targetPanel.id,
       x: absoluteX,
       y: absoluteY,
-      isGlobalPosition: true, // 絶対座標に変換済み
-      // 🔧 選択されたキャラクターの基本設定を保持
+      isGlobalPosition: true, // 
+      // 🔧 Keep basic settings for selected characters
       ...(selectedCharacter && {
         viewType: selectedCharacter.viewType,
         scale: selectedCharacter.scale,
-        // テンプレートの詳細設定で上書きされる項目は除外
+        // Exclude items overridden by template advanced settings
       })
     };
     
@@ -692,16 +692,16 @@ export const applyEnhancedSceneTemplate = (
     return finalCharacter;
   });
 
-  // 🔧 吹き出し生成（相対座標→絶対座標変換）
+  // 🔧 →
   const newSpeechBubbles = template.speechBubbles.map((bubble, index) => {
     const uniqueId = `bubble_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    // 🔧 相対座標→絶対座標変換
+    // 🔧 →
     const absoluteX = targetPanel.x + (bubble.x * targetPanel.width);
     const absoluteY = targetPanel.y + (bubble.y * targetPanel.height);
     
-    console.log(`💬 吹き出し座標変換: "${bubble.text}"`);
-    console.log(`   相対座標: (${bubble.x}, ${bubble.y}) → 絶対座標: (${absoluteX.toFixed(1)}, ${absoluteY.toFixed(1)})`);
+    console.log(`💬 : "${bubble.text}"`);
+    console.log(`   : (${bubble.x}, ${bubble.y}) → : (${absoluteX.toFixed(1)}, ${absoluteY.toFixed(1)})`);
     
     return {
       ...bubble,
@@ -709,75 +709,75 @@ export const applyEnhancedSceneTemplate = (
       panelId: targetPanel.id,
       x: absoluteX,
       y: absoluteY,
-      isGlobalPosition: true, // 絶対座標に変換済み
+      isGlobalPosition: true, // 
     };
   });
 
-  // 🔧 背景生成（相対座標のまま）
-  // 統合テンプレートでは background（単数形）を使用
+  // 🔧 
+  //  background
   const backgroundData = template.background || template.backgrounds?.[0];
   const newBackgrounds = backgroundData ? [backgroundData].map((bg, index) => {
     const uniqueId = `bg_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    console.log(`🎨 背景生成: ${bg.type || 'preset'}`);
-    console.log(`   プリセット: ${bg.preset || 'なし'}`);
-    console.log(`   相対座標: (${bg.x || 0}, ${bg.y || 0}, ${bg.width || 1}, ${bg.height || 1})`);
+    console.log(`🎨 : ${bg.type || 'preset'}`);
+    console.log(`   : ${bg.preset || ''}`);
+    console.log(`   : (${bg.x || 0}, ${bg.y || 0}, ${bg.width || 1}, ${bg.height || 1})`);
     
-    // 背景テンプレート名を設定（ユーザーフレンドリーな表示用）
+    // Set background template name (for user-friendly display)
     const templateName = bg.preset ? getBackgroundTemplateName(bg.preset) : null;
     
     return {
       ...bg,
       id: uniqueId,
       panelId: targetPanel.id,
-      name: templateName, // 手動背景と同じようにnameプロパティを設定
-      templateName: templateName, // 背景テンプレート名を追加
-      // 背景は相対座標のまま（パネル全体）
+      name: templateName, // name
+      templateName: templateName, // 
+      // Background remains in relative coordinates (entire panel)
     };
   }) : [];
 
-  // 🔧 効果線生成（相対座標のまま）
+  // 🔧 Effect line generation (relative coordinates)
   const newEffects = (template.effects || []).map((effect, index) => {
     const uniqueId = `effect_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    console.log(`⚡ 効果線生成: ${effect.type}`);
+    console.log(`⚡ : ${effect.type}`);
     
     return {
       ...effect,
       id: uniqueId,
       panelId: targetPanel.id,
       selected: false,
-      isGlobalPosition: false, // 効果線は相対座標
+      isGlobalPosition: false, // 
     };
   });
 
-  // 🔧 トーン生成（相対座標のまま）
+  // 🔧 Tone generation (relative coordinates)
   const newTones = (template.tones || []).map((tone, index) => {
     const uniqueId = `tone_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    console.log(`🎯 トーン生成: ${tone.pattern}`);
+    console.log(`🎯 : ${tone.pattern}`);
     
     return {
       ...tone,
       id: uniqueId,
       panelId: targetPanel.id,
       selected: false,
-      isGlobalPosition: false, // トーンは相対座標
+      isGlobalPosition: false, // 
       visible: true,
     };
   });
 
-  console.log(`✅ 統一ファクトリー版で要素生成完了:`);
-  console.log(`   キャラクター: ${newCharacters.length}個（絶対座標・編集可能）`);
-  console.log(`   吹き出し: ${newSpeechBubbles.length}個（絶対座標・編集可能）`);
-  console.log(`   背景: ${newBackgrounds.length}個（相対座標）`);
-  console.log(`   効果線: ${newEffects.length}個（相対座標）`);
-  console.log(`   トーン: ${newTones.length}個（相対座標）`);
+  console.log(`✅ Element generation completed with Unified Factory Edition:`);
+  console.log(`   : ${newCharacters.length}`);
+  console.log(`   : ${newSpeechBubbles.length}`);
+  console.log(`   : ${newBackgrounds.length}`);
+  console.log(`   : ${newEffects.length}`);
+  console.log(`   : ${newTones.length}`);
   
   if (newBackgrounds.length > 0) {
-    console.log(`🎨 生成された背景詳細:`, newBackgrounds[0]);
+    console.log(`🎨 :`, newBackgrounds[0]);
   } else {
-    console.log(`⚠️ 背景が生成されていません`);
+    console.log(`⚠️ `);
   }
 
   return {
@@ -790,7 +790,7 @@ export const applyEnhancedSceneTemplate = (
 };
 
 // ==========================================
-// 後方互換性のための既存関数（修正版）
+// Existing functions for backwards compatibility (modified)
 // ==========================================
 
 export interface SceneTemplate {
@@ -798,19 +798,19 @@ export interface SceneTemplate {
   speechBubbles: Omit<SpeechBubble, "id" | "panelId">[];
 }
 
-// 🔧 後方互換用（統一ファクトリーベースに変更）
+// 🔧 For backwards compatibility (changed to unified factory base)
 export const sceneTemplates: Record<string, SceneTemplate> = {
   daily: {
     characters: [characterPresets.happy({
       characterId: "character_1",
       type: "character_1",
-      name: "主人公",
+      name: "",
       x: 0.25,
       y: 0.6,
       scale: 2.0,
       viewType: "upper_body",
     })],
-    speechBubbles: [bubblePresets.normal("こんにちは", {
+    speechBubbles: [bubblePresets.normal("", {
       x: 0.167,
       y: 0.167,
       width: 80,
@@ -822,13 +822,13 @@ export const sceneTemplates: Record<string, SceneTemplate> = {
     characters: [characterPresets.running({
       characterId: "character_1",
       type: "character_1",
-      name: "主人公",
+      name: "",
       x: 0.333,
       y: 0.667,
       scale: 2.3,
       viewType: "full_body",
     })],
-    speechBubbles: [bubblePresets.shout("行くぞ！", {
+    speechBubbles: [bubblePresets.shout("", {
       x: 0.167,
       y: 0.167,
       width: 70,
@@ -840,13 +840,13 @@ export const sceneTemplates: Record<string, SceneTemplate> = {
     characters: [characterPresets.worried({
       characterId: "character_1",
       type: "character_1",
-      name: "ヒロイン",
+      name: "",
       x: 0.45,
       y: 0.6,
       scale: 2.2,
       viewType: "upper_body",
     })],
-    speechBubbles: [bubblePresets.thought("どうしよう...", {
+    speechBubbles: [bubblePresets.thought("...", {
       x: 0.667,
       y: 0.267,
       width: 90,
@@ -858,13 +858,13 @@ export const sceneTemplates: Record<string, SceneTemplate> = {
     characters: [characterPresets.surprised({
       characterId: "character_1",
       type: "character_1",
-      name: "主人公",
+      name: "",
       x: 0.5,
       y: 0.6,
       scale: 2.5,
       viewType: "face",
     })],
-    speechBubbles: [bubblePresets.shout("えっ！？", {
+    speechBubbles: [bubblePresets.shout("", {
       x: 0.25,
       y: 0.167,
       scale: 1.2,
@@ -887,13 +887,13 @@ export const applySceneTemplate = (
   }
 
   const targetPanel = selectedPanel || panels[0];
-  console.log(`🎭 後方互換テンプレート適用: ${sceneType} → パネル${targetPanel.id}`);
+  console.log(`🎭 : ${sceneType} → ${targetPanel.id}`);
 
-  // 🔧 相対座標→絶対座標変換付きで生成
+  // 🔧 →
   const newCharacters = template.characters.map((char, index) => {
     const uniqueId = `char_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    // 🔧 相対座標→絶対座標変換
+    // 🔧 →
     const absoluteX = targetPanel.x + (char.x * targetPanel.width);
     const absoluteY = targetPanel.y + (char.y * targetPanel.height);
     
@@ -910,7 +910,7 @@ export const applySceneTemplate = (
   const newSpeechBubbles = template.speechBubbles.map((bubble, index) => {
     const uniqueId = `bubble_${Date.now()}_${Math.random().toString(36).substr(2, 5)}_${index}`;
     
-    // 🔧 相対座標→絶対座標変換
+    // 🔧 →
     const absoluteX = targetPanel.x + (bubble.x * targetPanel.width);
     const absoluteY = targetPanel.y + (bubble.y * targetPanel.height);
     

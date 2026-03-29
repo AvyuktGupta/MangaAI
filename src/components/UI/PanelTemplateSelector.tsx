@@ -1,4 +1,4 @@
-// src/components/UI/PanelTemplateSelector.tsx - v1.1.5 シンプル修正版
+// src/components/UI/PanelTemplateSelector.tsx - v1.1.5 
 import React, { useState } from 'react';
 import { templates, templateDescriptions, templateCategories, popularTemplates } from '../CanvasArea/templates';
 
@@ -15,20 +15,20 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
   isDarkMode,
   isVisible
 }) => {
-  const [activeCategory, setActiveCategory] = useState<string>('人気');
+  const [activeCategory, setActiveCategory] = useState<string>('');
 
   if (!isVisible) return null;
 
-  const categories = ['人気', ...Object.keys(templateCategories)];
+  const categories = ['', ...Object.keys(templateCategories)];
 
   const getCurrentTemplates = (): string[] => {
-    if (activeCategory === '人気') {
+    if (activeCategory === '') {
       return popularTemplates;
     }
     return templateCategories[activeCategory] || [];
   };
 
-  // 🎨 美しいプレビューSVG生成 - アスペクト比維持版
+  // 🎨 SVG - 
   const generatePreview = (templateId: string): string => {
     const template = templates[templateId];
     if (!template || !template.panels) return '<svg viewBox="0 0 120 80" width="100%" height="100%"><rect x="10" y="10" width="100" height="60" fill="transparent" stroke="#6b7280" stroke-width="2" stroke-dasharray="5,5"/></svg>';
@@ -38,7 +38,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
     const fillColor = isDarkMode ? '#374151' : '#f3f4f6';
     const highlightColor = isDarkMode ? '#3b82f6' : '#2563eb';
     
-    // 🎨 パネル範囲を正確に計算（マージン込み）
+    // 🎨 Accurately calculate panel range (including margin)
     const allX = template.panels.map(p => [p.x, p.x + p.width]).flat();
     const allY = template.panels.map(p => [p.y, p.y + p.height]).flat();
     const minX = Math.min(...allX);
@@ -49,50 +49,50 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
     const contentWidth = maxX - minX;
     const contentHeight = maxY - minY;
     
-    // 🔧 コンテンツの実際のアスペクト比を計算
+    // 🔧 Calculate the actual aspect ratio of your content
     const contentAspectRatio = contentWidth / contentHeight;
     
-    // 🔧 プレビューエリアのサイズ（縦長に調整）
+    // 🔧 Size of preview area (adjust to portrait)
     const previewWidth = 80;
-    const previewHeight = 110; // 縦長に！
+    const previewHeight = 110; // 
     const margin = 6;
     
     let scaledWidth, scaledHeight, offsetX, offsetY;
     
     if (contentAspectRatio > 1) {
-      // 🔧 横長の場合：幅に合わせてスケール
+      // 🔧 For landscape: Scale to fit width
       scaledWidth = previewWidth - (margin * 2);
       scaledHeight = scaledWidth / contentAspectRatio;
       offsetX = margin;
       offsetY = (previewHeight - scaledHeight) / 2;
     } else {
-      // 🔧 縦長の場合：高さに合わせてスケール
+      // 🔧 For portrait: Scale to Height
       scaledHeight = previewHeight - (margin * 2);
       scaledWidth = scaledHeight * contentAspectRatio;
       offsetY = margin;
       offsetX = (previewWidth - scaledWidth) / 2;
     }
     
-    // 🔧 スケールファクターを計算
+    // 🔧 
     const scale = scaledWidth / contentWidth;
     
-    // 🔧 実際のオフセット計算（minX, minYを考慮）
+    // 🔧 minX, minY
     const finalOffsetX = offsetX - (minX * scale);
     const finalOffsetY = offsetY - (minY * scale);
     
-    // 🎨 パネル描画（美しいスタイリング）
+    // 🎨 Panel Drawing (Beautiful Styling)
     const panels = template.panels.map((panel, index) => {
       const x = panel.x * scale + finalOffsetX;
       const y = panel.y * scale + finalOffsetY;
       const width = panel.width * scale;
       const height = panel.height * scale;
       
-      // 🔧 フォントサイズを調整（見切れ防止）
+      // 🔧 Adjust font size (out-of-box)
       const fontSize = Math.max(10, Math.min(width, height) * 0.2);
       const textX = x + width / 2;
       const textY = y + height / 2;
       
-      // 🔧 シンプルなパネル（グラデーション削除、角丸のみ）
+      // 🔧 Simple panel (gradient removal, rounded corners)
       const radius = Math.min(3, Math.min(width, height) * 0.08);
       
       return `
@@ -110,7 +110,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
               font-weight="bold">${panel.id}</text>`;
     }).join('');
 
-    // 🔧 縦長のビューポートでSVG生成
+    // 🔧 SVG
     const background = `<rect x="0" y="0" width="${previewWidth}" height="${previewHeight}" 
                                fill="${isDarkMode ? '#1f2937' : '#ffffff'}"/>`;
 
@@ -134,20 +134,20 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
     transition: 'all 0.2s ease'
   });
 
-  // 🎨 縦長カードスタイル - アスペクト比重視
+  // 🎨  - 
   const getCardStyle = (templateId: string) => ({
-    width: '140px',   // プレビューエリアを拡大
-    height: '150px',  // 縦長プレビューに合わせて拡大
+    width: '140px',   // 
+    height: '150px',  // Enlarge to fit portrait preview
     margin: '8px',
-    borderRadius: '12px', // より丸みを帯びた角
+    borderRadius: '12px', // 
     cursor: 'pointer',
     border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
     backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
     boxShadow: isDarkMode 
       ? '0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3)' 
       : '0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // より滑らかなアニメーション
-    overflow: 'hidden', // コンテンツのはみ出しを防止
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // 
+    overflow: 'hidden', // 
     position: 'relative' as const
   });
 
@@ -166,7 +166,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
       zIndex: 1000,
       overflow: 'hidden'
     }}>
-      {/* ヘッダー */}
+      {/*  */}
       <div style={{
         padding: '20px 24px 16px',
         borderBottom: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
@@ -178,7 +178,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
           fontWeight: '600',
           color: isDarkMode ? '#f9fafb' : '#111827'
         }}>
-          📐 コマ割りテンプレート選択
+          📐 
         </h3>
         
         <div style={{
@@ -193,14 +193,14 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
               onClick={() => setActiveCategory(category)}
             >
               {category}
-              {category === '人気' && ' ⭐'}
-              {category !== '人気' && ` (${templateCategories[category]?.length || 0})`}
+              {category === '' && ' ⭐'}
+              {category !== '' && ` (${templateCategories[category]?.length || 0})`}
             </div>
           ))}
         </div>
       </div>
 
-      {/* テンプレート一覧 */}
+      {/*  */}
       <div style={{
         padding: '20px',
         maxHeight: '450px',  // 400px → 450px
@@ -232,10 +232,10 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
                 e.currentTarget.style.borderColor = isDarkMode ? '#374151' : '#e5e7eb';
               }}
             >
-              {/* 🔧 縦長プレビューエリア */}
+              {/* 🔧  */}
               <div style={{
                 width: '100%',
-                height: '110px', // 縦長の高さ
+                height: '110px', // 
                 padding: '8px',
                 display: 'flex',
                 alignItems: 'center',
@@ -270,7 +270,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
                   fontSize: '10px',
                   color: isDarkMode ? '#9ca3af' : '#6b7280'
                 }}>
-                  {templates[templateId]?.panels.length}コマ
+                  {templates[templateId]?.panels.length}
                 </div>
               </div>
             </div>
@@ -278,7 +278,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
         </div>
       </div>
 
-      {/* フッター */}
+      {/*  */}
       <div style={{
         padding: '12px 24px',
         borderTop: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
@@ -289,14 +289,14 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
           fontSize: '12px',
           color: isDarkMode ? '#6b7280' : '#9ca3af'
         }}>
-          💡 テンプレートをクリックして適用 • 全{Object.keys(templates).length}種類のコマ割りパターン
+          💡 Click on a template to apply it • {Object.keys(templates).length}
         </div>
       </div>
 
-      {/* 閉じるボタン */}
+      {/*  */}
       <button
         onClick={() => {
-          setActiveCategory('人気');
+          setActiveCategory('');
           if (onClose) {
             onClose();
           } else {
@@ -319,7 +319,7 @@ export const PanelTemplateSelector: React.FC<PanelTemplateSelectorProps> = ({
           alignItems: 'center',
           justifyContent: 'center'
         }}
-        title="閉じる"
+        title=""
       >
         ×
       </button>

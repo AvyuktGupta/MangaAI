@@ -1,144 +1,144 @@
 /**
- * アプリケーション全体の統一カラーパレット
+ * Unified color palette across applications
  * 
- * 🎨 色分けルール（直感的で覚えやすい）:
+ * 🎨 Color coding rules (intuitive and easy to remember):
  * 
- * 💚 緑色系統 = ファイル操作（保存、作成、読み込み）
- * 🔵 青色系統 = 出力・エクスポート（データを外に出す）
- * 🟠 オレンジ系統 = 編集・変更（何かを修正する）
- * 🔴 赤色系統 = 削除・危険操作（取り返しのつかない操作）
- * 🟣 紫色系統 = 設定・有効化（機能のON/OFF、設定変更）
- * ⚫ グレー系統 = 管理・一覧（情報を表示、管理画面）
+ * 💚  = File operations (save, create, read)
+ * 🔵  = Output/Export (data out)
+ * 🟠  = Edit/change (fix something)
+ * 🔴  = Deletion/dangerous operation (irreversible operation)
+ * 🟣  = ON/OFF
+ * ⚫  = Management/list (display information, management screen)
  */
 
 export const COLOR_PALETTE = {
-  // === 基本色 ===
+  // ===  ===
   primary: {
-    blue: '#3b82f6',      // プライマリブルー（保存、メインアクション）
-    purple: '#8b5cf6',    // プライマリパープル（出力、エクスポート）
-    green: '#10b981',     // プライマリグリーン（成功、有効状態）
-    orange: '#ff8833',    // プライマリオレンジ（アクセント、編集モード）
-    red: '#ef4444',       // プライマリレッド（削除、警告）
+    blue: '#3b82f6',      // Primary Blue (Save, Main Action)
+    purple: '#8b5cf6',    // Primary Purple (Output, Export)
+    green: '#10b981',     // Primary Green (Success, Active State)
+    orange: '#ff8833',    // Primary Range (Accent, Edit Mode)
+    red: '#ef4444',       // Primary Red (Delete, Warning)
   },
 
-  // === 状態色 ===
+  // ===  ===
   status: {
-    success: '#10b981',   // 成功状態
-    warning: '#f59e0b',   // 警告状態
-    error: '#ef4444',     // エラー状態
-    info: '#3b82f6',      // 情報状態
-    processing: '#8b5cf6', // 処理中状態
+    success: '#10b981',   // 
+    warning: '#f59e0b',   // 
+    error: '#ef4444',     // 
+    info: '#3b82f6',      // 
+    processing: '#8b5cf6', // 
   },
 
-  // === 背景色 ===
+  // ===  ===
   background: {
-    // ダークモード
+    // 
     dark: {
-      primary: '#1a1a1a',     // メイン背景
-      secondary: '#2d2d2d',   // セカンダリ背景
-      tertiary: '#3a3a3a',    // サード背景
-      card: '#1e1e1e',        // カード背景
-      modal: '#1e1e1e',       // モーダル背景
-      input: '#4b5563',       // 入力フィールド背景
+      primary: '#1a1a1a',     // 
+      secondary: '#2d2d2d',   // 
+      tertiary: '#3a3a3a',    // 
+      card: '#1e1e1e',        // 
+      modal: '#1e1e1e',       // 
+      input: '#4b5563',       // 
     },
-    // ライトモード
+    // 
     light: {
-      primary: '#ffffff',     // メイン背景
-      secondary: '#f8f9fa',   // セカンダリ背景
-      tertiary: '#e9ecef',    // サード背景
-      card: '#ffffff',        // カード背景
-      modal: '#ffffff',       // モーダル背景
-      input: '#ffffff',       // 入力フィールド背景
+      primary: '#ffffff',     // 
+      secondary: '#f8f9fa',   // 
+      tertiary: '#e9ecef',    // 
+      card: '#ffffff',        // 
+      modal: '#ffffff',       // 
+      input: '#ffffff',       // 
     }
   },
 
-  // === テキスト色 ===
+  // ===  ===
   text: {
-    // ダークモード
+    // 
     dark: {
-      primary: '#ffffff',     // メインテキスト
-      secondary: '#cccccc',   // セカンダリテキスト
-      muted: '#888888',       // ミュートテキスト
-      inverse: '#1a1a1a',     // 反転テキスト
+      primary: '#ffffff',     // 
+      secondary: '#cccccc',   // 
+      muted: '#888888',       // 
+      inverse: '#1a1a1a',     // 
     },
-    // ライトモード
+    // 
     light: {
-      primary: '#333333',     // メインテキスト
-      secondary: '#555555',   // セカンダリテキスト
-      muted: '#888888',       // ミュートテキスト
-      inverse: '#ffffff',     // 反転テキスト
+      primary: '#333333',     // 
+      secondary: '#555555',   // 
+      muted: '#888888',       // 
+      inverse: '#ffffff',     // 
     }
   },
 
-  // === ボーダー色 ===
+  // ===  ===
   border: {
-    // ダークモード
+    // 
     dark: {
-      primary: '#555555',     // メインボーダー
-      secondary: '#333333',   // セカンダリボーダー
-      focus: '#3b82f6',       // フォーカスボーダー
+      primary: '#555555',     // 
+      secondary: '#333333',   // 
+      focus: '#3b82f6',       // 
     },
-    // ライトモード
+    // 
     light: {
-      primary: '#dddddd',     // メインボーダー
-      secondary: '#e5e7eb',   // セカンダリボーダー
-      focus: '#3b82f6',       // フォーカスボーダー
+      primary: '#dddddd',     // 
+      secondary: '#e5e7eb',   // 
+      focus: '#3b82f6',       // 
     }
   },
 
-  // === 機能別ボタン色（直感的な色分けルール） ===
+  // === Functional button colors (intuitive color coding rules) ===
   buttons: {
-    // ファイル操作系（緑系統）
+    // 
     save: {
-      primary: '#16a34a',     // 💾 保存（緑） - ファイルを保存する
-      hover: '#15803d',       // 保存ボタンホバー
+      primary: '#16a34a',     // 💾  - 
+      hover: '#15803d',       // 
     },
-    // 出力・エクスポート系（青系統）
+    // Output/export system (blue system)
     export: {
-      primary: '#2563eb',     // 📤 出力（青） - データを出力する
-      hover: '#1d4ed8',       // 出力ボタンホバー
+      primary: '#2563eb',     // 📤  - 
+      hover: '#1d4ed8',       // 
     },
-    // 編集・変更系（オレンジ系統）
+    // Editing/modification system (orange system)
     edit: {
-      primary: '#ea580c',     // 🔧 編集（オレンジ） - 何かを編集・変更する
-      hover: '#dc2626',       // 編集ボタンホバー
+      primary: '#ea580c',     // 🔧  - 
+      hover: '#dc2626',       // 
     },
-    // 削除・危険系（赤系統）
+    // 
     delete: {
-      primary: '#dc2626',     // 🗑️ 削除（赤） - 危険な操作
-      hover: '#b91c1c',       // 削除ボタンホバー
+      primary: '#dc2626',     // 🗑️  - 
+      hover: '#b91c1c',       // 
     },
-    // 設定・有効化系（紫系統）
+    // 
     success: {
-      primary: '#9333ea',     // ⚙️ 設定・有効化（紫） - 機能のON/OFF
-      hover: '#7c3aed',       // 設定ボタンホバー
+      primary: '#9333ea',     // ⚙️  - ON/OFF
+      hover: '#7c3aed',       // 
     },
-    // 管理・一覧系（グレー系統）
+    // 
     manage: {
-      primary: '#6b7280',     // 📁 管理（グレー） - 一覧・管理機能
-      hover: '#4b5563',       // 管理ボタンホバー
+      primary: '#6b7280',     // 📁  - 
+      hover: '#4b5563',       // 
     }
   },
 
-  // === 特殊効果色 ===
+  // ===  ===
   effects: {
     hover: {
-      light: 'rgba(0, 0, 0, 0.1)',    // ライトモードホバー
-      dark: 'rgba(255, 255, 255, 0.1)', // ダークモードホバー
+      light: 'rgba(0, 0, 0, 0.1)',    // 
+      dark: 'rgba(255, 255, 255, 0.1)', // 
     },
     shadow: {
-      light: 'rgba(0, 0, 0, 0.1)',     // ライトモードシャドウ
-      dark: 'rgba(0, 0, 0, 0.3)',      // ダークモードシャドウ
+      light: 'rgba(0, 0, 0, 0.1)',     // 
+      dark: 'rgba(0, 0, 0, 0.3)',      // 
     },
     focus: {
-      light: 'rgba(59, 130, 246, 0.2)', // フォーカスリング
-      dark: 'rgba(59, 130, 246, 0.3)',  // フォーカスリング
+      light: 'rgba(59, 130, 246, 0.2)', // 
+      dark: 'rgba(59, 130, 246, 0.3)',  // 
     }
   }
 } as const;
 
 /**
- * 機能別のボタンスタイルを取得
+ * Get feature-specific button styles
  */
 export const getButtonStyle = (type: keyof typeof COLOR_PALETTE.buttons, isDarkMode: boolean) => ({
   backgroundColor: COLOR_PALETTE.buttons[type].primary,
@@ -154,7 +154,7 @@ export const getButtonStyle = (type: keyof typeof COLOR_PALETTE.buttons, isDarkM
 });
 
 /**
- * テーマ別の色を取得
+ * 
  */
 export const getThemeColors = (isDarkMode: boolean) => ({
   background: COLOR_PALETTE.background[isDarkMode ? 'dark' : 'light'],
@@ -163,7 +163,7 @@ export const getThemeColors = (isDarkMode: boolean) => ({
 });
 
 /**
- * 機能別の色を取得
+ * 
  */
 export const getFunctionalColors = () => ({
   save: COLOR_PALETTE.buttons.save,

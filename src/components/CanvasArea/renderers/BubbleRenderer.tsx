@@ -1,25 +1,25 @@
-// src/components/CanvasArea/renderers/BubbleRenderer.tsx - 文字折り返し強化版
+// src/components/CanvasArea/renderers/BubbleRenderer.tsx - 
 import { SpeechBubble, Panel } from "../../../types";
 
 export class BubbleRenderer {
-  // 吹き出し描画メイン関数（editingBubble対応版）
+  // editingBubble
   static drawBubbles(
     ctx: CanvasRenderingContext2D,
     bubbles: SpeechBubble[],
     panels: Panel[],
     selectedBubble: SpeechBubble | null,
-    editingBubble?: SpeechBubble | null  // 🔧 5つ目の引数を追加
+    editingBubble?: SpeechBubble | null  // 🔧 5
   ) {
     bubbles.forEach(bubble => {
       this.drawSingleBubble(ctx, bubble, panels, selectedBubble, editingBubble);
     });
   }
 
-  // 座標変換ヘルパー関数
+  // 
   static calculateBubblePosition(bubble: SpeechBubble, panel: Panel): { x: number; y: number; width: number; height: number } {
     if (bubble.isGlobalPosition) {
-      // 絶対座標の場合：サイズを拡大
-      const scaleFactor = 2.0; // 2倍に拡大
+      // For Absolute Coordinates: Enlarge Size
+      const scaleFactor = 2.0; // 2
       return {
         x: bubble.x,
         y: bubble.y,
@@ -27,7 +27,7 @@ export class BubbleRenderer {
         height: bubble.height * scaleFactor
       };
     } else {
-      // 相対座標の場合：パネルサイズに基づいて計算（拡大なし）
+      // For relative coordinates: Calculated based on panel size (no enlargement)
       const x = panel.x + (bubble.x * panel.width);
       const y = panel.y + (bubble.y * panel.height);
       const width = bubble.width * panel.width;
@@ -42,7 +42,7 @@ export class BubbleRenderer {
     }
   }
 
-  // 単一吹き出し描画（座標変換対応・編集中も表示）
+  // Single callout drawing (coordinate conversion compatible/displaying while editing)
   static drawSingleBubble(
     ctx: CanvasRenderingContext2D,
     bubble: SpeechBubble,
@@ -52,28 +52,28 @@ export class BubbleRenderer {
   ) {
     const panel = panels.find(p => p.id === bubble.panelId) || panels[0];
     if (!panel) {
-      console.warn(`⚠️ パネルが見つかりません: bubble=${bubble.id}, panelId=${bubble.panelId}`);
+      console.warn(`⚠️ : bubble=${bubble.id}, panelId=${bubble.panelId}`);
       return;
     }
 
-    // 座標変換を適用
+    // 
     const bubblePos = this.calculateBubblePosition(bubble, panel);
     const transformedBubble = { ...bubble, ...bubblePos };
 
     ctx.save();
 
-    // 🔧 編集中の吹き出しは半透明で表示
+    // 🔧 Show semi-transparent callouts while editing
     if (editingBubble && editingBubble.id === bubble.id) {
       ctx.globalAlpha = 0.7;
     }
 
-    // 吹き出し背景描画
+    // 
     this.drawBubbleBackground(ctx, transformedBubble);
     
-    // テキスト描画（強化版）
+    // 
     this.drawBubbleTextEnhanced(ctx, transformedBubble);
     
-    // 選択状態の場合、リサイズハンドル描画
+    // If selected, resize handle drawing
     if (selectedBubble && selectedBubble.id === bubble.id) {
       this.drawResizeHandles(ctx, transformedBubble);
     }
@@ -81,35 +81,32 @@ export class BubbleRenderer {
     ctx.restore();
   }
 
-  // 吹き出し背景描画（形状完全分離版）
+  // Callout background drawing (complete shape separation version)
   static drawBubbleBackground(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
     const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
     
-    // 基本色設定
+    // 
     ctx.fillStyle = isDarkMode ? "#2d2d2d" : "white";
     ctx.strokeStyle = isDarkMode ? "#555" : "#333";
     ctx.lineWidth = 2;
 
-    // 🔧 型に応じて確実に異なる形状を描画
+    // 🔧 Ensure that different shapes are drawn according to the type
     switch (bubble.type) {
       case "speech":
-      case "普通":
+      case "":
       case "normal":
         this.drawSpeechBubble(ctx, bubble);
         break;
         
-      case "thought":
-      case "心の声":
+      case 'thought':
         this.drawThoughtBubble(ctx, bubble);
         break;
-        
-      case "shout":
-      case "叫び":
+
+      case 'shout':
         this.drawShoutBubble(ctx, bubble);
         break;
-        
-      case "whisper":
-      case "小声":
+
+      case 'whisper':
         this.drawWhisperBubble(ctx, bubble);
         break;
         
@@ -118,17 +115,17 @@ export class BubbleRenderer {
     }
   }
 
-  // 通常の吹き出し（角丸四角形＋尻尾）
+  // Normal Callout (Rounded Rectangle + Tail)
   static drawSpeechBubble(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
     const cornerRadius = 12;
     
-    // メイン吹き出し部分
+    // 
     ctx.beginPath();
     ctx.roundRect(bubble.x, bubble.y, bubble.width, bubble.height, cornerRadius);
     ctx.fill();
     ctx.stroke();
 
-    // 吹き出しの尻尾（三角形）
+    // 
     const tailX = bubble.x + bubble.width * 0.15;
     const tailY = bubble.y + bubble.height;
     
@@ -141,9 +138,9 @@ export class BubbleRenderer {
     ctx.stroke();
   }
 
-  // 思考吹き出し（楕円形＋小さな泡）
+  // Thought Bubble (Oval + Small Bubble)
   static drawThoughtBubble(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
-    // メインの楕円
+    // 
     ctx.beginPath();
     ctx.ellipse(
       bubble.x + bubble.width / 2,
@@ -155,7 +152,7 @@ export class BubbleRenderer {
     ctx.fill();
     ctx.stroke();
 
-    // 思考の小さな泡（3つ）
+    // 3
     const bubblePositions = [
       { x: bubble.x + bubble.width * 0.2, y: bubble.y + bubble.height + 15, size: 12 },
       { x: bubble.x + bubble.width * 0.15, y: bubble.y + bubble.height + 35, size: 8 },
@@ -170,7 +167,7 @@ export class BubbleRenderer {
     });
   }
 
-  // 叫び吹き出し（ギザギザの爆発型）
+  // Scream Bubble (Jagged Explosive)
   static drawShoutBubble(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
     const centerX = bubble.x + bubble.width / 2;
     const centerY = bubble.y + bubble.height / 2;
@@ -198,7 +195,7 @@ export class BubbleRenderer {
     ctx.fill();
     ctx.stroke();
     
-    // 叫び効果線を追加
+    // 
     for (let i = 0; i < 6; i++) {
       const angle = (i / 6) * Math.PI * 2;
       const startRadius = outerRadius + 5;
@@ -216,17 +213,17 @@ export class BubbleRenderer {
       ctx.stroke();
     }
     
-    // 線幅を元に戻す
+    // 
     ctx.lineWidth = 2;
   }
 
-  // ささやき吹き出し（点線の枠＋小さめ）
+  // Whisper Callouts (Dotted Border + Smaller)
   static drawWhisperBubble(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
-    // 点線パターン設定
+    // 
     ctx.setLineDash([8, 6]);
     ctx.lineWidth = 1.5;
     
-    // 角を少し丸く
+    // 
     const cornerRadius = 15;
     
     ctx.beginPath();
@@ -234,11 +231,11 @@ export class BubbleRenderer {
     ctx.fill();
     ctx.stroke();
     
-    // 点線をリセット
+    // 
     ctx.setLineDash([]);
     ctx.lineWidth = 2;
     
-    // 小さな尻尾（点線）
+    // 
     ctx.setLineDash([4, 3]);
     const tailX = bubble.x + bubble.width * 0.3;
     const tailY = bubble.y + bubble.height;
@@ -251,19 +248,19 @@ export class BubbleRenderer {
     ctx.fill();
     ctx.stroke();
     
-    // 点線をリセット
+    // 
     ctx.setLineDash([]);
   }
 
-  // 🆕 テキスト描画（強化版：編集中は特別表示）
+  // 🆕 Text Drawing (Enhanced: Special while editing)
   static drawBubbleTextEnhanced(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
     if (!bubble.text || bubble.text.trim() === "") {
-      // 🔧 テキストが空の場合は「編集中...」を表示
+      // 🔧 If the text is empty, "Editing...
       ctx.fillStyle = "#888";
       ctx.font = "12px 'Noto Sans JP', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("編集中...", bubble.x + bubble.width / 2, bubble.y + bubble.height / 2);
+      ctx.fillText("...", bubble.x + bubble.width / 2, bubble.y + bubble.height / 2);
       return;
     }
 
@@ -273,7 +270,7 @@ export class BubbleRenderer {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // 吹き出し内のテキスト描画エリアを計算（余白を確保）
+    // Calculate the text rendering area in the callout (leave a margin)
     const padding = 12;
     const textArea = {
       x: bubble.x + padding,
@@ -282,26 +279,26 @@ export class BubbleRenderer {
       height: bubble.height - (padding * 2)
     };
 
-    // 最小サイズチェック
+    // 
     if (textArea.width <= 0 || textArea.height <= 0) return;
 
     if (bubble.vertical) {
-      // 縦書きモード
+      // 
       this.drawVerticalText(ctx, bubble.text, textArea, bubble.fontSize);
     } else {
-      // 横書きモード（文字折り返し対応）
+      // Landscape mode (character wrapping)
       this.drawHorizontalText(ctx, bubble.text, textArea, bubble.fontSize);
     }
   }
 
-  // 🆕 横書きテキスト描画（自動折り返し・フォントサイズ調整）
+  // 🆕 Horizontal Text Drawing (Auto Wrap/Font Size Adjustment)
   static drawHorizontalText(ctx: CanvasRenderingContext2D, text: string, area: {x: number, y: number, width: number, height: number}, customFontSize?: number) {
-    // 基本フォントサイズから開始（カスタムサイズがあればそれを使用）
+    // Start with the base font size (use it if you have a custom size)
     let fontSize = customFontSize || 32;
     let lines: string[] = [];
     let lineHeight = 0;
     
-    // フォントサイズを調整してテキストがエリア内に収まるようにする
+    // Adjust the font size so that the text fits within the area
     const minSize = Math.max(18, customFontSize ? customFontSize * 0.6 : 18);
     for (let size = fontSize; size >= minSize; size -= 1) {
       ctx.font = `${size}px 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif`;
@@ -317,34 +314,34 @@ export class BubbleRenderer {
       }
     }
 
-    // 最終的なフォント設定
+    // 
     ctx.font = `${fontSize}px 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif`;
     
-    // 描画開始位置を計算（中央揃え）
+    // Calculate Drawing Start Position (Center)
     const totalTextHeight = lines.length * lineHeight;
     const startY = area.y + (area.height - totalTextHeight) / 2 + lineHeight / 2;
     const centerX = area.x + area.width / 2;
 
-    // 各行を描画
+    // 
     lines.forEach((line, index) => {
       const y = startY + index * lineHeight;
       ctx.fillText(line, centerX, y);
     });
 
-    console.log(`💬 横書きテキスト描画: "${text.substring(0, 10)}..." フォントサイズ:${fontSize} 行数:${lines.length}`);
+    console.log(`💬 : "${text.substring(0, 10)}..." :${fontSize} :${lines.length}`);
   }
 
-  // 🆕 縦書きテキスト描画（改良版）
+  // 🆕 Vertical Text Drawing (Improved)
   static drawVerticalText(ctx: CanvasRenderingContext2D, text: string, area: {x: number, y: number, width: number, height: number}, customFontSize?: number) {
-    // 縦書き用基本設定（カスタムサイズがあればそれを使用）
+    // Vertical basic settings (use custom size if available)
     let fontSize = customFontSize || 32;
-    const chars = Array.from(text); // Unicode対応の文字分割
+    const chars = Array.from(text); // Unicode
     
-    // 縦書きレイアウト計算
+    // 
     const maxColumns = Math.floor(area.width / (fontSize * 1.2));
     const charsPerColumn = Math.floor(area.height / (fontSize * 1.2));
     
-    // フォントサイズ調整
+    // 
     const minSize = Math.max(18, customFontSize ? customFontSize * 0.6 : 18);
     for (let size = fontSize; size >= minSize; size -= 1) {
       const columnWidth = size * 1.2;
@@ -366,11 +363,11 @@ export class BubbleRenderer {
     const charsPerCol = Math.floor(area.height / charHeight);
     const totalColumns = Math.ceil(chars.length / charsPerCol);
     
-    // 描画開始位置（右から左へ）
+    // Drawing start position (right to left)
     const startX = area.x + area.width - columnWidth / 2;
     const startY = area.y + (area.height - (charsPerCol * charHeight)) / 2 + charHeight / 2;
 
-    // 各列を描画
+    // 
     for (let col = 0; col < totalColumns; col++) {
       const x = startX - (col * columnWidth);
       
@@ -387,14 +384,14 @@ export class BubbleRenderer {
 
   }
 
-  // 🆕 高度なテキスト折り返し処理（日本語対応）
+  // 🆕 Advanced Text Wrap Processing (Japanese)
   static wrapTextAdvanced(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
     const lines: string[] = [];
-    const paragraphs = text.split('\n'); // 改行で段落分割
+    const paragraphs = text.split('\n'); // 
 
     for (const paragraph of paragraphs) {
       if (paragraph.trim() === '') {
-        lines.push(''); // 空行を保持
+        lines.push(''); // 
         continue;
       }
 
@@ -421,7 +418,7 @@ export class BubbleRenderer {
     return lines;
   }
 
-  // 🆕 日本語テキストのセグメント化（改行に適した単位で分割）
+  // 🆕 Segmentation of Japanese text (split into units suitable for line breaks)
   static segmentJapaneseText(text: string): string[] {
     const segments: string[] = [];
     let current = '';
@@ -432,7 +429,7 @@ export class BubbleRenderer {
 
       current += char;
 
-      // 分割ポイントの判定
+      // 
       const shouldBreak = this.isBreakablePoint(char, nextChar);
 
       if (shouldBreak || i === text.length - 1) {
@@ -444,36 +441,32 @@ export class BubbleRenderer {
     return segments.filter(seg => seg.length > 0);
   }
 
-  // 🆕 改行可能ポイントの判定
+  // 🆕 
   static isBreakablePoint(char: string, nextChar?: string): boolean {
     if (!nextChar) return true;
 
     const code = char.charCodeAt(0);
     const nextCode = nextChar.charCodeAt(0);
 
-    // 句読点、記号の後は改行可能
-    if (/[。、！？．，]/.test(char)) return true;
-    
-    // ひらがな・カタカナの境界
-    if ((code >= 0x3040 && code <= 0x309F) && // ひらがな
-        (nextCode >= 0x30A0 && nextCode <= 0x30FF)) return true; // カタカナ
-    
-    // 漢字とひらがなの境界
-    if ((code >= 0x4E00 && code <= 0x9FAF) && // 漢字
-        (nextCode >= 0x3040 && nextCode <= 0x309F)) return true; // ひらがな
+    if (/[.,;:!?'"()[\]{}]/.test(char)) return true;
 
-    // 英数字と日本語の境界
-    if (/[a-zA-Z0-9]/.test(char) && /[ぁ-ゖァ-ヾ一-鶴]/.test(nextChar)) return true;
-    if (/[ぁ-ゖァ-ヾ一-鶴]/.test(char) && /[a-zA-Z0-9]/.test(nextChar)) return true;
+    if ((code >= 0x3040 && code <= 0x309f) &&
+        (nextCode >= 0x30a0 && nextCode <= 0x30ff)) return true;
 
-    // スペースの後は改行可能
+    if ((code >= 0x4e00 && code <= 0x9faf) &&
+        (nextCode >= 0x3040 && nextCode <= 0x309f)) return true;
+
+    if (/[a-zA-Z0-9]/.test(char) && /[-–—]/.test(nextChar)) return true;
+    if (/[-–—]/.test(char) && /[a-zA-Z0-9]/.test(nextChar)) return true;
+
+    // 
     if (/\s/.test(char)) return true;
 
-    // デフォルトは文字単位で改行可能（2文字以上の場合）
+    // By default, line breaks are possible on a character-by-character basis2
     return false;
   }
 
-  // 8方向リサイズハンドル描画
+  // 8
   static drawResizeHandles(ctx: CanvasRenderingContext2D, bubble: SpeechBubble) {
     const handleSize = 12;
     const isDarkMode = document.documentElement.getAttribute("data-theme") === "dark";
@@ -482,7 +475,7 @@ export class BubbleRenderer {
     ctx.strokeStyle = isDarkMode ? "#fff" : "#000";
     ctx.lineWidth = 2;
 
-    // 8方向のハンドル位置
+    // 8
     const handles = [
       { x: bubble.x - handleSize/2, y: bubble.y - handleSize/2, dir: "nw" },
       { x: bubble.x + bubble.width/2 - handleSize/2, y: bubble.y - handleSize/2, dir: "n" },
@@ -496,11 +489,11 @@ export class BubbleRenderer {
 
     handles.forEach(handle => {
       if (["nw", "ne", "se", "sw"].includes(handle.dir)) {
-        // 角：四角いハンドル
+        // 
         ctx.fillRect(handle.x, handle.y, handleSize, handleSize);
         ctx.strokeRect(handle.x, handle.y, handleSize, handleSize);
       } else {
-        // 辺：丸いハンドル
+        // 
         ctx.beginPath();
         ctx.arc(handle.x + handleSize/2, handle.y + handleSize/2, handleSize/2, 0, Math.PI * 2);
         ctx.fill();
@@ -509,7 +502,7 @@ export class BubbleRenderer {
     });
   }
 
-  // リサイズハンドル判定
+  // 
   static isBubbleResizeHandleClicked(
     mouseX: number, 
     mouseY: number, 
@@ -545,27 +538,27 @@ export class BubbleRenderer {
     return { isClicked: false, direction: "" };
   }
 
-  // 吹き出し位置判定
+  // 
   static findBubbleAt(
     x: number, 
     y: number, 
     bubbles: SpeechBubble[], 
     panels: Panel[]
   ): SpeechBubble | null {
-    console.log(`🔎 findBubbleAt呼び出し: click=(${x},${y}), bubbles=${bubbles.length}個`);
+    console.log(`🔎 findBubbleAt: click=(${x},${y}), bubbles=${bubbles.length}`);
     for (let i = bubbles.length - 1; i >= 0; i--) {
       const bubble = bubbles[i];
       const panel = panels.find(p => p.id === bubble.panelId) || panels[0];
       if (!panel) continue;
       
       const bubblePos = this.calculateBubblePosition(bubble, panel);
-      console.log(`  吹き出し${i}: id=${bubble.id}, 元座標=(${bubble.x},${bubble.y}), 画面座標=(${bubblePos.x},${bubblePos.y}), サイズ=${bubblePos.width}x${bubblePos.height}, isGlobal=${bubble.isGlobalPosition}`);
+      console.log(`  ${i}: id=${bubble.id}, =(${bubble.x},${bubble.y}), =(${bubblePos.x},${bubblePos.y}), =${bubblePos.width}x${bubblePos.height}, isGlobal=${bubble.isGlobalPosition}`);
       
       if (x >= bubblePos.x && 
           x <= bubblePos.x + bubblePos.width &&
           y >= bubblePos.y && 
           y <= bubblePos.y + bubblePos.height) {
-        console.log(`  ✅ ヒット！`);
+        console.log(`  ✅ `);
         return bubble;
       }
     }
@@ -573,7 +566,7 @@ export class BubbleRenderer {
     return null;
   }
 
-  // リサイズ実行
+  // 
   static resizeBubble(
     bubble: SpeechBubble,
     direction: string,
@@ -587,7 +580,7 @@ export class BubbleRenderer {
     let newWidth = bubble.width;
     let newHeight = bubble.height;
 
-    // 相対座標の場合は、デルタ値をパネルサイズで正規化
+    // For relative coordinates, normalize delta values by panel size
     let adjustedDeltaX = deltaX;
     let adjustedDeltaY = deltaY;
     
@@ -596,7 +589,7 @@ export class BubbleRenderer {
       adjustedDeltaY = deltaY / panel.height;
     }
     
-    // 相対座標の場合は、最小サイズも相対値で指定
+    // For relative coordinates, the minimum size is also specified in relative values.
     const minWidth = bubble.isGlobalPosition ? 60 : 0.1;
     const minHeight = bubble.isGlobalPosition ? 40 : 0.05;
 

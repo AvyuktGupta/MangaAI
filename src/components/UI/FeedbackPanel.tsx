@@ -1,16 +1,16 @@
 /**
- * ベータ版フィードバック収集パネル
- * ユーザーからの意見・要望を収集するためのUI
+ * Beta Feedback Gathering Panel
+ * To collect feedback and requests from usersUI
  */
 
 import React, { useState } from 'react';
 
 interface FeedbackData {
-  rating: number; // 1-5の評価
-  category: string; // フィードバックカテゴリ
-  message: string; // 詳細メッセージ
-  userAgent: string; // ブラウザ情報
-  timestamp: string; // 送信日時
+  rating: number; // 1-5
+  category: string; // 
+  message: string; // 
+  userAgent: string; // 
+  timestamp: string; // 
 }
 
 interface FeedbackPanelProps {
@@ -31,55 +31,55 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const categories = [
-    { value: 'usability', label: '使いやすさ' },
-    { value: 'features', label: '機能について' },
-    { value: 'performance', label: '動作・パフォーマンス' },
-    { value: 'ui', label: 'デザイン・UI' },
-    { value: 'bug', label: 'バグ報告' },
-    { value: 'request', label: '機能要望' },
-    { value: 'other', label: 'その他' }
+    { value: 'usability', label: '' },
+    { value: 'features', label: '' },
+    { value: 'performance', label: '' },
+    { value: 'ui', label: 'UI' },
+    { value: 'bug', label: '' },
+    { value: 'request', label: '' },
+    { value: 'other', label: '' }
   ];
 
   const handleSubmit = async () => {
     if (!category || !message.trim()) {
-      alert('カテゴリとメッセージを入力してください。');
+      alert('Please enter a category and a message.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Googleフォームに送信
+      // Google
       const formData = new FormData();
-      formData.append('entry.1234567890', rating.toString()); // 評価
-      formData.append('entry.1234567891', category); // カテゴリ
-      formData.append('entry.1234567892', message.trim()); // メッセージ
-      formData.append('entry.1234567893', new Date().toISOString()); // タイムスタンプ
-      formData.append('entry.1234567894', navigator.userAgent); // ブラウザ情報
+      formData.append('entry.1234567890', rating.toString()); // 
+      formData.append('entry.1234567891', category); // 
+      formData.append('entry.1234567892', message.trim()); // 
+      formData.append('entry.1234567893', new Date().toISOString()); // 
+      formData.append('entry.1234567894', navigator.userAgent); // 
 
-      // Googleフォームの送信URL（実際のフォーム作成後に更新が必要）
+      // GoogleURL(needs to be updated after the actual form is created)
       const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
       
       const response = await fetch(GOOGLE_FORM_URL, {
         method: 'POST',
         body: formData,
-        mode: 'no-cors' // CORS回避のため
+        mode: 'no-cors' // CORS
       });
 
-      // 送信完了後の処理
+      // 
       setIsSubmitted(true);
       setTimeout(() => {
         setIsSubmitted(false);
         onClose();
-        // フォームリセット
+        // 
         setRating(0);
         setCategory('');
         setMessage('');
       }, 2000);
 
     } catch (error) {
-      console.error('フィードバック送信エラー:', error);
-      alert('送信に失敗しました。もう一度お試しください。');
+      console.error(':', error);
+      alert('Submission failed, please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +111,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
         overflowY: 'auto',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
       }}>
-        {/* ヘッダー */}
+        {/*  */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -126,7 +126,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
             fontSize: '18px',
             fontWeight: 'bold'
           }}>
-            🧪 ベータ版フィードバック
+            🧪 
           </h3>
           <button
             onClick={onClose}
@@ -143,7 +143,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
           </button>
         </div>
 
-        {/* 送信完了メッセージ */}
+        {/*  */}
         {isSubmitted ? (
           <div style={{
             textAlign: 'center',
@@ -152,15 +152,15 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
           }}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
             <h3 style={{ margin: '0 0 8px 0', color: onDarkMode ? '#fff' : '#333' }}>
-              フィードバックを送信しました！
+              Feedback sent
             </h3>
             <p style={{ margin: 0, color: onDarkMode ? '#ccc' : '#666' }}>
-              ご協力ありがとうございます
+              
             </p>
           </div>
         ) : (
           <>
-            {/* 評価 */}
+            {/*  */}
             <div style={{ marginBottom: '20px' }}>
               <label style={{
                 display: 'block',
@@ -168,7 +168,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
                 color: onDarkMode ? '#fff' : '#333',
                 fontWeight: '500'
               }}>
-                全体的な評価（任意）
+                
               </label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -190,7 +190,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
               </div>
             </div>
 
-            {/* カテゴリ選択 */}
+            {/*  */}
             <div style={{ marginBottom: '20px' }}>
               <label style={{
                 display: 'block',
@@ -198,7 +198,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
                 color: onDarkMode ? '#fff' : '#333',
                 fontWeight: '500'
               }}>
-                カテゴリ *
+                 *
               </label>
               <select
                 value={category}
@@ -213,7 +213,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
                   fontSize: '14px'
                 }}
               >
-                <option value="">カテゴリを選択してください</option>
+                <option value=""></option>
                 {categories.map((cat) => (
                   <option key={cat.value} value={cat.value}>
                     {cat.label}
@@ -222,7 +222,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
               </select>
             </div>
 
-            {/* メッセージ入力 */}
+            {/*  */}
             <div style={{ marginBottom: '24px' }}>
               <label style={{
                 display: 'block',
@@ -230,12 +230,12 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
                 color: onDarkMode ? '#fff' : '#333',
                 fontWeight: '500'
               }}>
-                メッセージ *
+                 *
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="ご意見・ご要望をお聞かせください..."
+                placeholder="Tell us what you think..."
                 style={{
                   width: '100%',
                   minHeight: '120px',
@@ -251,7 +251,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
               />
             </div>
 
-            {/* 送信ボタン */}
+            {/*  */}
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button
                 onClick={onClose}
@@ -265,7 +265,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
                   fontSize: '14px'
                 }}
               >
-                キャンセル
+                
               </button>
               <button
                 onClick={handleSubmit}
@@ -283,7 +283,7 @@ export const FeedbackPanel: React.FC<FeedbackPanelProps> = ({
                   fontWeight: '500'
                 }}
               >
-                {isSubmitting ? '送信中...' : '送信'}
+                {isSubmitting ? '...' : ''}
               </button>
             </div>
           </>

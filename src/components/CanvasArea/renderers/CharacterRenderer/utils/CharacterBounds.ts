@@ -1,12 +1,12 @@
 // src/components/CanvasArea/renderers/CharacterRenderer/utils/CharacterBounds.ts
-// 🎯 キャラクター境界・当たり判定専用クラス
+// 🎯 Character boundary/percussion class only
 
 import { Character, Panel, CharacterBounds as CharacterBoundsType } from "../../../../../types";
 import { CharacterUtils } from "./CharacterUtils";
 
 export class CharacterBounds {
   
-  // 🎯 キャラクター境界情報取得
+  // 🎯 
   static getCharacterBounds(
     character: Character,
     panel: Panel
@@ -24,7 +24,7 @@ export class CharacterBounds {
     };
   }
 
-  // 🎯 回転を考慮したキャラクター境界
+  // 🎯 Character boundaries with rotation
   static getRotatedCharacterBounds(
     character: Character,
     panel: Panel
@@ -67,7 +67,7 @@ export class CharacterBounds {
     return { original, rotated };
   }
 
-  // 🎯 キャラクタークリック判定（回転対応）
+  // 🎯 Character click judgment (rotation correspondence)
   static isCharacterClicked(
     mouseX: number,
     mouseY: number,
@@ -77,7 +77,7 @@ export class CharacterBounds {
     const rotation = character.rotation || 0;
     
     if (rotation === 0) {
-      // 通常の矩形判定
+      // 
       const bounds = CharacterBounds.getCharacterBounds(character, panel);
       return (
         mouseX >= bounds.x &&
@@ -86,12 +86,12 @@ export class CharacterBounds {
         mouseY <= bounds.y + bounds.height
       );
     } else {
-      // 回転している場合の判定
+      // 
       return CharacterBounds.isRotatedCharacterClicked(mouseX, mouseY, character, panel);
     }
   }
 
-  // 🎯 回転キャラクターのクリック判定
+  // 🎯 Determining the Click of a Rotating Character
   static isRotatedCharacterClicked(
     mouseX: number,
     mouseY: number,
@@ -101,16 +101,16 @@ export class CharacterBounds {
     const bounds = CharacterBounds.getCharacterBounds(character, panel);
     const rotation = character.rotation || 0;
     
-    // マウス座標を逆回転させてキャラクターローカル座標で判定
+    // Reverse the mouse coordinates and determine by character local coordinates
     const reversedPoint = CharacterUtils.rotatePoint(
       mouseX,
       mouseY,
       bounds.centerX,
       bounds.centerY,
-      -rotation // 逆回転
+      -rotation // 
     );
     
-    // 逆回転した座標で通常の矩形判定
+    // Normal rectangular determination with reverse rotation coordinates
     return (
       reversedPoint.x >= bounds.x &&
       reversedPoint.x <= bounds.x + bounds.width &&
@@ -119,25 +119,25 @@ export class CharacterBounds {
     );
   }
 
-  // 🎯 複数キャラクターからクリック対象を検索
+  // 🎯 Search multiple characters for clicks
   static findCharacterAt(
     mouseX: number,
     mouseY: number,
     characters: Character[],
     panels: Panel[]
   ): Character | null {
-    // 後ろから検索（上に描画されたものを優先）
+    // Search from the back (prioritize those drawn above)
     for (let i = characters.length - 1; i >= 0; i--) {
       const character = characters[i];
       const panel = panels.find((p) => p.id === character.panelId);
       
       if (!panel) {
-        console.warn(`⚠️ パネル未発見 - キャラクター: ${character.name}, パネルID: ${character.panelId}`);
+        console.warn(`⚠️  - : ${character.name}, ID: ${character.panelId}`);
         continue;
       }
 
       if (CharacterBounds.isCharacterClicked(mouseX, mouseY, character, panel)) {
-        // コンソールログは無効化
+        // 
         return character;
       }
     }
@@ -145,7 +145,7 @@ export class CharacterBounds {
     return null;
   }
 
-  // 🎯 リサイズハンドル境界計算（四隅のみ版）
+  // 🎯 Resize handle boundary calculation (four-corner version only)
   static getResizeHandleBounds(
     character: Character,
     panel: Panel
@@ -160,7 +160,7 @@ export class CharacterBounds {
     const handleSize = 12;
     
     return [
-      // 四隅ハンドル（四角）のみ
+      // 
       { direction: "nw", x: bounds.x - handleSize/2, y: bounds.y - handleSize/2, width: handleSize, height: handleSize },
       { direction: "ne", x: bounds.x + bounds.width - handleSize/2, y: bounds.y - handleSize/2, width: handleSize, height: handleSize },
       { direction: "se", x: bounds.x + bounds.width - handleSize/2, y: bounds.y + bounds.height - handleSize/2, width: handleSize, height: handleSize },
@@ -168,7 +168,7 @@ export class CharacterBounds {
     ];
   }
 
-  // 🎯 リサイズハンドルクリック判定
+  // 🎯 Resize Handle Click Determination
   static isResizeHandleClicked(
     mouseX: number,
     mouseY: number,
@@ -176,7 +176,7 @@ export class CharacterBounds {
     panel: Panel
   ): { isClicked: boolean; direction: string } {
     const handles = CharacterBounds.getResizeHandleBounds(character, panel);
-    const tolerance = 10; // クリック判定を広く
+    const tolerance = 10; // 
     
     for (const handle of handles) {
       const inRangeX = mouseX >= handle.x - tolerance && 
@@ -185,7 +185,7 @@ export class CharacterBounds {
                       mouseY <= handle.y + handle.height + tolerance;
       
       if (inRangeX && inRangeY) {
-        console.log(`🔧 リサイズハンドル ${handle.direction} クリック検出!`);
+        console.log(`🔧  ${handle.direction} !`);
         return { isClicked: true, direction: handle.direction };
       }
     }
@@ -193,25 +193,25 @@ export class CharacterBounds {
     return { isClicked: false, direction: "" };
   }
 
-  // CharacterBounds.ts の getRotationHandleBounds メソッド修正
+  // CharacterBounds.ts  getRotationHandleBounds 
 
-// 🎯 回転ハンドル境界計算（範囲縮小版）
+// 🎯 Rotating handle boundary calculation (reduced range version)
 static getRotationHandleBounds(
   character: Character,
   panel: Panel
 ): { x: number; y: number; radius: number } {
   const bounds = CharacterBounds.getCharacterBounds(character, panel);
   const handleDistance = 35;
-  const handleRadius = 15; // 🔧 100px → 15px に大幅縮小
+  const handleRadius = 15; // 🔧 100px → 15px 
   
   return {
     x: bounds.centerX,
     y: bounds.y - handleDistance,
-    radius: handleRadius  // 小さな範囲のみで回転
+    radius: handleRadius  // 
   };
 }
 
-// 🎯 回転ハンドルクリック判定（範囲縮小版）
+// 🎯 Rotating handle click judgment (reduced range version)
 static isRotationHandleClicked(
   mouseX: number,
   mouseY: number,
@@ -227,7 +227,7 @@ static isRotationHandleClicked(
   const isClicked = distance <= handle.radius;
   
   if (isClicked) {
-    console.log("🔄 [範囲縮小版] 回転ハンドルクリック検出!", {
+    console.log("🔄 [] !", {
       distance: Math.round(distance),
       radius: handle.radius,
       mousePos: { x: mouseX, y: mouseY },
@@ -238,7 +238,7 @@ static isRotationHandleClicked(
   return isClicked;
 }
 
-  // 🎯 統合ハンドルクリック判定（完全修正版）
+  // 🎯 Integrated Handle Click Interpretation (Full Revision)
   static getHandleClickInfo(
     mouseX: number,
     mouseY: number,
@@ -249,21 +249,21 @@ static isRotationHandleClicked(
     type: "none" | "resize" | "rotate";
     direction?: string 
   } {
-    console.log("🎯 統合ハンドル判定開始:", {
+    console.log("🎯 :", {
       mousePos: { x: mouseX, y: mouseY },
       character: character.name
     });
 
-    // 🔄 回転ハンドル判定（最優先）
+    // 🔄 
     if (CharacterBounds.isRotationHandleClicked(mouseX, mouseY, character, panel)) {
-      console.log("✅ 回転ハンドル検出！");
+      console.log("✅ ");
       return { isClicked: true, type: "rotate" };
     }
     
-    // 🔧 リサイズハンドル判定
+    // 🔧 
     const resizeResult = CharacterBounds.isResizeHandleClicked(mouseX, mouseY, character, panel);
     if (resizeResult.isClicked) {
-      console.log("✅ リサイズハンドル検出！", resizeResult.direction);
+      console.log("✅ ", resizeResult.direction);
       return { 
         isClicked: true, 
         type: "resize", 
@@ -271,18 +271,18 @@ static isRotationHandleClicked(
       };
     }
     
-    console.log("❌ ハンドル検出されず");
+    console.log("❌ ");
     return { isClicked: false, type: "none" };
   }
 
-  // 🎯 キャラクター境界とパネル境界の重複判定
+  // 🎯 Character boundary and panel boundary duplication determination
   static isCharacterInPanel(
     character: Character,
     panel: Panel
   ): boolean {
     const charBounds = CharacterBounds.getCharacterBounds(character, panel);
     
-    // パネル境界内かチェック
+    // 
     return (
       charBounds.x >= panel.x &&
       charBounds.y >= panel.y &&
@@ -291,7 +291,7 @@ static isRotationHandleClicked(
     );
   }
 
-  // 🎯 キャラクター同士の重複判定
+  // 🎯 
   static areCharactersOverlapping(
     character1: Character,
     character2: Character,
@@ -305,7 +305,7 @@ static isRotationHandleClicked(
     const bounds1 = CharacterBounds.getCharacterBounds(character1, panel1);
     const bounds2 = CharacterBounds.getCharacterBounds(character2, panel2);
     
-    // 矩形重複判定
+    // 
     return !(
       bounds1.x + bounds1.width < bounds2.x ||
       bounds2.x + bounds2.width < bounds1.x ||
@@ -314,7 +314,7 @@ static isRotationHandleClicked(
     );
   }
 
-  // 🎯 スナップ位置計算
+  // 🎯 
   static calculateSnapPosition(
     character: Character,
     panel: Panel,
@@ -327,11 +327,11 @@ static isRotationHandleClicked(
     const bounds = CharacterBounds.getCharacterBounds(character, panel);
     const { gridSize } = snapSettings;
     
-    // グリッドに最も近い位置を計算
+    // Calculate the position closest to the grid
     const snappedX = Math.round(bounds.centerX / gridSize) * gridSize;
     const snappedY = Math.round(bounds.centerY / gridSize) * gridSize;
     
-    // キャラクター座標系に戻す
+    // 
     if (character.isGlobalPosition) {
       return { x: snappedX, y: snappedY };
     } else {
@@ -342,7 +342,7 @@ static isRotationHandleClicked(
     }
   }
 
-  // 🎯 デバッグ用境界情報出力
+  // 🎯 
   static debugBoundsInfo(
     character: Character,
     panel: Panel,
@@ -351,7 +351,7 @@ static isRotationHandleClicked(
     const bounds = CharacterBounds.getCharacterBounds(character, panel);
     const rotation = character.rotation || 0;
     
-    console.log(`🔍 境界デバッグ [${operation}]:`, {
+    console.log(`🔍  [${operation}]:`, {
       character: character.name,
       bounds: {
         x: Math.round(bounds.x),

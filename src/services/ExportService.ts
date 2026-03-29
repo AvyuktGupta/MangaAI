@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-// 🔧 トーン対応: ToneElementを追加
+// 🔧 : ToneElement
 import { Panel, Character, SpeechBubble, BackgroundElement, EffectElement, ToneElement } from '../types';
 
 export interface ExportOptions {
@@ -8,7 +8,7 @@ export interface ExportOptions {
   quality: 'high' | 'medium' | 'low';
   resolution: number; // DPI
   includeBackground: boolean;
-  separatePages: boolean; // PDFの場合、各コマを別ページにするか
+  separatePages: boolean; // PDF, do you want each frame to be on a separate page?
 }
 
 export interface ExportProgress {
@@ -30,7 +30,7 @@ export class ExportService {
   }
 
   /**
-   * キャンバス全体をPDF出力
+   * PDF
    */
   async exportToPDF(
     canvasElement: HTMLCanvasElement,
@@ -39,7 +39,7 @@ export class ExportService {
     onProgress?: (progress: ExportProgress) => void
   ): Promise<void> {
     try {
-      onProgress?.({ step: 'initialize', progress: 0, message: 'PDF出力を開始...' });
+      onProgress?.({ step: 'initialize', progress: 0, message: 'PDF...' });
 
       const pdf = new jsPDF({
         orientation: 'landscape',
@@ -48,27 +48,27 @@ export class ExportService {
       });
 
       if (options.separatePages) {
-        // 各コマを別ページで出力
+        // 
         await this.exportPanelsSeparately(pdf, canvasElement, panels, options, onProgress);
       } else {
-        // 全体を1ページで出力
+        // 1
         await this.exportCanvasAsSinglePage(pdf, canvasElement, options, onProgress);
       }
 
-      onProgress?.({ step: 'saving', progress: 95, message: 'PDFファイルを保存中...' });
+      onProgress?.({ step: 'saving', progress: 95, message: 'PDF...' });
       
       const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-      pdf.save(`ネーム_${timestamp}.pdf`);
+      pdf.save(`_${timestamp}.pdf`);
 
-      onProgress?.({ step: 'complete', progress: 100, message: 'PDF出力完了！' });
+      onProgress?.({ step: 'complete', progress: 100, message: 'PDF' });
     } catch (error) {
-      console.error('PDF出力エラー:', error);
-      throw new Error('PDF出力に失敗しました');
+      console.error('PDF:', error);
+      throw new Error('PDF');
     }
   }
 
   /**
-   * 各コマを個別のPNGとして出力
+   * PNG
    */
   async exportToPNG(
     canvasElement: HTMLCanvasElement,
@@ -77,33 +77,33 @@ export class ExportService {
     onProgress?: (progress: ExportProgress) => void
   ): Promise<void> {
     try {
-      onProgress?.({ step: 'initialize', progress: 0, message: 'PNG出力を開始...' });
+      onProgress?.({ step: 'initialize', progress: 0, message: 'PNG...' });
 
-      // 全体画像の出力
+      // 
       const fullCanvas = await this.captureCanvas(canvasElement, options);
-      this.downloadImage(fullCanvas, 'ネーム_全体.png');
+      this.downloadImage(fullCanvas, '_.png');
 
-      onProgress?.({ step: 'panels', progress: 30, message: '各コマを出力中...' });
+      onProgress?.({ step: 'panels', progress: 30, message: '...' });
 
-      // 各コマの個別出力
+      // 
       for (let i = 0; i < panels.length; i++) {
         const panel = panels[i];
         const panelCanvas = await this.capturePanelArea(canvasElement, panel, options);
-        this.downloadImage(panelCanvas, `ネーム_コマ${i + 1}.png`);
+        this.downloadImage(panelCanvas, `_${i + 1}.png`);
         
         const progress = 30 + (60 * (i + 1) / panels.length);
-        onProgress?.({ step: 'panels', progress, message: `コマ ${i + 1}/${panels.length} 完了` });
+        onProgress?.({ step: 'panels', progress, message: ` ${i + 1}/${panels.length} ` });
       }
 
-      onProgress?.({ step: 'complete', progress: 100, message: 'PNG出力完了！' });
+      onProgress?.({ step: 'complete', progress: 100, message: 'PNG' });
     } catch (error) {
-      console.error('PNG出力エラー:', error);
-      throw new Error('PNG出力に失敗しました');
+      console.error('PNG:', error);
+      throw new Error('PNG');
     }
   }
 
   /**
-   * クリスタ用PSDデータの出力（トーン対応版）
+   * PSDData output (tone-compatible version)
    */
   async exportToPSD(
     canvasElement: HTMLCanvasElement,
@@ -112,50 +112,50 @@ export class ExportService {
     bubbles: SpeechBubble[],
     backgrounds: BackgroundElement[],
     effects: EffectElement[],
-    tones: ToneElement[], // 🆕 トーンデータ追加
+    tones: ToneElement[], // 🆕 
     options: ExportOptions,
     onProgress?: (progress: ExportProgress) => void
   ): Promise<void> {
     try {
-      onProgress?.({ step: 'initialize', progress: 0, message: 'クリスタ用データ準備中...' });
+      onProgress?.({ step: 'initialize', progress: 0, message: '...' });
 
-      // PSD形式は複雑なので、代替案として構造化されたデータを出力
+      // PSDThe format is complex, so output structured data as an alternative
       const layerData = this.createLayerStructure(panels, characters, bubbles, backgrounds, effects, tones);
       
-      onProgress?.({ step: 'layers', progress: 50, message: 'レイヤー情報を生成中...' });
+      onProgress?.({ step: 'layers', progress: 50, message: '...' });
 
-      // JSONファイルとして出力（クリスタで読み込み可能）
+      // JSONOutput as file (readable by Christa)
       const jsonData = JSON.stringify(layerData, null, 2);
-      this.downloadJSON(jsonData, 'ネーム_レイヤー構造.json');
+      this.downloadJSON(jsonData, '_.json');
 
-      // 各要素を個別のPNGとして出力
+      // PNG
       await this.exportLayersAsPNG(canvasElement, layerData, options, onProgress);
 
-      onProgress?.({ step: 'complete', progress: 100, message: 'クリスタ用データ出力完了！' });
+      onProgress?.({ step: 'complete', progress: 100, message: '' });
     } catch (error) {
-      console.error('PSD出力エラー:', error);
-      throw new Error('クリスタ用データ出力に失敗しました');
+      console.error('PSD:', error);
+      throw new Error('Failed to output data for Christa');
     }
   }
 
   /**
-   * エクスポート設定のバリデーション
+   * Export Settings Validation
    */
   validateExportOptions(options: ExportOptions): string[] {
     const errors: string[] = [];
 
     if (options.resolution < 72 || options.resolution > 600) {
-      errors.push('解像度は72-600DPIの範囲で設定してください');
+      errors.push('72-600DPI');
     }
 
     if (!['pdf', 'png', 'psd'].includes(options.format)) {
-      errors.push('サポートされていない出力形式です');
+      errors.push('Unsupported output format');
     }
 
     return errors;
   }
 
-  // ============ プライベートメソッド ============
+  // ============  ============
 
   private async exportPanelsSeparately(
     pdf: jsPDF,
@@ -170,7 +170,7 @@ export class ExportService {
       onProgress?.({ 
         step: 'panels', 
         progress: 10 + (80 * i / panels.length), 
-        message: `コマ ${i + 1}/${panels.length} を処理中...` 
+        message: ` ${i + 1}/${panels.length} ...` 
       });
 
       const panelCanvas = await this.capturePanelArea(canvasElement, panel, options);
@@ -179,7 +179,7 @@ export class ExportService {
         pdf.addPage();
       }
 
-      // A4サイズに合わせて配置
+      // A4
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 10;
@@ -204,11 +204,11 @@ export class ExportService {
     options: ExportOptions,
     onProgress?: (progress: ExportProgress) => void
   ): Promise<void> {
-    onProgress?.({ step: 'capture', progress: 20, message: 'キャンバスをキャプチャ中...' });
+    onProgress?.({ step: 'capture', progress: 20, message: '...' });
 
     const canvas = await this.captureCanvas(canvasElement, options);
     
-    onProgress?.({ step: 'convert', progress: 60, message: 'PDF形式に変換中...' });
+    onProgress?.({ step: 'convert', progress: 60, message: 'PDF...' });
 
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -248,7 +248,7 @@ export class ExportService {
   ): Promise<HTMLCanvasElement> {
     const scale = this.getScaleFromQuality(options.quality);
     
-    // パネル領域のみをキャプチャ
+    // 
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d')!;
     
@@ -260,7 +260,7 @@ export class ExportService {
       tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
     }
 
-    // キャンバス要素から該当領域をコピー
+    // Copy the area from the canvas element
     tempCtx.drawImage(
       canvasElement,
       panel.x, panel.y, panel.width, panel.height,
@@ -270,14 +270,14 @@ export class ExportService {
     return tempCanvas;
   }
 
-  // 🔧 トーン対応版レイヤー構造作成（types.ts対応修正版）
+  // 🔧 Create a tone-compatible version of the layer structure (types.ts
   private createLayerStructure(
     panels: Panel[],
     characters: Character[],
     bubbles: SpeechBubble[],
     backgrounds: BackgroundElement[],
     effects: EffectElement[],
-    tones: ToneElement[] // 🆕 トーンデータ追加
+    tones: ToneElement[] // 🆕 
   ): any {
     return {
       version: '1.0',
@@ -285,7 +285,7 @@ export class ExportService {
       layers: {
         panels: panels.map((panel, index) => ({
           id: panel.id,
-          name: `コマ${index + 1}`,
+          name: `${index + 1}`,
           x: panel.x,
           y: panel.y,
           width: panel.width,
@@ -294,12 +294,12 @@ export class ExportService {
         })),
         characters: characters.map((char, index) => ({
           id: char.id,
-          name: `キャラクター${index + 1}`,
+          name: `${index + 1}`,
           x: char.x,
           y: char.y,
           scale: char.scale,
           type: char.type,
-          // 🔧 types.tsの実際のプロパティに修正
+          // 🔧 types.ts
           expression: char.expression || "normal",           // faceExpression → expression
           pose: char.action || "standing",                   // bodyPose → action  
           direction: char.facing || "front",                 // bodyDirection → facing
@@ -308,7 +308,7 @@ export class ExportService {
         })),
         bubbles: bubbles.map((bubble, index) => ({
           id: bubble.id,
-          name: `吹き出し${index + 1}`,
+          name: `${index + 1}`,
           x: bubble.x,
           y: bubble.y,
           width: bubble.width,
@@ -319,7 +319,7 @@ export class ExportService {
         })),
         backgrounds: backgrounds.map((bg, index) => ({
           id: bg.id,
-          name: `背景${index + 1}`,
+          name: `${index + 1}`,
           x: bg.x,
           y: bg.y,
           width: bg.width,
@@ -331,7 +331,7 @@ export class ExportService {
         })),
         effects: effects.map((effect, index) => ({
           id: effect.id,
-          name: `効果線${index + 1}`,
+          name: `${index + 1}`,
           x: effect.x,
           y: effect.y,
           width: effect.width,
@@ -345,10 +345,10 @@ export class ExportService {
           zIndex: effect.zIndex,
           visible: true
         })),
-        // 🆕 トーンレイヤー追加
+        // 🆕 
         tones: tones.map((tone, index) => ({
           id: tone.id,
-          name: `トーン${index + 1}`,
+          name: `${index + 1}`,
           x: tone.x,
           y: tone.y,
           width: tone.width,
@@ -376,25 +376,25 @@ export class ExportService {
     options: ExportOptions,
     onProgress?: (progress: ExportProgress) => void
   ): Promise<void> {
-    // 各レイヤーを個別のPNGファイルとして出力
+    // PNG
     const allLayers = [
       ...layerData.layers.panels,
       ...layerData.layers.characters,
       ...layerData.layers.bubbles,
       ...layerData.layers.backgrounds,
       ...layerData.layers.effects,
-      ...layerData.layers.tones // 🆕 トーンレイヤー追加
+      ...layerData.layers.tones // 🆕 
     ];
 
     for (let i = 0; i < allLayers.length; i++) {
       const layer = allLayers[i];
       
-      // レイヤー領域をキャプチャ（実装は簡略化）
+      // Capture layer area (simplified implementation)
       const layerCanvas = await this.captureLayerArea(canvasElement, layer, options);
-      this.downloadImage(layerCanvas, `レイヤー_${layer.name}.png`);
+      this.downloadImage(layerCanvas, `_${layer.name}.png`);
       
       const progress = 60 + (35 * (i + 1) / allLayers.length);
-      onProgress?.({ step: 'layers', progress, message: `レイヤー ${i + 1}/${allLayers.length} 出力中` });
+      onProgress?.({ step: 'layers', progress, message: ` ${i + 1}/${allLayers.length} ` });
     }
   }
 
@@ -403,7 +403,7 @@ export class ExportService {
     layer: any,
     options: ExportOptions
   ): Promise<HTMLCanvasElement> {
-    // 簡略化された実装
+    // 
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d')!;
     

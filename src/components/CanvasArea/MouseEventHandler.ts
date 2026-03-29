@@ -36,7 +36,7 @@ export interface MouseEventCallbacks {
 
 export class MouseEventHandler {
   /**
-   * Canvas クリックイベント処理
+   * Canvas 
    */
   static handleCanvasClick(
     e: React.MouseEvent<HTMLCanvasElement>,
@@ -82,7 +82,7 @@ export class MouseEventHandler {
   }
 
   /**
-   * Canvas マウスダウンイベント処理
+   * Canvas 
    */
   static handleCanvasMouseDown(
     e: React.MouseEvent<HTMLCanvasElement>,
@@ -101,7 +101,7 @@ export class MouseEventHandler {
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // パネル編集モード時の操作
+    // 
     if (isPanelEditMode && selectedPanel) {
       const panelHandle = PanelManager.getPanelHandleAt(mouseX, mouseY, selectedPanel);
       
@@ -116,7 +116,7 @@ export class MouseEventHandler {
             resizeDirection: String(panelHandle.direction || ""),
             dragOffset: { x: mouseX, y: mouseY }
           });
-          // ドラッグ開始時にイベントを発火
+          // Fire event at start of drag
           if (callbacks.onDragStart) {
             callbacks.onDragStart();
           }
@@ -130,14 +130,14 @@ export class MouseEventHandler {
               y: mouseY - selectedPanel.y,
             }
           });
-          // ドラッグ開始時にイベントを発火
+          // Fire event at start of drag
           if (callbacks.onDragStart) {
             callbacks.onDragStart();
           }
           e.preventDefault();
           return;
         } else if (panelHandle.type === "split" && callbacks.onPanelSplit) {
-          const direction = window.confirm("水平分割（上下）しますか？\nキャンセルで垂直分割（左右）") 
+          const direction = window.confirm("Split horizontally (up and down)?\nCancel and split vertically (left and right)") 
             ? "horizontal" 
             : "vertical";
           callbacks.onPanelSplit(String(selectedPanel.id), direction);
@@ -147,18 +147,18 @@ export class MouseEventHandler {
       }
     }
 
-    // 吹き出し操作
+    // 
     const clickedBubble = BubbleRenderer.findBubbleAt(mouseX, mouseY, speechBubbles, panels);
-    console.log(`🔍 吹き出しクリック判定: mouse=(${mouseX},${mouseY}), 吹き出し数=${speechBubbles.length}, 見つかった=${clickedBubble ? 'あり' : 'なし'}`);
+    console.log(`🔍 : mouse=(${mouseX},${mouseY}), =${speechBubbles.length}, =${clickedBubble ? '' : ''}`);
     if (clickedBubble) {
       callbacks.setSelectedBubble(clickedBubble);
       
-      // 相対座標の場合は、パネルに対する相対位置を計算
+      // For relative coordinates, calculate the relative position to the panel
       const panel = panels.find(p => p.id === clickedBubble.panelId) || panels[0];
       if (panel && !clickedBubble.isGlobalPosition) {
-        // 相対座標の場合: パネル内での相対位置を保存
+        // : Save relative position in panel
         const bubblePos = BubbleRenderer.calculateBubblePosition(clickedBubble, panel);
-        console.log(`🖱️ 吹き出しクリック(相対): bubble=(${clickedBubble.x},${clickedBubble.y}), 画面座標=(${bubblePos.x},${bubblePos.y}), mouse=(${mouseX},${mouseY}), offset=(${mouseX - bubblePos.x},${mouseY - bubblePos.y})`);
+        console.log(`🖱️ (): bubble=(${clickedBubble.x},${clickedBubble.y}), =(${bubblePos.x},${bubblePos.y}), mouse=(${mouseX},${mouseY}), offset=(${mouseX - bubblePos.x},${mouseY - bubblePos.y})`);
         callbacks.setMouseState({
           isDragging: true,
           dragOffset: {
@@ -167,8 +167,8 @@ export class MouseEventHandler {
           }
         });
       } else {
-        // 絶対座標の場合: そのまま使用
-        console.log(`🖱️ 吹き出しクリック(絶対): bubble=(${clickedBubble.x},${clickedBubble.y}), mouse=(${mouseX},${mouseY}), offset=(${mouseX - clickedBubble.x},${mouseY - clickedBubble.y})`);
+        // : 
+        console.log(`🖱️ (): bubble=(${clickedBubble.x},${clickedBubble.y}), mouse=(${mouseX},${mouseY}), offset=(${mouseX - clickedBubble.x},${mouseY - clickedBubble.y})`);
         callbacks.setMouseState({
           isDragging: true,
           dragOffset: {
@@ -185,7 +185,7 @@ export class MouseEventHandler {
       return;
     }
 
-    // キャラクター操作
+    // Character operation
     const clickedCharacter = CharacterRenderer.findCharacterAt(mouseX, mouseY, characters, panels);
     if (clickedCharacter) {
       callbacks.setSelectedCharacter(clickedCharacter);
@@ -204,7 +204,7 @@ export class MouseEventHandler {
   }
 
   /**
-   * Canvas マウス移動イベント処理
+   * Canvas 
    */
   static handleCanvasMouseMove(
     e: React.MouseEvent<HTMLCanvasElement>,
@@ -221,20 +221,20 @@ export class MouseEventHandler {
   ): void {
     if (!mouseState.isDragging && !mouseState.isPanelResizing && !mouseState.isPanelMoving) return;
     
-    console.log(`🖱️ マウス移動: isDragging=${mouseState.isDragging}, selectedBubble=${selectedBubble ? selectedBubble.id : 'なし'}`);
+    console.log(`🖱️ : isDragging=${mouseState.isDragging}, selectedBubble=${selectedBubble ? selectedBubble.id : ''}`);
     
     const rect = canvas.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // パネルリサイズ
+    // 
     if (selectedPanel && mouseState.isPanelResizing) {
       const deltaX = mouseX - mouseState.dragOffset.x;
       const deltaY = mouseY - mouseState.dragOffset.y;
       
       const updatedPanel = PanelManager.resizePanel(
         selectedPanel,
-        String(mouseState.resizeDirection), // 明示的に文字列に変換
+        String(mouseState.resizeDirection), // 
         deltaX,
         deltaY,
         50
@@ -246,7 +246,7 @@ export class MouseEventHandler {
       return;
     }
 
-    // パネル移動
+    // 
     if (selectedPanel && mouseState.isPanelMoving) {
       const deltaX = mouseX - mouseState.dragOffset.x - selectedPanel.x;
       const deltaY = mouseY - mouseState.dragOffset.y - selectedPanel.y;
@@ -267,20 +267,20 @@ export class MouseEventHandler {
       return;
     }
 
-    // 吹き出し移動
+    // 
     if (selectedBubble && mouseState.isDragging) {
       const panel = panels.find(p => p.id === selectedBubble.panelId) || panels[0];
       
       if (panel && !selectedBubble.isGlobalPosition) {
-        // 相対座標の場合: パネル内での相対位置として保存
+        // : Save as relative position in panel
         const newAbsX = mouseX - mouseState.dragOffset.x;
         const newAbsY = mouseY - mouseState.dragOffset.y;
         
-        // 絶対座標からパネル相対座標に変換
+        // Convert from absolute coordinates to panel relative coordinates
         const relativeX = (newAbsX - panel.x) / panel.width;
         const relativeY = (newAbsY - panel.y) / panel.height;
         
-        console.log(`📍 吹き出し移動(相対): mouse=(${mouseX},${mouseY}), offset=(${mouseState.dragOffset.x},${mouseState.dragOffset.y}), 新画面座標=(${newAbsX},${newAbsY}), panel=(${panel.x},${panel.y},${panel.width}x${panel.height}), 新相対座標=(${relativeX},${relativeY})`);
+        console.log(`📍 (): mouse=(${mouseX},${mouseY}), offset=(${mouseState.dragOffset.x},${mouseState.dragOffset.y}), =(${newAbsX},${newAbsY}), panel=(${panel.x},${panel.y},${panel.width}x${panel.height}), =(${relativeX},${relativeY})`);
         
         const updatedBubble = {
           ...selectedBubble,
@@ -295,11 +295,11 @@ export class MouseEventHandler {
         );
         callbacks.setSelectedBubble(updatedBubble);
       } else {
-        // 絶対座標の場合: そのまま使用
+        // : 
         const newX = mouseX - mouseState.dragOffset.x;
         const newY = mouseY - mouseState.dragOffset.y;
         
-        console.log(`📍 吹き出し移動(絶対): mouse=(${mouseX},${mouseY}), offset=(${mouseState.dragOffset.x},${mouseState.dragOffset.y}), 新座標=(${newX},${newY})`);
+        console.log(`📍 (): mouse=(${mouseX},${mouseY}), offset=(${mouseState.dragOffset.x},${mouseState.dragOffset.y}), =(${newX},${newY})`);
         
         const updatedBubble = {
           ...selectedBubble,
@@ -317,7 +317,7 @@ export class MouseEventHandler {
       return;
     }
 
-    // キャラクター移動
+    // 
     if (selectedCharacter && mouseState.isDragging) {
       const newX = mouseX - mouseState.dragOffset.x;
       const newY = mouseY - mouseState.dragOffset.y;
@@ -339,7 +339,7 @@ export class MouseEventHandler {
   }
 
   /**
-   * Canvas マウスアップイベント処理
+   * Canvas 
    */
   static handleCanvasMouseUp(
     callbacks: MouseEventCallbacks
@@ -354,14 +354,14 @@ export class MouseEventHandler {
       snapLines: []
     });
     
-    // ドラッグ終了時にイベントを発火
+    // Fire event at end of drag
     if (callbacks.onDragEnd) {
       callbacks.onDragEnd();
     }
   }
 
   /**
-   * Canvas ダブルクリックイベント処理
+   * Canvas Double-click event processing
    */
   static handleCanvasDoubleClick(
     e: React.MouseEvent<HTMLCanvasElement>,
@@ -378,12 +378,12 @@ export class MouseEventHandler {
     if (clickedBubble) {
       callbacks.setEditingBubble(clickedBubble);
       callbacks.setEditText(clickedBubble.text);
-      console.log("✏️ 吹き出し編集開始:", clickedBubble.text);
+      console.log("✏️ :", clickedBubble.text);
     }
   }
 
   /**
-   * Canvas 右クリックイベント処理
+   * Canvas 
    */
   static handleCanvasContextMenu(
     e: React.MouseEvent<HTMLCanvasElement>,

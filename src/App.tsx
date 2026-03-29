@@ -1,4 +1,4 @@
-// src/App.tsx - v1.1.5 初期画面表示最適化版
+// src/App.tsx - v1.1.5 Initial screen display optimization version
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import CanvasComponent from "./components/CanvasComponent";
 import CharacterDetailPanel from "./components/UI/CharacterDetailPanel";
@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import "./App.css";
 import { COLOR_PALETTE, getThemeColors } from './styles/colorPalette';
 
-// 必要なimport（トーン機能含む）
+// import(Including tone function)
 import useProjectSave from './hooks/useProjectSave';
 import ProjectPanel from './components/UI/ProjectPanel';
 import BackgroundPanel from './components/UI/BackgroundPanel';
@@ -25,10 +25,10 @@ import SnapSettingsPanel from './components/UI/SnapSettingsPanel';
 import { SimpleFeedbackPanel } from './components/UI/SimpleFeedbackPanel';
 import { CURRENT_CONFIG, BetaUtils } from './config/betaConfig';
 import { StoryToComicModal } from './components/UI/StoryToComicModal';
-import { OpenAISettingsModal } from './components/UI/OpenAISettingsModal';
+import { OllamaSettingsModal } from './components/UI/OllamaSettingsModal';
 import { CharacterPromptRegisterModal } from './components/UI/CharacterPromptRegisterModal';
 import HelpModal from './components/UI/HelpModal';
-import { openAIService } from './services/OpenAIService';
+import { ollamaService } from './services/OllamaService';
 import { usageLimitService } from './services/UsageLimitService';
 
 import {
@@ -44,18 +44,18 @@ import {
 } from './utils/ScaleTransformUtils';
 
 function App() {
-  // 🔧 最適化1: 状態管理の初期化を統一・明確化
+  // 🔧 1: Unify and clarify initialization of state management
   const [selectedTemplate, setSelectedTemplate] = useState<string>("reverse_t");
 
-  // 🔧 最適化2: 初期パネル設定の最適化
+  // 🔧 2: Optimizing initial panel settings
   const [panels, setPanels] = useState<Panel[]>(() => {
-    // コンソールログは無効化
+    // Console logging disabled
     const initialPanels = templates.reverse_t.panels;
-    // コンソールログは無効化
+    // Console logging disabled
     return [...initialPanels];
   });
 
-  // 基本状態管理（最適化済み）
+  // Basic state management (optimized)
   const [characters, setCharacters] = useState<Character[]>([]);
   const [speechBubbles, setSpeechBubbles] = useState<SpeechBubble[]>([]);
   const [backgrounds, setBackgrounds] = useState<BackgroundElement[]>([]);
@@ -63,12 +63,12 @@ function App() {
   const [tones, setTones] = useState<ToneElement[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [selectedPanel, setSelectedPanel] = useState<Panel | null>(null);
-  const [selectedPanels, setSelectedPanels] = useState<Panel[]>([]); // 複数選択用
+  const [selectedPanels, setSelectedPanels] = useState<Panel[]>([]); // For multiple selection
   const [selectedEffect, setSelectedEffect] = useState<EffectElement | null>(null);
   const [selectedTone, setSelectedTone] = useState<ToneElement | null>(null);
   const [dialogueText, setDialogueText] = useState<string>("");
 
-  // UI状態管理（最適化済み）
+  // UIState management (optimized)
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [showCharacterPanel, setShowCharacterPanel] = useState<boolean>(false);
   const [isPanelEditMode, setIsPanelEditMode] = useState<boolean>(false);
@@ -84,33 +84,34 @@ function App() {
   const [isPaperSizePanelVisible, setIsPaperSizePanelVisible] = useState(false);
   const [showExportPanel, setShowExportPanel] = useState<boolean>(false);
 
-  // サイドバーの開閉状態
+  // Sidebar open/closed state
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(true);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(true);
 
-  // 🔄 コマ入れ替え機能
+  // 🔄 Frame replacement function
   const [swapPanel1, setSwapPanel1] = useState<number | null>(null);
   const [swapPanel2, setSwapPanel2] = useState<number | null>(null);
   const [isSwapMode, setIsSwapMode] = useState<boolean>(false);
   const lastPanelClickRef = useRef<{ panelId: number; timestamp: number } | null>(null);
 
-  // 🧪 ベータ版フィードバック機能
+  // 🧪 Beta feedback feature
   const [showFeedbackPanel, setShowFeedbackPanel] = useState<boolean>(false);
   
-  // 🤖 OpenAI連携機能
+  // 🤖 Ollama Llama  + Flux 
   const [showStoryToComicModal, setShowStoryToComicModal] = useState<boolean>(false);
   const [storyModalMode, setStoryModalMode] = useState<'full' | 'single'>('full');
-  const [showOpenAISettingsModal, setShowOpenAISettingsModal] = useState<boolean>(false);
+  const [showOllamaSettingsModal, setShowOllamaSettingsModal] = useState<boolean>(false);
   const [isGeneratingFromStory, setIsGeneratingFromStory] = useState<boolean>(false);
+  const [isGeneratingFluxImage, setIsGeneratingFluxImage] = useState<boolean>(false);
   
-  // 👤 キャラプロンプト登録
+  // 👤 Character prompt registration
   const [showCharacterPromptRegister, setShowCharacterPromptRegister] = useState<boolean>(false);
   const [registeringCharacterId, setRegisteringCharacterId] = useState<string>('character_1');
   
-  // 📖 ヘルプモーダル
+  // 📖 help modal
   const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
 
-  // スナップ設定の状態管理
+  // Snap settings state management
   const [snapSettings, setSnapSettings] = useState<SnapSettings>({
     enabled: true,
     gridSize: 20,
@@ -118,13 +119,13 @@ function App() {
     gridDisplay: 'edit-only'
   });
 
-  // 🔧 最適化3: デフォルトダークモード設定の最適化
+  // 🔧 3: Optimizing default dark mode settings
   useEffect(() => {
-    // コンソールログは無効化
+    // Console logging disabled
     document.documentElement.setAttribute("data-theme", "dark");
   }, []);
 
-  // 🔧 初期テンプレートのスケーリング適用
+  // 🔧 Apply initial template scaling
   useEffect(() => {
     const { pixelWidth, pixelHeight } = canvasSettings.paperSize;
     const templateBaseWidth = 800;
@@ -143,7 +144,7 @@ function App() {
     }
   }, [canvasSettings.paperSize, selectedTemplate]);
 
-  // 🔧 初期キャンバスサイズ設定
+  // 🔧 Initial canvas size settings
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -152,25 +153,25 @@ function App() {
       canvas.width = pixelWidth;
       canvas.height = pixelHeight;
       
-      // 表示スケーリングを適用（テンプレート配置を最適化）
-      const containerWidth = 1000; // 適切なサイズに調整
-      const containerHeight = 700; // 高さを調整
+      // Apply display scaling (optimize template placement)
+      const containerWidth = 1000; // Adjust to appropriate size
+      const containerHeight = 700; // 
       const displayScaleX = containerWidth / pixelWidth;
       const displayScaleY = containerHeight / pixelHeight;
       const displayScale = Math.min(displayScaleX, displayScaleY, 1);
       
-      // 最小サイズを保証（適切な値に）
+      // Guaranteed minimum size (to a reasonable value)
       const minDisplayScale = 0.7;
       const finalDisplayScale = Math.max(displayScale, minDisplayScale);
       
       canvas.style.width = `${pixelWidth * finalDisplayScale}px`;
       canvas.style.height = `${pixelHeight * finalDisplayScale}px`;
       
-      // コンソールログは無効化
+      // Console logging disabled
     }
   }, [canvasSettings]);
 
-  // プロジェクト保存hook
+  // Save projecthook
   const settings = useMemo(() => ({ 
     snapEnabled: snapSettings.enabled, 
     snapSize: snapSettings.gridSize, 
@@ -182,7 +183,7 @@ function App() {
     height: 600 
   }), []);
 
-  // テンプレートカウント用memo（最適化済み）
+  // For template countingmemo(optimized)
   const backgroundTemplateCount = useMemo(() => {
     const uniqueNames = new Set(
       backgrounds
@@ -197,26 +198,26 @@ function App() {
     return uniqueNames.size;
   }, [effects]);
 
-  // トーン機能は無効化
+  // Tone feature disabled
 
-  // キャラクター名前管理（最適化済み）
+  // Character name management (optimized)
   const [characterNames, setCharacterNames] = useState<Record<string, string>>({
-    character_1: '主人公',
-    character_2: 'ヒロイン',
-    character_3: 'ライバル',
-    character_4: '友人'
+    character_1: 'Hero',
+    character_2: 'Heroine',
+    character_3: 'Rival',
+    character_4: 'Friend'
   });
 
   const [characterSettings, setCharacterSettings] = useState<Record<string, any>>({
-    character_1: { appearance: null, role: '主人公' },
-    character_2: { appearance: null, role: 'ヒロイン' },
-    character_3: { appearance: null, role: 'ライバル' },
-    character_4: { appearance: null, role: '友人' }
+    character_1: { appearance: null, role: 'Hero' },
+    character_2: { appearance: null, role: 'Heroine' },
+    character_3: { appearance: null, role: 'Rival' },
+    character_4: { appearance: null, role: 'Friend' }
   });
 
   const projectSave = useProjectSave();
 
-  // 変更検知のためのuseEffect
+  // for change detectionuseEffect
   useEffect(() => {
     const projectData = {
       panels,
@@ -234,7 +235,7 @@ function App() {
     projectSave.checkForChanges(projectData);
   }, [panels, characters, speechBubbles, backgrounds, effects, tones, canvasSize, settings, characterNames, characterSettings, canvasSettings, projectSave]);
 
-  // 使用状況の更新（環境変数モード時のみ）
+  // Update usage status (only in environment variable mode)
   useEffect(() => {
     const updateUsageStatus = async () => {
       if (process.env.REACT_APP_USE_ENV_API_KEY === 'true') {
@@ -247,20 +248,20 @@ function App() {
     };
     
     updateUsageStatus();
-    const interval = setInterval(updateUsageStatus, 5000); // 5秒ごとに更新
+    const interval = setInterval(updateUsageStatus, 5000); // 5Updated every second
     
     return () => clearInterval(interval);
   }, []);
 
   const getCharacterDisplayName = useCallback((character: Character) => {
-    return characterNames[character.type] || character.name || 'キャラクター';
+    return characterNames[character.type] || character.name || 'Character';
   }, [characterNames]);
 
-  // 機能コールバック用の状態
+  // State for function callbacks
   const [addCharacterFunc, setAddCharacterFunc] = useState<((type: string) => void) | null>(null);
   const [addBubbleFunc, setAddBubbleFunc] = useState<((type: string, text: string) => void) | null>(null);
 
-  // アンドゥ/リドゥ機能
+  // /
   const [operationHistory, setOperationHistory] = useState<{
     characters: Character[][];
     speechBubbles: SpeechBubble[][];
@@ -279,15 +280,15 @@ function App() {
     currentIndex: -1,
   });
   
-  // アンドゥリドゥ実行中フラグ（useRefで同期管理）
+  // Undo redo flag (useRef)
   const isUndoRedoExecutingRef = useRef(false);
   
-  // 初回マウント判定用
+  // For initial mount judgment
   const isFirstMountRef = useRef(true);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // 履歴保存の最適化 - 依存関係を文字列で管理
+  // Optimized history storage - Manage dependencies with strings
   const charactersSignature = useMemo(() => 
     characters.map(char => `${char.id}-${char.x}-${char.y}-${char.scale}`).join(','), 
     [characters]
@@ -313,9 +314,9 @@ function App() {
     [effects]
   );
 
-  // トーン機能は無効化
+  // Tone feature disabled
 
-  // 履歴保存関数
+  // history save function
   const saveToHistory = useCallback((
     newCharacters: Character[], 
     newBubbles: SpeechBubble[], 
@@ -324,7 +325,7 @@ function App() {
     newEffects: EffectElement[]
   ) => {
     setOperationHistory(prev => {
-      // 初回保存の場合は特別処理
+      // Special handling when saving for the first time
       if (prev.currentIndex === -1) {
         return {
           characters: [[...newCharacters]],
@@ -347,7 +348,7 @@ function App() {
         currentIndex: prev.currentIndex + 1,
       };
       
-      // 履歴上限管理
+      // History upper limit management
       if (newHistory.characters.length > 50) {
         newHistory.characters = newHistory.characters.slice(1);
         newHistory.speechBubbles = newHistory.speechBubbles.slice(1);
@@ -363,26 +364,26 @@ function App() {
   }, []);
 
 
-  // 自動履歴保存（useEffect）
+  // Automatic history saving (useEffect
   useEffect(() => {
-    // 初回マウント時はスキップ
+    // Skip when mounting for the first time
     if (isFirstMountRef.current) {
       isFirstMountRef.current = false;
       return;
     }
     
-    // アンドゥリドゥ実行中はスキップ
+    // Skip during undo redo
     if (isUndoRedoExecutingRef.current) {
       return;
     }
     
-    // 空の状態ではスキップ
+    // Skip if empty
     if (characters.length === 0 && speechBubbles.length === 0 && panels.length === 0 && 
         backgrounds.length === 0 && effects.length === 0) {
       return;
     }
 
-    // 500ms後に履歴保存（デバウンス）
+    // 500msSave history later (debounce)
     const timer = setTimeout(() => {
       saveToHistory(characters, speechBubbles, panels, backgrounds, effects);
     }, 500);
@@ -390,10 +391,10 @@ function App() {
     return () => clearTimeout(timer);
   }, [charactersSignature, bubblesSignature, panelsSignature, backgroundsSignature, effectsSignature, saveToHistory]);
 
-  // アンドゥ/リドゥ処理
+  // /
   const handleUndo = useCallback(() => {
     if (operationHistory.currentIndex > 0) {
-      // 実行中フラグを立てる
+      // flag as running
       isUndoRedoExecutingRef.current = true;
       
       const newIndex = operationHistory.currentIndex - 1;
@@ -404,7 +405,7 @@ function App() {
       setEffects([...operationHistory.effects[newIndex]]);
       setOperationHistory(prev => ({ ...prev, currentIndex: newIndex }));
       
-      // フラグをリセット（履歴保存タイムアウトより長く）
+      // Reset flag (longer than history save timeout)
       setTimeout(() => {
         isUndoRedoExecutingRef.current = false;
       }, 600);
@@ -413,7 +414,7 @@ function App() {
 
   const handleRedo = useCallback(() => {
     if (operationHistory.currentIndex < operationHistory.characters.length - 1) {
-      // 実行中フラグを立てる
+      // flag as running
       isUndoRedoExecutingRef.current = true;
       
       const newIndex = operationHistory.currentIndex + 1;
@@ -424,7 +425,7 @@ function App() {
       setEffects([...operationHistory.effects[newIndex]]);
       setOperationHistory(prev => ({ ...prev, currentIndex: newIndex }));
       
-      // フラグをリセット（履歴保存タイムアウトより長く）
+      // Reset flag (longer than history save timeout)
       setTimeout(() => {
         isUndoRedoExecutingRef.current = false;
       }, 600);
@@ -439,7 +440,7 @@ function App() {
     }
   }, [selectedCharacter, characters]);
 
-  // キーボードイベント処理（最適化済み）
+  // Keyboard event handling (optimized)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeElement = document.activeElement;
@@ -481,14 +482,14 @@ function App() {
         setShowEffectPanel(prev => !prev);
       }
 
-      // トーン機能は無効化
+      // Tone feature disabled
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleDeleteSelected, handleUndo, handleRedo]);
 
-  // スナップ設定ハンドラー
+  // snap settings handler
   const handleSnapToggle = useCallback(() => {
     setShowSnapSettingsPanel(true);
   }, []);
@@ -499,11 +500,11 @@ function App() {
 
 
   const handleCharacterNameUpdate = useCallback((type: string, newName: string, newRole: string, appearance: any) => {
-    // コンソールログは無効化
+    // Console logging disabled
     
     setCharacterNames(prev => {
       const updated = { ...prev, [type]: newName };
-      // コンソールログは無効化
+      // Console logging disabled
       return updated;
     });
     
@@ -515,14 +516,14 @@ function App() {
           role: newRole
         }
       };
-      console.log(`⚙️ 設定更新:`, updated);
+      console.log(`⚙️ Settings update:`, updated);
       return updated;
     });
     
     setCharacters(prev => {
       const updated = prev.map(char => {
         if (char.type === type) {
-          console.log(`🔄 キャラクター更新: ${char.id} (${type}) → ${newName}`);
+          console.log(`🔄 Character update: ${char.id} (${type}) → ${newName}`);
           return {
             ...char,
             name: newName,
@@ -534,21 +535,21 @@ function App() {
         }
         return char;
       });
-      console.log(`✅ 全キャラクター更新完了:`, updated);
+      console.log(`✅ All characters updated:`, updated);
       return updated;
     });
     
-    console.log(`✅ キャラクター名前更新完了: ${type} → ${newName}`);
+    console.log(`✅ Character name updated: ${type} → ${newName}`);
   }, []);
 
-  // ダークモード切り替え
+  // Dark mode toggle
   const toggleTheme = useCallback(() => {
     const newTheme = isDarkMode ? "light" : "dark";
     setIsDarkMode(!isDarkMode);
     document.documentElement.setAttribute("data-theme", newTheme);
   }, [isDarkMode]);
 
-  // 🔧 最適化5: テンプレート切り替えの最適化
+  // 🔧 5: Optimization of template switching
   const handleTemplateClick = useCallback((template: string) => {
     console.log('🎯 Template change:', template);
     setSelectedTemplate(template);
@@ -596,7 +597,7 @@ function App() {
     console.log('✅ Template applied successfully with ratio scaling');
   }, [canvasSettings, saveToHistory]);
 
-  // ページ管理hook
+  // hook
   const pageManager = usePageManager({
     panels, characters, bubbles: speechBubbles, backgrounds, effects, tones,
     onDataUpdate: ({ panels: newPanels, characters: newCharacters, bubbles: newBubbles, backgrounds: newBackgrounds, effects: newEffects, tones: newTones }) => {
@@ -609,7 +610,7 @@ function App() {
     }
   });
 
-  // キャンバス設定変更ハンドラー（最適化済み）
+  // Canvas settings change handler (optimized)
   const handleCanvasSettingsChange = useCallback((newSettings: CanvasSettings) => {
     const oldSettings = canvasSettings;
     
@@ -650,21 +651,21 @@ function App() {
       const scaledBubbles = currentPageData.bubbles.map(bubble => scaleBubble(bubble, transform));
       const scaledBackgrounds = currentPageData.backgrounds.map(bg => scaleBackground(bg, transform));
       const scaledEffects = currentPageData.effects.map(effect => scaleEffect(effect, transform));
-      // トーン機能は無効化
+      // Tone feature disabled
       
       setPanels(scaledPanels);
       setCharacters(scaledCharacters);
       setSpeechBubbles(scaledBubbles);
       setBackgrounds(scaledBackgrounds);
       setEffects(scaledEffects);
-      // トーン機能は無効化
+      // Tone feature disabled
     } else {
       setPanels(prev => prev.map(panel => scalePanel(panel, transform)));
       setCharacters(prev => prev.map(char => scaleCharacter(char, transform)));
       setSpeechBubbles(prev => prev.map(bubble => scaleBubble(bubble, transform)));
       setBackgrounds(prev => prev.map(bg => scaleBackground(bg, transform)));
       setEffects(prev => prev.map(effect => scaleEffect(effect, transform)));
-      // トーン機能は無効化
+      // Tone feature disabled
     }
     
     if (canvasRef.current) {
@@ -675,14 +676,14 @@ function App() {
       canvas.width = newWidth;
       canvas.height = newHeight;
       
-      const containerWidth = 1200; // 1000 → 1200 に拡大
-      const containerHeight = 800; // 700 → 800 に拡大
+      const containerWidth = 1200; // 1000 → 1200 
+      const containerHeight = 800; // 700 → 800 
       const displayScaleX = containerWidth / newWidth;
       const displayScaleY = containerHeight / newHeight;
       const displayScale = Math.min(displayScaleX, displayScaleY, 1);
       
-      // 最小サイズを保証（適切な値に）
-      const minDisplayScale = 0.8; // 0.7 → 0.8 に拡大
+      // Guaranteed minimum size (to a reasonable value)
+      const minDisplayScale = 0.8; // 0.7 → 0.8 
       const finalDisplayScale = Math.max(displayScale, minDisplayScale);
       
       canvas.style.width = `${newWidth * finalDisplayScale}px`;
@@ -704,7 +705,7 @@ function App() {
     console.log('✅ Canvas settings change completed successfully');
   }, [canvasSettings, canvasRef, pageManager]);
 
-  // その他のハンドラー関数（既存と同様、省略）
+  // Other handler functions (same as existing, omitted)
   const getCanvasDisplayScale = useCallback(() => {
     if (!canvasRef.current) return 1;
     
@@ -726,7 +727,7 @@ function App() {
     return { x: Math.round(canvasX), y: Math.round(canvasY) };
   }, [getCanvasDisplayScale]);
 
-  // キャラクター操作
+  // Character operation
   const handleCharacterClick = useCallback((charType: string) => {
     if (addCharacterFunc) {
       addCharacterFunc(charType);
@@ -735,21 +736,21 @@ function App() {
 
   const handleBubbleClick = useCallback((bubbleType: string) => {
     if (addBubbleFunc) {
-      const text = dialogueText || "ダブルクリックで編集";
+      const text = dialogueText || "Double-click to edit";
       addBubbleFunc(bubbleType, text);
       setDialogueText("");
     }
   }, [addBubbleFunc, dialogueText]);
 
-  // 👤 キャラプロンプト登録保存
+  // 👤 Save character prompt registration
   const handleSaveCharacterPrompt = useCallback((characterId: string, name: string, prompt: string) => {
-    // キャラクター名を更新
+    // Update character name
     setCharacterNames(prev => ({
       ...prev,
       [characterId]: name
     }));
 
-    // キャラクター設定にプロンプトを保存
+    // Save prompt in character settings
     setCharacterSettings(prev => ({
       ...prev,
       [characterId]: {
@@ -761,18 +762,12 @@ function App() {
       }
     }));
 
-    alert(`✅ ${name} のプロンプトを登録しました！`);
+    alert(`✅ Saved prompt for ${name}`);
   }, []);
 
-  // 🤖 OpenAI: プレビュー生成
+  // 🤖 Ollama: Preview generation
   const handleGeneratePreview = useCallback(async (story: string, tone: string): Promise<any[]> => {
-    if (!openAIService.hasApiKey()) {
-      alert('OpenAI APIキーを設定してください');
-      setShowOpenAISettingsModal(true);
-      throw new Error('API key not set');
-    }
-
-    // 登録済みキャラ情報を準備
+    // Prepare registered character information
     const registeredCharacters = Object.entries(characterNames)
       .filter(([id, name]) => characterSettings[id]?.appearance?.basePrompt)
       .map(([id, name]) => ({
@@ -781,7 +776,7 @@ function App() {
         prompt: characterSettings[id].appearance.basePrompt
       }));
 
-    const result = await openAIService.generatePanelContent({
+    const result = await ollamaService.generatePanelContent({
       story,
       panelCount: panels.length,
       tone,
@@ -789,15 +784,15 @@ function App() {
     });
 
     if (!result.success || !result.panels) {
-      throw new Error(result.error || '生成に失敗しました');
+      throw new Error(result.error || 'Generation failed');
     }
 
     return result.panels;
   }, [panels, characterNames, characterSettings]);
 
-  // 🤖 OpenAI: プレビュー適用
+  // 🤖 Ollama: Apply preview
   const handleApplyPreview = useCallback((previewData: any[]) => {
-    const { updatedPanels, newBubbles } = openAIService.applyPanelContent(
+    const { updatedPanels, newBubbles } = ollamaService.applyPanelContent(
       panels,
       speechBubbles,
       previewData,
@@ -807,18 +802,12 @@ function App() {
     setPanels(updatedPanels);
     setSpeechBubbles(newBubbles);
     
-    alert(`✅ ${previewData.length}コマの内容を適用しました！`);
+    alert(`✅ Applied content to ${previewData.length} panel(s)`);
   }, [panels, speechBubbles, characterSettings]);
 
-  // 🤖 OpenAI: 1コマ生成
+  // 🤖 Ollama: 1
   const handleGenerateSinglePanel = useCallback(async (story: string, tone: string, targetPanelId: number) => {
-    if (!openAIService.hasApiKey()) {
-      alert('OpenAI APIキーを設定してください');
-      setShowOpenAISettingsModal(true);
-      throw new Error('API key not set');
-    }
-
-    // 既存のコマ情報を取得
+    // Get existing frame information
     const existingPanels = panels.map(panel => ({
       panelId: panel.id,
       note: panel.note || '',
@@ -827,14 +816,14 @@ function App() {
       characterId: panel.selectedCharacterId
     }));
 
-    // 登録済みキャラクター情報
+    // Registered character information
     const characters = Object.entries(characterNames).map(([id, name]) => ({
       id,
       name,
       prompt: characterSettings[id]?.appearance?.basePrompt || ''
     }));
 
-    const result = await openAIService.generateSinglePanel(
+    const result = await ollamaService.generateSinglePanel(
       story,
       targetPanelId,
       existingPanels,
@@ -845,11 +834,11 @@ function App() {
     return result;
   }, [panels, speechBubbles, characterNames, characterSettings]);
 
-  // 🤖 OpenAI: 1コマ適用
+  // 🤖 Ollama: 1
   const handleApplySinglePanel = useCallback((panelData: any) => {
     if (!panelData) return;
 
-    // 選択中のコマに内容を適用
+    // Apply content to selected frame
     const updatedPanels = panels.map(panel => 
       panel.id === panelData.panelId 
         ? {
@@ -863,28 +852,33 @@ function App() {
     );
     setPanels(updatedPanels);
 
-    // セリフバブルを更新
+    // Updated dialogue bubble
     const updatedBubbles = speechBubbles.filter(bubble => bubble.panelId !== panelData.panelId);
     if (panelData.dialogue) {
       const bubbleTypeMap: Record<string, string> = {
-        '普通': 'normal',
-        '叫び': 'shout',
-        '小声': 'whisper',
-        '心の声': 'thought'
+        normal: 'normal',
+        shout: 'shout',
+        whisper: 'whisper',
+        thought: 'thought',
+        // Legacy Japanese labels (escaped — no CJK in source)
+        '\u666e\u901a': 'normal',
+        '\u53eb\u3073': 'shout',
+        '\u5c0f\u58f0': 'whisper',
+        '\u5fc3\u306e\u58f0': 'thought',
       };
       
       const newBubble = {
         id: Date.now().toString(),
         panelId: panelData.panelId,
         text: panelData.dialogue,
-        x: 0.5,  // パネル中央（相対座標）
-        y: 0.3,  // パネル上部寄り（相対座標）
-        width: 0.7,  // パネル幅の70%（相対座標）
-        height: 0.25, // パネル高さの25%（相対座標）
-        type: bubbleTypeMap[panelData.bubbleType || '普通'] || 'normal',
-        vertical: true,  // デフォルトは縦書き
+        x: 0.5,  // Panel center (relative coordinates)
+        y: 0.3,  // Near the top of the panel (relative coordinates)
+        width: 0.7,  // 70%(relative coordinates)
+        height: 0.25, // panel height25%(relative coordinates)
+        type: bubbleTypeMap[panelData.bubbleType || 'normal'] || 'normal',
+        vertical: true,  // Default is vertical
         scale: 1,
-        isGlobalPosition: false  // パネル相対座標を使用
+        isGlobalPosition: false  // Use panel relative coordinates
       };
       
       
@@ -892,7 +886,7 @@ function App() {
     }
     setSpeechBubbles(updatedBubbles);
 
-    alert(`✅ コマ${panelData.panelId}の内容を適用しました！`);
+    alert(`✅ Applied content to panel ${panelData.panelId}`);
   }, [panels, speechBubbles]);
 
   const handleCharacterUpdate = useCallback((updatedCharacter: Character) => {
@@ -928,7 +922,7 @@ function App() {
 
   const handlePanelUpdate = useCallback((updatedPanels: Panel[]) => {
     setPanels(updatedPanels);
-    // 履歴保存はonDragEndで行う（ドラッグ中の連続更新を防ぐため）
+    // onDragEnd(to prevent continuous updates while dragging)
   }, []);
   
 
@@ -960,27 +954,27 @@ function App() {
     }
 
     setPanels(prevPanels => [...prevPanels, newPanel]);
-    console.log(`✅ コマ追加完了: ${newPanelId} (${position})`);
+    console.log(`✅ Panel added: ${newPanelId} (${position})`);
   }, [panels]);
 
   const handlePanelDelete = useCallback((panelId: string) => {
     if (panels.length <= 1) {
-      console.log(`⚠️ 最後のコマは削除できません`);
+      console.log(`⚠️ Cannot delete the last panel`);
       return;
     }
 
-    if (window.confirm(`コマ${panelId}を削除しますか？`)) {
+    if (window.confirm(`Delete panel ${panelId}?`)) {
       const panelIdNum = parseInt(panelId);
       setCharacters(prev => prev.filter(char => char.panelId !== panelIdNum));
       setSpeechBubbles(prev => prev.filter(bubble => bubble.panelId !== panelIdNum));
       setBackgrounds(prev => prev.filter(bg => bg.panelId !== panelIdNum));
       setEffects(prev => prev.filter(effect => effect.panelId !== panelIdNum));
-      // トーン機能は無効化
+      // Tone feature disabled
       setPanels(prev => prev.filter(panel => panel.id !== panelIdNum));
       setSelectedPanel(null);
       setSelectedEffect(null);
-      // トーン機能は無効化
-      console.log(`🗑️ コマ削除: ${panelId}`);
+      // Tone feature disabled
+      console.log(`🗑️ Panel deleted: ${panelId}`);
     }
   }, [panels.length]);
 
@@ -1026,10 +1020,10 @@ function App() {
     }
 
     setPanels(newPanels);
-    console.log(`${direction}分割完了（隙間: ${gap}px）`);
+    console.log(`${direction} split done (gap ${gap}px)`);
   }, [panels]);
 
-  // コマの入れ替え機能（サイズはそのまま、内容のみ入れ替え）
+  // Frame swapping function (same size, only swaps content)
   const handlePanelSwap = useCallback((panelId1: number, panelId2: number) => {
     const panel1 = panels.find(p => p.id === panelId1);
     const panel2 = panels.find(p => p.id === panelId2);
@@ -1062,25 +1056,25 @@ function App() {
       return panel;
     }));
 
-    console.log(`🔄 コマ ${panelId1} と ${panelId2} の内容を入れ替えました`);
+    console.log(`🔄 Swapped content of panels ${panelId1} and ${panelId2}`);
   }, [panels]);
 
   const handleClearAll = useCallback(() => {
-    if (window.confirm("全ての要素をクリアしますか？")) {
+    if (window.confirm("Clear all elements on the canvas?")) {
       setCharacters([]);
       setSpeechBubbles([]);
       setBackgrounds([]);
       setEffects([]);
-      // トーン機能は無効化
+      // Tone feature disabled
       setSelectedCharacter(null);
       setSelectedPanel(null);
       setSelectedEffect(null);
-      // トーン機能は無効化
+      // Tone feature disabled
     }
   }, []);
 
   const handleExport = useCallback((format: string) => {
-    alert(`${format}でのエクスポート機能は実装予定です`);
+    alert(`Export as ${format} is not implemented yet`);
   }, []);
 
   const handleCharacterRightClick = useCallback((e: React.MouseEvent, charType: string) => {
@@ -1099,13 +1093,13 @@ function App() {
   };
 
   const handleBackgroundAdd = useCallback((template: BackgroundTemplate) => {
-    console.log(`背景テンプレート「${template.name}」を適用しました`);
+    console.log(`Applied background template "${template.name}"`);
   }, []);
 
   const handleEffectAdd = useCallback((effect: EffectElement) => {
     setEffects([...effects, effect]);
     setSelectedEffect(effect);
-    console.log(`効果線「${effect.type}」を追加しました`);
+    console.log(`Added effect "${effect.type}"`);
   }, [effects]);
 
   const handleEffectUpdate = useCallback((updatedEffect: EffectElement) => {
@@ -1115,7 +1109,7 @@ function App() {
     setSelectedEffect(updatedEffect);
   }, []);
 
-  // トーン機能は無効化
+  // Tone feature disabled
 
   const handleCharacterSettingsUpdate = useCallback((characterData: any) => {
     const { name, role, appearance } = characterData;
@@ -1124,14 +1118,14 @@ function App() {
 
   return (
     <div className={`app ${isDarkMode ? 'dark' : 'light'}`}>
-      {/* ヘッダー */}
+      {/*  */}
       <header className="header">
-        <h1>📖 AI漫画ネームメーカー</h1>
+        <h1>📖 AI Comic Layout Maker</h1>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <button 
             className="control-btn"
             onClick={() => setShowHelpModal(true)}
-            title="使い方ガイド"
+            title="User guide"
             style={{
               background: '#3498db',
               color: "white",
@@ -1139,7 +1133,7 @@ function App() {
               fontWeight: "bold"
             }}
           >
-            📖 使い方ガイド
+            📖 User guide
           </button>
 
           <div style={{ width: "1px", height: "24px", background: "var(--border-color)" }}></div>
@@ -1148,7 +1142,7 @@ function App() {
             className="control-btn"
             onClick={async () => {
               if (!projectSave.currentProjectId || !projectSave.currentProjectName) {
-                alert('保存されているプロジェクトがありません。「📁 プロジェクト管理」から「名前を付けて保存」してください。');
+                alert('No saved project yet. Use 📁 Project manager → Save as.');
                 return;
               }
               
@@ -1169,16 +1163,16 @@ function App() {
                 
                 const success = await projectSave.saveProject(projectData);
                 if (success) {
-                  alert(`プロジェクト「${projectSave.currentProjectName}」を上書き保存しました`);
+                  alert(`Saved project “${projectSave.currentProjectName}”`);
                 } else {
-                  alert('保存に失敗しました');
+                  alert('Save failed');
                 }
               } catch (error) {
-                console.error('保存エラー:', error);
-                alert('保存中にエラーが発生しました');
+                console.error('Save error:', error);
+                alert('An error occurred while saving');
               }
             }}
-            title={projectSave.currentProjectName ? `上書き保存: ${projectSave.currentProjectName}` : "上書き保存（プロジェクト未保存）"}
+            title={projectSave.currentProjectName ? `Overwrite: ${projectSave.currentProjectName}` : 'Overwrite (no project saved)'}
             style={{
               background: projectSave.currentProjectId ? COLOR_PALETTE.buttons.save.primary : '#9ca3af',
               color: "white",
@@ -1187,13 +1181,13 @@ function App() {
               cursor: projectSave.currentProjectId ? 'pointer' : 'not-allowed'
             }}
           >
-            💾 {projectSave.currentProjectName ? `上書き: ${projectSave.currentProjectName}` : "上書き保存"}
+            💾 {projectSave.currentProjectName ? `Save: ${projectSave.currentProjectName}` : 'Overwrite save'}
           </button>
 
           <button 
             className="control-btn"
             onClick={() => setShowProjectPanel(true)}
-            title="プロジェクト管理"
+            title="Project manager"
             style={{
               background: COLOR_PALETTE.buttons.manage.primary,
               color: "white",
@@ -1201,7 +1195,7 @@ function App() {
               fontWeight: "bold"
             }}
           >
-            📁 プロジェクト管理
+            📁 Project manager
           </button>
 
           <div style={{ width: "1px", height: "24px", background: "var(--border-color)" }}></div>
@@ -1209,7 +1203,7 @@ function App() {
           <button 
             className="control-btn"
             onClick={() => setShowExportPanel(true)}
-            title="プロンプト出力"
+            title="Export prompts"
             style={{
               background: COLOR_PALETTE.buttons.export.primary,
               color: "white",
@@ -1217,7 +1211,7 @@ function App() {
               fontWeight: "bold"
             }}
           >
-            📤 出力
+            📤 Export
           </button>
 
           <div style={{ width: "1px", height: "24px", background: "var(--border-color)" }}></div>
@@ -1225,30 +1219,30 @@ function App() {
           <button 
             className={`control-btn ${snapSettings.enabled ? 'active' : ''}`}
             onClick={handleSnapToggle}
-            title="スナップ設定"
+            title="Snap settings"
             style={{
               background: snapSettings.enabled ? COLOR_PALETTE.buttons.success.primary : "var(--bg-tertiary)",
               color: snapSettings.enabled ? "white" : "var(--text-primary)",
               border: `1px solid ${snapSettings.enabled ? COLOR_PALETTE.buttons.success.primary : "var(--border-color)"}`,
             }}
           >
-            ⚙️ スナップ
+            ⚙️ Snap
           </button>
           
           <button 
             className="theme-toggle"
             onClick={toggleTheme}
-            title={`${isDarkMode ? 'ライト' : 'ダーク'}モードに切り替え`}
+            title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
           >
             {isDarkMode ? '☀️' : '🌙'}
           </button>
           
-          {/* 🧪 ベータ版フィードバックボタン */}
+          {/* Beta feedback */}
           {CURRENT_CONFIG.isBetaVersion && (
             <button 
               className="feedback-button"
               onClick={() => setShowFeedbackPanel(true)}
-              title="ベータ版フィードバックを送信"
+              title="Send beta feedback"
               style={{
                 padding: "8px 12px",
                 backgroundColor: COLOR_PALETTE.primary.orange,
@@ -1261,7 +1255,7 @@ function App() {
                 marginLeft: "8px"
               }}
             >
-              🧪 フィードバック
+              🧪 Feedback
             </button>
           )}
         </div>
@@ -1307,7 +1301,7 @@ function App() {
         {isLeftSidebarOpen && (
         <div className="sidebar left-sidebar">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-primary)' }}>🛠️ ツール</h3>
+            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-primary)' }}>🛠️ Tools</h3>
             <button
               onClick={() => setIsLeftSidebarOpen(false)}
               style={{
@@ -1323,7 +1317,7 @@ function App() {
             </button>
           </div>
           <div className="section">
-            <h3>📐 パネルテンプレート</h3>
+            <h3>📐 Panel templates</h3>
             <button 
               className="control-btn"
               onClick={() => setShowPanelSelector(true)}
@@ -1336,16 +1330,16 @@ function App() {
                 borderRadius: "6px"
               }}
             >
-              🎯 コマ割りを選択 ({Object.keys(templates).length}種類)
+              🎯 Choose layout ({Object.keys(templates).length} types)
             </button>
             <div className="section-info">
-              ✨ コマ数別に分類された使いやすいテンプレート集
+              ✨ Templates grouped by panel count
             </div>
           </div>
 
-          {/* キャラクター登録セクション */}
+          {/* Character registration section */}
           <div className="section">
-            <h3>👤 キャラクター登録</h3>
+            <h3>👤 Characters</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {Object.entries(characterNames).map(([id, name]) => (
                 <button 
@@ -1371,18 +1365,18 @@ function App() {
                 >
                   <span>{name}</span>
                   <span style={{ fontSize: "10px", opacity: 0.7 }}>
-                    {characterSettings[id]?.appearance?.basePrompt ? '✅' : '未登録'}
+                    {characterSettings[id]?.appearance?.basePrompt ? '✅' : 'Not set'}
                   </span>
                 </button>
               ))}
                 </div>
             <div className="section-info" style={{ marginTop: "8px" }}>
-              💡 プロンプトを登録すると使い回せます
+              💡 Register prompts to reuse them
               </div>
             </div>
 
           <div className="section">
-            <h3>📐 用紙サイズ</h3>
+            <h3>📐 Paper size</h3>
             <button
               onClick={() => setIsPaperSizePanelVisible(true)}
               style={{
@@ -1400,11 +1394,11 @@ function App() {
             </button>
           </div>
 
-          {/* SceneTemplatePanel非表示 - シンプルなネームツールに集中 */}
+          {/* SceneTemplatePanel - Focus on simple naming tools */}
         </div>
         )}
 
-        {/* メインエリア */}
+        {/* main area */}
         <div className="canvas-area">
           <div className="canvas-controls">
             <div className="undo-redo-buttons">
@@ -1412,40 +1406,40 @@ function App() {
                 className="control-btn"
                 onClick={handleUndo}
                 disabled={operationHistory.currentIndex <= 0 || operationHistory.characters.length === 0}
-                title="元に戻す (Ctrl+Z)"
+                title="Undo (Ctrl+Z)"
               >
-                ↶ 戻す
+                ↶ Undo
               </button>
               <button 
                 className="control-btn"
                 onClick={handleRedo}
                 disabled={operationHistory.currentIndex >= operationHistory.characters.length - 1 || operationHistory.characters.length === 0}
-                title="やり直し (Ctrl+Y)"
+                title="Redo (Ctrl+Y)"
               >
-                ↷ 進む
+                ↷ Redo
               </button>
               <button 
                 className="control-btn delete-btn"
                 onClick={handleDeleteSelected}
                 disabled={!selectedCharacter}
-                title="選択要素を削除 (Backspace)"
+                title="Delete selection (Backspace)"
               >
-                🗑️ 削除
+                🗑️ Delete
               </button>
             </div>
             <div className="canvas-info">
-              操作履歴: {operationHistory.currentIndex + 1} / {Math.max(1, operationHistory.characters.length)}
-              {selectedCharacter && <span> | 選択中: {getCharacterDisplayName(selectedCharacter)}</span>}
-              {selectedPanel && <span> | パネル{selectedPanel.id}選択中</span>}
-              {selectedEffect && <span> | 効果線選択中</span>}
-              {/* トーン機能は無効化 */}
-              {isPanelEditMode && <span> | 🔧 コマ編集モード</span>}
-              {snapSettings.enabled && <span> | ⚙️ スナップ: {snapSettings.gridSize}px ({snapSettings.sensitivity})</span>}
-              {projectSave.isAutoSaving && <span> | 💾 自動保存中...</span>}
-              {projectSave.hasUnsavedChanges && <span> | ⚠️ 未保存</span>}
-              {backgrounds.length > 0 && <span> | 🎨 背景: {backgrounds.length}個</span>}
-              {effects.length > 0 && <span> | ⚡ 効果線: {effects.length}個</span>}
-              {/* トーン機能は無効化 */}
+              History: {operationHistory.currentIndex + 1} / {Math.max(1, operationHistory.characters.length)}
+              {selectedCharacter && <span> | Selected: {getCharacterDisplayName(selectedCharacter)}</span>}
+              {selectedPanel && <span> | Panel {selectedPanel.id} selected</span>}
+              {selectedEffect && <span> | Effect selected</span>}
+              {/* Tone feature disabled */}
+              {isPanelEditMode && <span> | 🔧 Panel edit mode</span>}
+              {snapSettings.enabled && <span> | ⚙️ Snap: {snapSettings.gridSize}px ({snapSettings.sensitivity})</span>}
+              {projectSave.isAutoSaving && <span> | 💾 Auto-saving…</span>}
+              {projectSave.hasUnsavedChanges && <span> | ⚠️ Unsaved</span>}
+              {backgrounds.length > 0 && <span> | 🎨 Backgrounds: {backgrounds.length}</span>}
+              {effects.length > 0 && <span> | ⚡ Effects: {effects.length}</span>}
+              {/* Tone function disabled */}
             </div>
           </div>
 
@@ -1477,12 +1471,12 @@ function App() {
                 if (lastPanelClickRef.current && 
                     lastPanelClickRef.current.panelId === panel.id && 
                     now - lastPanelClickRef.current.timestamp < 300) {
-                  console.log('⏭️ 重複クリック無視');
+                  console.log('⏭️ Ignoring duplicate click');
                   return;
                 }
                 lastPanelClickRef.current = { panelId: panel.id, timestamp: now };
                 
-                console.log('🔄 入れ替えモード: コマクリック', { 
+                console.log('🔄 Swap mode: panel click', { 
                   panelId: panel.id, 
                   currentSwap1: swapPanel1, 
                   currentSwap2: swapPanel2 
@@ -1492,17 +1486,17 @@ function App() {
                   const currentSwap2 = swapPanel2;
                   
                   if (panel.id === prev1) {
-                    console.log('❌ 1番目のコマを選択解除');
+                    console.log('❌ Cleared first panel selection');
                     return null;
                   } else if (panel.id === currentSwap2) {
-                    console.log('❌ 2番目のコマを選択解除');
+                    console.log('❌ Cleared second panel selection');
                     setSwapPanel2(null);
                     return prev1;
                   } else if (!prev1) {
-                    console.log('✅ 1番目のコマを選択:', panel.id);
+                    console.log('✅ First panel:', panel.id);
                     return panel.id;
                   } else if (prev1 && !currentSwap2) {
-                    console.log('✅ 2番目のコマを選択:', panel.id);
+                    console.log('✅ Second panel:', panel.id);
                     setSwapPanel2(panel.id);
                     return prev1;
                   }
@@ -1550,7 +1544,7 @@ function App() {
         {isRightSidebarOpen && (
         <div className="sidebar right-sidebar">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-primary)' }}>⚙️ 設定</h3>
+            <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-primary)' }}>⚙️ Settings</h3>
             <button
               onClick={() => setIsRightSidebarOpen(false)}
               style={{
@@ -1566,9 +1560,9 @@ function App() {
             </button>
           </div>
 
-          {/* ページ全体メモ */}
+          {/* Whole page memo */}
           <div className="section">
-            <h3>📄 AIでページ作成</h3>
+            <h3>📄 AI page</h3>
             
             <div style={{ marginBottom: "12px" }}>
               <label style={{
@@ -1578,7 +1572,7 @@ function App() {
                 display: "block",
                 marginBottom: "4px"
               }}>
-                📝 ページメモ（構成・展開・意図）
+                📝 Page notes (structure, beats, intent)
               </label>
               <textarea
                 value={pageManager.currentPage.note || ''}
@@ -1587,7 +1581,7 @@ function App() {
                     note: e.target.value
                   });
                 }}
-                placeholder="例: 主人公が朝起きて驚く。窓の外に巨大なロボット。主人公は急いで着替えて外に飛び出す。"
+                placeholder="Example: Hero wakes up shocked. Giant robot outside the window. They change fast and run out."
                 style={{
                   width: '100%',
                   minHeight: '80px',
@@ -1601,15 +1595,11 @@ function App() {
                 }}
               />
               
-              {/* AI生成ボタン - 1ページ分を生成 */}
+              {/* AI - 1Generate pages */}
               <button
                 onClick={() => {
-                  if (!openAIService.hasApiKey()) {
-                    if (window.confirm('OpenAI APIキーが未設定です。設定画面を開きますか？')) {
-                      setShowOpenAISettingsModal(true);
-                    }
-                  } else if (panels.length === 0) {
-                    alert('先にコマ割りテンプレートを選択してください');
+                  if (panels.length === 0) {
+                    alert('Choose a panel template first');
                   } else {
                     setStoryModalMode('full');
                     setShowStoryToComicModal(true);
@@ -1630,7 +1620,7 @@ function App() {
                   marginBottom: '4px'
                 }}
               >
-                🤖 1ページ分を生成
+                🤖 Generate full page
               </button>
               
               <div style={{ 
@@ -1639,13 +1629,13 @@ function App() {
                 marginTop: "4px",
                 marginBottom: "8px" 
               }}>
-                💡 ページメモからすべてのコマ内容を生成
+                💡 Generate all panels from page notes
               </div>
 
-              {/* APIキー設定（開発モード時のみ） */}
+              {/* Ollama (hidden when using env API mode) */}
               {process.env.REACT_APP_USE_ENV_API_KEY !== 'true' && (
                 <button
-                  onClick={() => setShowOpenAISettingsModal(true)}
+                  onClick={() => setShowOllamaSettingsModal(true)}
                   style={{
                     width: '100%',
                     padding: '8px',
@@ -1658,11 +1648,11 @@ function App() {
                     marginTop: '8px'
                   }}
                 >
-                  🔑 APIキー設定
+                  ⚙️ Ollama connection
                 </button>
               )}
               
-              {/* 使用状況表示（環境変数モード時のみ） */}
+              {/* Usage (env API mode) */}
               {process.env.REACT_APP_USE_ENV_API_KEY === 'true' && (
                 <div style={{
                   marginTop: '8px',
@@ -1673,32 +1663,25 @@ function App() {
                   fontSize: '10px',
                   color: 'var(--text-muted)'
                 }}>
-                  <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>📊 使用状況</div>
-                  <div id="usage-status">本日: 0/10回 | 累計: 0/100回</div>
+                  <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>📊 Usage</div>
+                  <div id="usage-status">Today: 0/10 | All-time: 0/100</div>
                   <div style={{ marginTop: '4px', fontSize: '9px' }}>
-                    💡 無料版: 1日10回、累計100回まで
+                    💡 Free tier: 10/day, 100 total
                   </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* コマ設定セクション */}
+          {/* Frame settings section */}
           {selectedPanel && (
             <div className="section">
-              <h3>📝 コマ {selectedPanel.id}</h3>
+              <h3>📝 Panel {selectedPanel.id}</h3>
               
-              {/* 1コマ生成ボタン */}
               <button
                 onClick={() => {
-                  if (!openAIService.hasApiKey()) {
-                    if (window.confirm('OpenAI APIキーが未設定です。設定画面を開きますか？')) {
-                      setShowOpenAISettingsModal(true);
-                    }
-                  } else {
-                    setStoryModalMode('single');
-                    setShowStoryToComicModal(true);
-                  }
+                  setStoryModalMode('single');
+                  setShowStoryToComicModal(true);
                 }}
                 style={{
                   width: '100%',
@@ -1713,10 +1696,9 @@ function App() {
                   marginBottom: '8px'
                 }}
               >
-                🤖 AIでコマ内容を生成
+                🤖 Generate panel with AI
               </button>
               
-              {/* コマ重要度マーカー */}
               <div style={{ marginBottom: "12px" }}>
                 <label style={{
                   fontSize: "11px",
@@ -1725,13 +1707,13 @@ function App() {
                   display: "block",
                   marginBottom: "6px"
                 }}>
-                  ⭐ 重要度
+                  ⭐ Importance
                 </label>
                 <div style={{ display: "flex", gap: "8px" }}>
                   {[
-                    { value: 'normal', label: '通常', color: '#6b7280', emoji: '○' },
-                    { value: 'important', label: '重要', color: '#f59e0b', emoji: '⭐' },
-                    { value: 'climax', label: '見せ場', color: '#ef4444', emoji: '🔥' }
+                    { value: 'normal', label: 'Normal', color: '#6b7280', emoji: '○' },
+                    { value: 'important', label: 'Important', color: '#f59e0b', emoji: '⭐' },
+                    { value: 'climax', label: 'Highlight', color: '#ef4444', emoji: '🔥' }
                   ].map(({ value, label, color, emoji }) => (
                     <button
                       key={value}
@@ -1762,7 +1744,7 @@ function App() {
                 </div>
               </div>
               
-              {/* コマメモ */}
+              {/*  */}
               <div style={{ marginBottom: "12px" }}>
                 <label style={{
                   fontSize: "11px",
@@ -1771,7 +1753,7 @@ function App() {
                   display: "block",
                   marginBottom: "4px"
                 }}>
-                  📌 メモ（構図・シーン説明）
+                  📌 Notes (composition, scene)
                 </label>
                 <textarea
                   value={selectedPanel.note || ''}
@@ -1784,7 +1766,7 @@ function App() {
                     setPanels(updatedPanels);
                     setSelectedPanel({ ...selectedPanel, note: e.target.value });
                   }}
-                  placeholder="例: リナ驚く、サユ笑顔でツッコミ"
+                  placeholder="e.g. Rina shocked, Sayu grinning with a quip"
                   style={{
                     width: '100%',
                     minHeight: '50px',
@@ -1799,7 +1781,7 @@ function App() {
                 />
               </div>
 
-              {/* キャラクター選択＋プロンプト表示 */}
+              {/* Character selection + prompt display */}
               <div style={{ marginBottom: "12px" }}>
                 <label style={{
                   fontSize: "11px",
@@ -1808,7 +1790,7 @@ function App() {
                   display: "block",
                   marginBottom: "4px"
                 }}>
-                  👤 使用キャラクター
+                  👤 Character
                 </label>
                 
                 <select
@@ -1823,7 +1805,7 @@ function App() {
                     setPanels(updatedPanels);
                     setSelectedPanel({ ...selectedPanel, selectedCharacterId: charId });
                     
-                    // キャラ設定からプロンプトを自動取得
+                    // Automatically get prompts from character settings
                     if (charId && characterSettings[charId]?.appearance?.basePrompt) {
                       const basePrompt = characterSettings[charId].appearance.basePrompt;
                       const updatedPanelsWithPrompt = panels.map(p =>
@@ -1850,13 +1832,13 @@ function App() {
                     marginBottom: '8px'
                   }}
                 >
-                  <option value="">（キャラなし）</option>
+                  <option value="">(none)</option>
                   {Object.entries(characterNames).map(([id, name]) => (
                     <option key={id} value={id}>{name}</option>
                   ))}
                 </select>
 
-                {/* キャラプロンプト表示（読み取り専用的に） */}
+                {/* Character prompt display (read-only) */}
                 {selectedPanel.characterPrompt && (
                   <div style={{
                     padding: '8px',
@@ -1882,11 +1864,10 @@ function App() {
                   borderRadius: "4px",
                   marginTop: "4px"
                 }}>
-                  💡 左サイドバーでキャラ登録→選択で自動入力
+                  💡 Register in the left sidebar → pick here to autofill
                 </div>
               </div>
 
-              {/* 動作プロンプト（自動生成） */}
               <div>
                 <label style={{
               fontSize: "11px", 
@@ -1895,14 +1876,13 @@ function App() {
                   display: "block",
                   marginBottom: "4px"
                 }}>
-                  🎬 動作・シチュエーション
+                  🎬 Action / situation
                 </label>
                 
-                {/* AI生成用の入力欄 */}
                 <div style={{ marginBottom: '8px' }}>
                   <input
                     type="text"
-                    placeholder="例: 驚いた表情で振り向く"
+                    placeholder="e.g. turns around with a shocked face"
                     id={`action-input-${selectedPanel.id}`}
                     style={{
                       width: '100%',
@@ -1921,21 +1901,14 @@ function App() {
                       const description = input?.value?.trim();
                       
                       if (!description) {
-                        alert('動作・シチュエーションの説明を入力してください');
-                        return;
-                      }
-
-                      if (!openAIService.hasApiKey()) {
-                        if (window.confirm('OpenAI APIキーが未設定です。設定画面を開きますか？')) {
-                          setShowOpenAISettingsModal(true);
-                        }
+                        alert('Describe the action or situation');
                         return;
                       }
 
                       try {
                         setIsGeneratingFromStory(true);
                         
-                        const actionPrompt: { prompt: string; promptJa: string } = await openAIService.generateActionPrompt(description);
+                        const actionPrompt: { prompt: string; promptJa: string } = await ollamaService.generateActionPrompt(description);
                         
                         if (actionPrompt) {
                           const updatedPanels = panels.map(p =>
@@ -1950,12 +1923,12 @@ function App() {
                             actionPromptJa: description
                           });
                           
-                          // 入力欄をクリア
+                          // Clear input field
                           if (input) input.value = '';
                         }
                       } catch (error) {
                         console.error('Action prompt generation error:', error);
-                        alert('動作プロンプト生成に失敗しました: ' + (error as Error).message);
+                        alert('Action prompt failed: ' + (error as Error).message);
                       } finally {
                         setIsGeneratingFromStory(false);
                       }
@@ -1973,7 +1946,7 @@ function App() {
                       fontWeight: 'bold'
                     }}
                   >
-                    {isGeneratingFromStory ? '🤖 生成中...' : '🎬 プロンプト生成'}
+                    {isGeneratingFromStory ? '🤖 ...' : '🎬 Prompt generation'}
                   </button>
                 </div>
 
@@ -1988,7 +1961,7 @@ function App() {
                     setPanels(updatedPanels);
                     setSelectedPanel({ ...selectedPanel, actionPrompt: e.target.value });
                   }}
-                  placeholder="動作・表情・構図（OpenAI自動生成 or 手動入力）"
+                  placeholder="Action, expression, layout (Ollama / Llama or type manually)"
                   style={{
                     width: '100%',
                     minHeight: '60px',
@@ -2002,8 +1975,52 @@ function App() {
                     resize: 'vertical'
                   }}
                 />
+
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const parts = [
+                      selectedPanel.characterPrompt,
+                      selectedPanel.actionPrompt,
+                    ].filter(Boolean) as string[];
+                    if (parts.length === 0) {
+                      alert('Enter a character prompt and/or English action prompt first.');
+                      return;
+                    }
+                    const imagePrompt = `${parts.join(', ')}, anime manga illustration, clean composition`;
+                    try {
+                      setIsGeneratingFluxImage(true);
+                      const blob = await ollamaService.generatePanelImageBlob(imagePrompt);
+                      const url = URL.createObjectURL(blob);
+                      window.open(url, '_blank', 'noopener,noreferrer');
+                    } catch (err) {
+                      console.error(err);
+                      alert(
+                        'Flux image failed: ' +
+                          (err instanceof Error ? err.message : String(err)) +
+                          '\nCheck your Ollama image model name and pull.'
+                      );
+                    } finally {
+                      setIsGeneratingFluxImage(false);
+                    }
+                  }}
+                  disabled={isGeneratingFluxImage}
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    marginTop: '8px',
+                    background: isGeneratingFluxImage ? '#999' : '#6366f1',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: isGeneratingFluxImage ? 'not-allowed' : 'pointer',
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {isGeneratingFluxImage ? '🖼️ Generating…' : '🖼️ Flux (Ollama) preview image'}
+                </button>
                 
-                {/* 日本語説明表示 */}
                 {(selectedPanel as any).actionPromptJa && (
                   <div style={{
                     fontSize: "11px",
@@ -2015,7 +2032,7 @@ function App() {
                     marginTop: "6px",
                     lineHeight: "1.5"
                   }}>
-                    💬 日本語: {(selectedPanel as any).actionPromptJa}
+                    💬 Notes: {(selectedPanel as any).actionPromptJa}
                   </div>
                 )}
                 
@@ -2027,15 +2044,14 @@ function App() {
               borderRadius: "4px",
                   marginTop: "4px"
             }}>
-                  💡 最終プロンプト = キャラ + 動作で自動合成
+                  💡 Final image prompt = character + action combined
             </div>
           </div>
 
-              {/* コマ編集操作 */}
               {isPanelEditMode && (
                 <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid var(--border-color)" }}>
                   <h4 style={{ fontSize: "12px", marginBottom: "8px", color: "var(--text-primary)" }}>
-                    🔧 コマ編集操作
+                    🔧 Panel editing
                   </h4>
                   <button 
                     className="btn btn-secondary"
@@ -2053,7 +2069,7 @@ function App() {
                       marginBottom: '8px'
                     }}
                   >
-                    🧹 全クリア
+                    🧹 Clear all
                   </button>
                   <div style={{ 
                     fontSize: "10px", 
@@ -2063,11 +2079,11 @@ function App() {
                     borderRadius: "4px",
                     lineHeight: "1.4",
                   }}>
-                    <strong>操作方法:</strong><br/>
-                    • 🔵 移動: 中央ハンドルをドラッグ<br/>
-                    • 🟧 リサイズ: 四隅のハンドル<br/>
-                    • ✂️ 分割: 分割アイコンをクリック<br/>
-                    • 🗑️ 削除: 削除アイコンをクリック
+                    <strong>How to:</strong><br/>
+                    • 🔵 Move: drag the center handle<br/>
+                    • 🟧 Resize: corner handles<br/>
+                    • ✂️ Split: split icon<br/>
+                    • 🗑️ Delete: trash icon
                   </div>
                 </div>
               )}
@@ -2075,18 +2091,18 @@ function App() {
           )}
 
           <div className="section">
-            <h3>💬 セリフ・吹き出し</h3>
+            <h3>💬 Dialogue & bubbles</h3>
             <div className="bubble-types">
               {[
-                { id: 'normal', icon: '💬', name: '普通' },
-                { id: 'shout', icon: '❗', name: '叫び' },
-                { id: 'whisper', icon: '💭', name: '小声' },
-                { id: 'thought', icon: '☁️', name: '心の声' }
+                { id: 'normal', icon: '💬', name: 'Normal' },
+                { id: 'shout', icon: '❗', name: 'Shout' },
+                { id: 'whisper', icon: '💭', name: 'Whisper' },
+                { id: 'thought', icon: '☁️', name: 'Thought' }
               ].map(bubble => (
                 <div 
                   key={bubble.id}
                   className="bubble-btn"
-                  onClick={() => handleBubbleClick(bubble.name)}
+                  onClick={() => handleBubbleClick(bubble.id)}
                 >
                   {bubble.icon} {bubble.name}
                 </div>
@@ -2095,7 +2111,7 @@ function App() {
           </div>
 
           <div className="section">
-            <h3>🔧 編集</h3>
+            <h3>🔧 Edit</h3>
             <button 
               className={`control-btn ${isPanelEditMode ? 'active' : ''}`}
               onClick={() => setIsPanelEditMode(!isPanelEditMode)}
@@ -2111,7 +2127,7 @@ function App() {
                 fontWeight: "bold"
               }}
             >
-              {isPanelEditMode ? "✅ 編集モード中" : "🔧 コマ編集モード"}
+              {isPanelEditMode ? "✅ Edit mode on" : "🔧 Panel edit mode"}
             </button>
             <div style={{
               fontSize: "10px",
@@ -2122,12 +2138,12 @@ function App() {
               marginTop: "8px",
               lineHeight: "1.4"
             }}>
-              💡 コマをクリック→ハンドルで移動・リサイズ・分割
+              💡 Click a panel, then use handles to move, resize, or split
             </div>
           </div>
 
           <div className="section">
-            <h3>🎨 装飾</h3>
+            <h3>🎨 Decor</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               <button 
                 className="control-btn"
@@ -2143,7 +2159,7 @@ function App() {
                   fontSize: "13px"
                 }}
               >
-                🎨 背景
+                🎨 Background
                 {backgroundTemplateCount > 0 && <span style={{ marginLeft: "4px" }}>({backgroundTemplateCount})</span>}
               </button>
 
@@ -2161,7 +2177,7 @@ function App() {
                   fontSize: "13px"
                 }}
               >
-                ⚡ 効果線
+                ⚡ Effects
                 {effectTemplateCount > 0 && <span style={{ marginLeft: "4px" }}>({effectTemplateCount})</span>}
               </button>
           </div>
@@ -2169,7 +2185,7 @@ function App() {
 
           {panels.length > 1 && (
           <div className="section">
-              <h3>🔄 コマ操作</h3>
+              <h3>🔄 Panels</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 <button
                   onClick={() => {
@@ -2191,7 +2207,7 @@ function App() {
                     fontWeight: "bold"
                   }}
                 >
-                  {isSwapMode ? "❌ 入れ替えモード終了" : "🔄 コマ入れ替えモード"}
+                  {isSwapMode ? "❌ Exit swap mode" : "🔄 Swap panel content"}
                 </button>
 
                 {isSwapMode && (
@@ -2208,7 +2224,7 @@ function App() {
                         fontSize: "12px",
                         fontWeight: "bold"
                       }}>
-                        1️⃣ {swapPanel1 ? `コマ ${swapPanel1}` : "未選択"}
+                        1️⃣ {swapPanel1 ? `Panel ${swapPanel1}` : "None"}
                       </div>
                       <div style={{
                         flex: 1,
@@ -2221,7 +2237,7 @@ function App() {
                         fontSize: "12px",
                         fontWeight: "bold"
                       }}>
-                        2️⃣ {swapPanel2 ? `コマ ${swapPanel2}` : "未選択"}
+                        2️⃣ {swapPanel2 ? `Panel ${swapPanel2}` : "None"}
                       </div>
                     </div>
 
@@ -2233,7 +2249,7 @@ function App() {
                           setSwapPanel2(null);
                           setIsSwapMode(false);
                         } else {
-                          alert('異なる2つのコマを選択してください');
+                          alert('Pick two different panels');
                         }
                       }}
                       disabled={!swapPanel1 || !swapPanel2 || swapPanel1 === swapPanel2}
@@ -2249,7 +2265,7 @@ function App() {
                         fontWeight: "bold"
                       }}
                     >
-                      🔄 内容を入れ替え実行
+                      🔄 Swap content
                     </button>
                   </>
                 )}
@@ -2264,19 +2280,19 @@ function App() {
                   borderRadius: "4px",
                   marginTop: "8px"
                 }}>
-                  💡 コマをクリックして選択→「入れ替え実行」で内容を交換<br/>
-                  サイズ・位置はそのまま、内容（メモ・プロンプト・キャラ）のみ入れ替え
+                  💡 Click two panels, then Swap — only notes, prompts, and character swap<br/>
+                  Positions and sizes stay the same
                 </div>
               )}
             </div>
           )}
 
-          {/* 出力は上バーに移動 */}
+          {/* Output moved to top bar */}
         </div>
         )}
       </div>
 
-      {/* モーダル・パネル類 */}
+      {/* Modal panels */}
       {showCharacterPanel && selectedCharacter && (
         <CharacterDetailPanel
           selectedCharacter={selectedCharacter}
@@ -2331,7 +2347,7 @@ function App() {
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
           }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--text-primary)' }}>📤 プロンプト出力</h3>
+              <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--text-primary)' }}>📤 Prompt export</h3>
               <button
                 onClick={() => setShowExportPanel(false)}
                 style={{
@@ -2373,7 +2389,7 @@ function App() {
         isDarkMode={isDarkMode}
       />
 
-      {/* トーン機能は無効化 */}
+      {/* Tone function disabled */}
 
       <CharacterSettingsPanel
         isOpen={showCharacterSettingsPanel}
@@ -2393,7 +2409,7 @@ function App() {
         isDarkMode={isDarkMode}
       />
 
-      {/* OpenAI連携モーダル */}
+      {/* Ollama Cooperation modal */}
       <StoryToComicModal
         isOpen={showStoryToComicModal}
         onClose={() => setShowStoryToComicModal(false)}
@@ -2409,9 +2425,9 @@ function App() {
         initialMode={storyModalMode}
       />
 
-      <OpenAISettingsModal
-        isOpen={showOpenAISettingsModal}
-        onClose={() => setShowOpenAISettingsModal(false)}
+      <OllamaSettingsModal
+        isOpen={showOllamaSettingsModal}
+        onClose={() => setShowOllamaSettingsModal(false)}
         isDarkMode={isDarkMode}
       />
 
@@ -2419,7 +2435,7 @@ function App() {
         isOpen={showCharacterPromptRegister}
         onClose={() => setShowCharacterPromptRegister(false)}
         characterId={registeringCharacterId}
-        characterName={characterNames[registeringCharacterId] || `キャラクター${registeringCharacterId.replace('character_', '')}`}
+        characterName={characterNames[registeringCharacterId] || `Character ${registeringCharacterId.replace('character_', '')}`}
         currentPrompt={characterSettings[registeringCharacterId]?.appearance?.basePrompt || selectedPanel?.characterPrompt || ''}
         onSave={handleSaveCharacterPrompt}
         isDarkMode={isDarkMode}
@@ -2429,10 +2445,10 @@ function App() {
         isOpen={showProjectPanel}
         onClose={() => setShowProjectPanel(false)}
         onLoadProject={(projectId) => {
-          console.log('📂 App.tsx: プロジェクト読み込み開始 - projectId:', projectId);
+          console.log('📂 App.tsx: load project start - projectId:', projectId);
           
           const project = projectSave.loadProject(projectId);
-          console.log('📊 loadProjectの戻り値:', project ? 'データあり' : 'データなし');
+          console.log('📊 loadProject result:', project ? 'has data' : 'empty');
           
           if (project) {
             setPanels(project.panels || []);
@@ -2459,9 +2475,9 @@ function App() {
               document.documentElement.setAttribute("data-theme", project.settings.darkMode ? "dark" : "light");
             }
             
-            console.log('✅ プロジェクト読み込み完了');
+            console.log('✅ Project load complete');
           } else {
-            console.error('❌ プロジェクトデータが取得できませんでした');
+            console.error('❌ Could not load project data');
           }
         }}
         onNewProject={() => {
@@ -2471,25 +2487,25 @@ function App() {
           setSpeechBubbles([]);
           setBackgrounds([]);
           setEffects([]);
-          // トーン機能は無効化
+          // Tone feature disabled
           
           setCharacterNames({
-            character_1: '主人公',
-            character_2: 'ヒロイン',
-            character_3: 'ライバル',
-            character_4: '友人'
+            character_1: 'Hero',
+            character_2: 'Heroine',
+            character_3: 'Rival',
+            character_4: 'Friend'
           });
           setCharacterSettings({
-            character_1: { appearance: null, role: '主人公' },
-            character_2: { appearance: null, role: 'ヒロイン' },
-            character_3: { appearance: null, role: 'ライバル' },
-            character_4: { appearance: null, role: '友人' }
+            character_1: { appearance: null, role: 'Hero' },
+            character_2: { appearance: null, role: 'Heroine' },
+            character_3: { appearance: null, role: 'Rival' },
+            character_4: { appearance: null, role: 'Friend' }
           });
           
           setSelectedCharacter(null);
           setSelectedPanel(null);
           setSelectedEffect(null);
-          // トーン機能は無効化
+          // Tone feature disabled
         }}
         currentProjectId={projectSave.currentProjectId}
         saveStatus={projectSave.saveStatus}
@@ -2526,14 +2542,14 @@ function App() {
         isVisible={showPanelSelector}
       />
 
-      {/* 🧪 ベータ版フィードバックパネル */}
+      {/* 🧪 Beta feedback panel */}
       <SimpleFeedbackPanel
         isVisible={showFeedbackPanel}
         onClose={() => setShowFeedbackPanel(false)}
         onDarkMode={isDarkMode}
       />
 
-      {/* 📖 ヘルプモーダル */}
+      {/* 📖 help modal */}
       <HelpModal
         isOpen={showHelpModal}
         onClose={() => setShowHelpModal(false)}

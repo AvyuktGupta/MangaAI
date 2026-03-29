@@ -47,7 +47,6 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ヘッダー */}
         <div
           style={{
             padding: '20px 24px',
@@ -59,7 +58,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
           }}
         >
           <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: textColor }}>
-            📖 使い方ガイド
+            User guide
           </h2>
           <button
             onClick={onClose}
@@ -76,7 +75,6 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
           </button>
         </div>
 
-        {/* コンテンツ */}
         <div
           style={{
             flex: 1,
@@ -85,59 +83,57 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
           }}
         >
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            
-            {/* AI漫画制作の全体フロー */}
+
             <section style={{ marginBottom: '32px', padding: '20px', backgroundColor: isDarkMode ? '#1e3a4a' : '#e8f4f8', borderRadius: '12px', border: `2px solid ${isDarkMode ? '#4fc3f7' : '#3498db'}` }}>
               <h3 style={{ fontSize: '22px', marginBottom: '16px', color: isDarkMode ? '#4fc3f7' : '#2c3e50', textAlign: 'center' }}>
-                🎨 AI漫画制作の全体フロー
+                Full AI comic workflow
               </h3>
               <div style={{ fontSize: '16px', lineHeight: '2', color: textColor, textAlign: 'center' }}>
                 <div style={{ marginBottom: '8px' }}>
-                  <strong>① このツールでネーム作成</strong> 📝<br/>
-                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>コマ割り・セリフ・動作プロンプト生成</span>
+                  <strong>1. Build your layouts here</strong><br/>
+                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>Panels, dialogue, and action prompts</span>
                 </div>
                 <div style={{ fontSize: '24px', margin: '8px 0' }}>↓</div>
                 <div style={{ marginBottom: '8px' }}>
-                  <strong>② エクスポート（画像 + プロンプト）</strong> 📥<br/>
-                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>prompts.txt に各コマの画像生成用プロンプトが出力</span>
+                  <strong>2. Export (image + prompts)</strong><br/>
+                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>prompts.txt lists English prompts per panel</span>
                 </div>
                 <div style={{ fontSize: '24px', margin: '8px 0' }}>↓</div>
                 <div style={{ marginBottom: '8px' }}>
-                  <strong>③ AI画像生成ツールで各コマを生成</strong> 🤖<br/>
-                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>Stable Diffusion / Midjourney / DALL-E 3 など</span>
+                  <strong>3. Generate art in your AI tool</strong><br/>
+                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>Ollama (Flux), Stable Diffusion, Midjourney, etc.</span>
                 </div>
                 <div style={{ fontSize: '24px', margin: '8px 0' }}>↓</div>
                 <div>
-                  <strong>④ 画像合成して完成！</strong> ✨<br/>
-                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>生成画像にセリフを重ねて漫画化</span>
+                  <strong>4. Composite and finish</strong><br/>
+                  <span style={{ fontSize: '14px', color: isDarkMode ? '#aaa' : '#666' }}>Drop dialogue and effects on your generated art</span>
                 </div>
               </div>
             </section>
 
-            {/* ネーム制作の流れ */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '22px', marginBottom: '20px', color: isDarkMode ? '#4fc3f7' : '#2c3e50', borderBottom: `3px solid ${isDarkMode ? '#4fc3f7' : '#3498db'}`, paddingBottom: '8px' }}>
-                🚀 このツールでの作業フロー
+                In-app workflow
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[
-                  { step: '1', icon: '👤', title: 'キャラクター登録', desc: '左パネルの「👤 キャラクター」→「キャラクター名設定」で主要キャラを登録' },
-                  { step: '2', icon: '📋', title: 'テンプレート選択', desc: '「📄 新規作成」でコマ数を選択（1コマ、2コマ横並び、4コマなど）' },
-                  { step: '3', icon: '📝', title: 'ページメモ入力', desc: '右サイドバー「📄 AIでページ作成」でストーリーを入力' },
-                  { step: '4', icon: '🤖', title: 'AIで生成', desc: '「🤖 1ページ分を生成」ボタンでモーダルを開き、プレビュー→適用' },
-                  { step: '5', icon: '🎨', title: '微調整', desc: '吹き出しサイズ、コマ重要度、背景などを調整' },
-                  { step: '6', icon: '💾', title: '保存・エクスポート', desc: 'プロジェクト保存 & PNG/JPEGで画像出力' }
+                  { step: '1', icon: '👤', title: 'Register characters', desc: 'Left sidebar: Characters — set names for your main cast' },
+                  { step: '2', icon: '📋', title: 'Pick a template', desc: 'New project: choose panel count (1, 2 side-by-side, 4-koma, etc.)' },
+                  { step: '3', icon: '📝', title: 'Page notes', desc: 'Right sidebar: “AI page” — enter your story beats' },
+                  { step: '4', icon: '🤖', title: 'Generate with AI', desc: '“Generate full page” opens the modal: preview, then Apply' },
+                  { step: '5', icon: '🎨', title: 'Polish', desc: 'Resize bubbles, panel importance, backgrounds' },
+                  { step: '6', icon: '💾', title: 'Save and export', desc: 'Save project and export PNG/JPEG' }
                 ].map((item, idx) => (
-                  <div key={idx} style={{ 
-                    display: 'flex', 
-                    alignItems: 'flex-start', 
+                  <div key={idx} style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
                     gap: '16px',
                     padding: '16px',
                     backgroundColor: cardBg,
                     borderRadius: '8px',
                     border: `2px solid ${idx === 0 ? (isDarkMode ? '#4fc3f7' : '#3498db') : 'transparent'}`
                   }}>
-                    <div style={{ 
+                    <div style={{
                       minWidth: '48px',
                       height: '48px',
                       borderRadius: '50%',
@@ -163,53 +159,51 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
               </div>
             </section>
 
-            {/* AI生成機能 */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#ff6b9d' : '#e74c3c', borderBottom: `2px solid ${isDarkMode ? '#ff6b9d' : '#e74c3c'}`, paddingBottom: '8px' }}>
-                🤖 AI生成機能の使い方
+                AI generation
               </h3>
-              
+
               <div style={{ marginBottom: '20px' }}>
-                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: isDarkMode ? '#ff6b9d' : '#e74c3c' }}>📄 1ページ分を生成</h4>
+                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: isDarkMode ? '#ff6b9d' : '#e74c3c' }}>Full page</h4>
                 <ol style={{ lineHeight: '1.8', color: textColor, marginLeft: '20px' }}>
-                  <li>右サイドバーの「📄 AIでページ作成」を開く</li>
-                  <li>「ページメモ（構成・展開・意図）」にストーリーを入力
+                  <li>Open “AI page” in the right sidebar</li>
+                  <li>Type story notes (structure, beats, intent)
                     <div style={{ backgroundColor: infoBg, padding: '12px', borderRadius: '6px', marginTop: '8px', fontSize: '14px' }}>
-                      例: 「主人公が朝起きて驚く。窓の外に巨大なロボット。主人公は急いで着替えて外に飛び出す。」
+                      Example: The hero wakes up shocked. A giant robot outside the window. They dress fast and run outside.
                     </div>
                   </li>
-                  <li>「🤖 1ページ分を生成」ボタンをクリック</li>
-                  <li>「🎨 プレビュー生成」→ 内容確認 → 「✅ 適用」</li>
+                  <li>Click “Generate full page”</li>
+                  <li>Preview → review → Apply</li>
                 </ol>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: isDarkMode ? '#ff6b9d' : '#e74c3c' }}>🎯 1コマのみ生成</h4>
+                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: isDarkMode ? '#ff6b9d' : '#e74c3c' }}>Single panel</h4>
                 <ol style={{ lineHeight: '1.8', color: textColor, marginLeft: '20px' }}>
-                  <li>コマを選択</li>
-                  <li>右サイドバーの「📝 コマ設定」を開く</li>
-                  <li>「🤖 AIでコマ内容を生成」ボタンをクリック</li>
-                  <li>そのコマの内容を入力 → 「🎨 プレビュー生成」→ 「✅ 適用」</li>
+                  <li>Select a panel</li>
+                  <li>Open “Panel settings” on the right</li>
+                  <li>Click “Generate panel with AI”</li>
+                  <li>Enter what happens in that panel → Preview → Apply</li>
                 </ol>
               </div>
 
               <div style={{ backgroundColor: tipBg, padding: '12px', borderRadius: '8px', borderLeft: `4px solid ${isDarkMode ? '#ffa726' : '#f39c12'}` }}>
-                <strong>💡 Tip:</strong> 詳細なストーリーほど質の高い内容が生成されます。キャラクター名を統一して記述してください。
+                <strong>Tip:</strong> More specific story notes yield better results. Keep character names consistent with your registrations.
               </div>
             </section>
 
-            {/* 基本操作 */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#81c784' : '#27ae60', borderBottom: `2px solid ${isDarkMode ? '#81c784' : '#27ae60'}`, paddingBottom: '8px' }}>
-                🎨 基本操作
+                Basics
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 {[
-                  { title: '新規作成', desc: '📄ボタンでテンプレート選択' },
-                  { title: '保存', desc: '💾 新規保存 or 上書き保存' },
-                  { title: '元に戻す', desc: 'Ctrl + Z（やり直し: Ctrl + Y）' },
-                  { title: 'コマ編集', desc: '✏️ボタンで移動・リサイズ・分割' },
-                  { title: '吹き出し', desc: 'ダブルクリックでテキスト入力' }
+                  { title: 'New project', desc: 'Toolbar: template picker' },
+                  { title: 'Save', desc: 'Save as new or overwrite' },
+                  { title: 'Undo', desc: 'Ctrl + Z (redo: Ctrl + Y)' },
+                  { title: 'Panels', desc: 'Edit mode: move, resize, split' },
+                  { title: 'Bubbles', desc: 'Double-click a panel to add text' }
                 ].map((item, idx) => (
                   <div key={idx} style={{ padding: '12px', backgroundColor: cardBg, borderRadius: '6px' }}>
                     <strong style={{ color: textColor }}>{item.title}:</strong>
@@ -219,94 +213,90 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
               </div>
             </section>
 
-            {/* エクスポート */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#ba68c8' : '#8e44ad', borderBottom: `2px solid ${isDarkMode ? '#ba68c8' : '#8e44ad'}`, paddingBottom: '8px' }}>
-                📥 エクスポート（画像 + プロンプト）
+                Export (image + prompts)
               </h3>
               <div style={{ backgroundColor: infoBg, padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
-                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: textColor }}>出力される3つのファイル</h4>
+                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: textColor }}>Three output files</h4>
                 <ol style={{ lineHeight: '1.8', color: textColor, marginLeft: '20px', fontSize: '14px' }}>
-                  <li><strong>layout.png/jpg</strong>: ネーム画像（コマ割り・吹き出し配置）</li>
-                  <li><strong>prompts.txt</strong>: 各コマの画像生成用プロンプト（英語）</li>
-                  <li><strong>project.json</strong>: プロジェクトデータ（バックアップ用）</li>
+                  <li><strong>layout.png/jpg</strong>: layout with panels and bubbles</li>
+                  <li><strong>prompts.txt</strong>: English image prompts per panel</li>
+                  <li><strong>project.json</strong>: backup of project data</li>
                 </ol>
               </div>
 
               <div style={{ backgroundColor: isDarkMode ? '#2a4a2a' : '#e8f5e9', padding: '16px', borderRadius: '8px', border: `2px solid ${isDarkMode ? '#66bb6a' : '#4caf50'}` }}>
-                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: isDarkMode ? '#66bb6a' : '#2e7d32' }}>🎨 prompts.txt の活用方法</h4>
+                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: isDarkMode ? '#66bb6a' : '#2e7d32' }}>Using prompts.txt</h4>
                 <div style={{ fontSize: '14px', lineHeight: '1.8', color: textColor }}>
-                  <p style={{ marginBottom: '12px' }}>各コマの<strong>Action Prompt</strong>を以下のAI画像生成ツールにコピペ：</p>
+                  <p style={{ marginBottom: '12px' }}>Copy each panel’s <strong>action prompt</strong> into your generator:</p>
                   <ul style={{ marginLeft: '20px', marginBottom: '12px' }}>
-                    <li><strong>Stable Diffusion WebUI</strong>: そのままコピーして使用</li>
-                    <li><strong>Midjourney</strong>: /imagine の後に貼り付け</li>
-                    <li><strong>DALL-E 3</strong>: ChatGPT Plus で送信</li>
+                    <li><strong>Ollama (Flux)</strong>: “Flux preview” in the app, or <code style={{ fontSize: '12px' }}>ollama run</code></li>
+                    <li><strong>Stable Diffusion WebUI</strong>: paste into the prompt field</li>
+                    <li><strong>Midjourney</strong>: after /imagine</li>
                   </ul>
                   <div style={{ backgroundColor: tipBg, padding: '12px', borderRadius: '6px', fontSize: '13px' }}>
-                    <strong>💡 Tip:</strong> プロンプトは英語で出力されるため、そのままコピペで高品質な画像が生成できます！
+                    <strong>Hint:</strong> Prompts are English by design so they paste cleanly into most tools.
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* キャラクター登録 */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#ffb74d' : '#f39c12', borderBottom: `2px solid ${isDarkMode ? '#ffb74d' : '#f39c12'}`, paddingBottom: '8px' }}>
-                👤 キャラクター登録
+                Characters
               </h3>
               <div style={{ backgroundColor: infoBg, padding: '16px', borderRadius: '8px' }}>
-                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: textColor }}>事前登録の流れ</h4>
+                <h4 style={{ fontSize: '16px', marginBottom: '12px', color: textColor }}>Registration</h4>
                 <ol style={{ lineHeight: '1.8', color: textColor, marginLeft: '20px', fontSize: '14px' }}>
-                  <li>左パネル「👤 キャラクター」を開く</li>
-                  <li>「キャラクター名設定」で主要キャラ（主人公、ヒロインなど）の名前を登録</li>
-                  <li>AI生成時にこの名前を使うと、キャラクターが識別されます</li>
+                  <li>Open Characters in the left sidebar</li>
+                  <li>Set names for leads (hero, rival, etc.)</li>
+                  <li>The model uses those names when generating</li>
                 </ol>
                 <div style={{ marginTop: '12px', padding: '12px', backgroundColor: tipBg, borderRadius: '6px', fontSize: '14px' }}>
-                  <strong>💡 Note:</strong> 基本的にはAI生成でコマ内容と吹き出しが自動配置されるため、手動でのキャラクター配置は不要です
+                  <strong>Note:</strong> AI generation places dialogue and panel content automatically; you usually do not need to place character sprites by hand.
                 </div>
               </div>
             </section>
 
-            {/* 吹き出し */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#4dd0e1' : '#16a085', borderBottom: `2px solid ${isDarkMode ? '#4dd0e1' : '#16a085'}`, paddingBottom: '8px' }}>
-                💬 吹き出し編集
+                Speech bubbles
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
-                  <h4 style={{ fontSize: '14px', marginBottom: '8px', color: isDarkMode ? '#4dd0e1' : '#16a085' }}>基本操作</h4>
+                  <h4 style={{ fontSize: '14px', marginBottom: '8px', color: isDarkMode ? '#4dd0e1' : '#16a085' }}>Controls</h4>
                   <ul style={{ fontSize: '14px', lineHeight: '1.6', color: textColor }}>
-                    <li>追加: コマをダブルクリック</li>
-                    <li>編集: 吹き出しをダブルクリック</li>
-                    <li>確定: Ctrl + Enter</li>
-                    <li>キャンセル: Esc</li>
+                    <li>Add: double-click a panel</li>
+                    <li>Edit: double-click the bubble</li>
+                    <li>Commit: Ctrl + Enter</li>
+                    <li>Cancel: Esc</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '14px', marginBottom: '8px', color: isDarkMode ? '#4dd0e1' : '#16a085' }}>種類</h4>
+                  <h4 style={{ fontSize: '14px', marginBottom: '8px', color: isDarkMode ? '#4dd0e1' : '#16a085' }}>Types</h4>
                   <ul style={{ fontSize: '14px', lineHeight: '1.6', color: textColor }}>
-                    <li>💬 普通: 通常の吹き出し</li>
-                    <li>💭 思考: 雲形の吹き出し</li>
-                    <li>❗ 叫び: ギザギザ</li>
-                    <li>🤫 小声: 点線</li>
+                    <li>Normal: standard tail</li>
+                    <li>Thought: cloud</li>
+                    <li>Shout: jagged</li>
+                    <li>Whisper: dashed</li>
                   </ul>
                 </div>
               </div>
             </section>
 
-            {/* ショートカット */}
             <section style={{ marginBottom: '32px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#e57373' : '#c0392b', borderBottom: `2px solid ${isDarkMode ? '#e57373' : '#c0392b'}`, paddingBottom: '8px' }}>
-                ⌨️ ショートカットキー
+                Shortcuts
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                 {[
-                  { key: 'Ctrl + Z', desc: '元に戻す' },
-                  { key: 'Ctrl + Y', desc: 'やり直し' },
-                  { key: 'Delete', desc: '削除' },
-                  { key: 'Ctrl + Enter', desc: '編集確定' },
-                  { key: 'Esc', desc: 'キャンセル' },
-                  { key: 'ダブルクリック', desc: '吹き出し編集' }
+                  { key: 'Ctrl + Z', desc: 'Undo' },
+                  { key: 'Ctrl + Y', desc: 'Redo' },
+                  { key: 'Delete', desc: 'Delete' },
+                  { key: 'Ctrl + Enter', desc: 'Commit edit' },
+                  { key: 'Esc', desc: 'Cancel' },
+                  { key: 'Double-click', desc: 'Edit bubble' }
                 ].map((item, idx) => (
                   <div key={idx} style={{ padding: '10px', backgroundColor: cardBg, borderRadius: '6px', textAlign: 'center' }}>
                     <div style={{ fontWeight: 'bold', fontSize: '13px', color: textColor, marginBottom: '4px' }}>{item.key}</div>
@@ -316,16 +306,15 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
               </div>
             </section>
 
-            {/* Tips */}
             <section style={{ marginBottom: '16px' }}>
               <h3 style={{ fontSize: '20px', marginBottom: '16px', color: isDarkMode ? '#9575cd' : '#8e44ad', borderBottom: `2px solid ${isDarkMode ? '#9575cd' : '#8e44ad'}`, paddingBottom: '8px' }}>
-                💡 よくある質問
+                FAQ
               </h3>
               {[
-                { q: 'AI生成がうまくいかない', a: 'より詳細なストーリーを入力してください。各コマの内容を明確に区切って記述し、事前に登録したキャラクター名を使用します。' },
-                { q: '吹き出しのサイズや位置を変えたい', a: '吹き出しを選択すると四隅にハンドルが表示されます。ドラッグで移動・リサイズできます。' },
-                { q: 'プロジェクトが消えた', a: 'ブラウザのローカルストレージに保存されています。同じブラウザで「📁 プロジェクト管理」から確認できます。' },
-                { q: 'コマの内容を変更したい', a: '1コマ生成モードで選択したコマのみ再生成できます。または吹き出しをダブルクリックでテキスト編集できます。' }
+                { q: 'AI output is weak', a: 'Add more concrete beats per panel. Use the same registered names you set in Characters.' },
+                { q: 'I want to move or resize a bubble', a: 'Select it — handles appear at the corners. Drag to move or resize.' },
+                { q: 'My project disappeared', a: 'Data lives in this browser’s storage. Open Project manager from the toolbar on the same browser.' },
+                { q: 'I want to change one panel', a: 'Use single-panel generation for that panel only, or double-click a bubble to edit text.' }
               ].map((item, idx) => (
                 <div key={idx} style={{ marginBottom: '16px' }}>
                   <strong style={{ color: isDarkMode ? '#9575cd' : '#8e44ad', fontSize: '14px' }}>Q: {item.q}</strong>
@@ -339,7 +328,6 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
           </div>
         </div>
 
-        {/* フッター */}
         <div
           style={{
             padding: '16px 24px',
@@ -362,7 +350,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, isDarkMode = fal
               fontWeight: 'bold',
             }}
           >
-            閉じる
+            Close
           </button>
         </div>
       </div>

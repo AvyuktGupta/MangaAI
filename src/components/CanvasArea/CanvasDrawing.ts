@@ -3,7 +3,7 @@ import { Panel } from "../../types";
 
 export class CanvasDrawing {
   /**
-   * グリッド描画
+   * 
    */
   static drawGrid(
     ctx: CanvasRenderingContext2D,
@@ -32,7 +32,7 @@ export class CanvasDrawing {
   }
 
   /**
-   * 複数パネル描画
+   * 
    */
   static drawPanels(
     ctx: CanvasRenderingContext2D,
@@ -43,7 +43,7 @@ export class CanvasDrawing {
     swapPanel1?: number | null,
     swapPanel2?: number | null
   ): void {
-    // 🔧 パネルの順序をID順で固定（座標順ソートを防ぐ）
+    // 🔧 IDFixed in order (prevents coordinate sorting)
     const orderedPanels = [...panels].sort((a, b) => a.id - b.id);
     
     orderedPanels.forEach((panel) => {
@@ -56,7 +56,7 @@ export class CanvasDrawing {
   }
 
   /**
-   * 単一パネル描画
+   * 
    */
   static drawPanel(
     ctx: CanvasRenderingContext2D,
@@ -67,16 +67,16 @@ export class CanvasDrawing {
     isSwapSelected1?: boolean,
     isSwapSelected2?: boolean
   ): void {
-    // コンソールログは無効化
+    // 
     
-    // パネルがキャンバス内にあるかチェック
+    // Check if the panel is in the canvas
     const isPanelInCanvas = panel.x >= 0 && panel.y >= 0 && 
                            panel.x + panel.width <= ctx.canvas.width && 
                            panel.y + panel.height <= ctx.canvas.height;
     
-    // コンソールログは無効化
+    // 
     
-    // パネル背景
+    // 
     if (isDarkMode) {
       ctx.fillStyle = "rgba(80, 80, 80, 0.9)";
     } else {
@@ -84,12 +84,12 @@ export class CanvasDrawing {
     }
     ctx.fillRect(panel.x, panel.y, panel.width, panel.height);
 
-    // パネル枠線（入れ替え選択状態を優先）
+    // Panel Border (override selection)
     if (isSwapSelected1) {
-      ctx.strokeStyle = "#ff0000"; // 赤色で1番目選択
+      ctx.strokeStyle = "#ff0000"; // 1
       ctx.lineWidth = 5;
     } else if (isSwapSelected2) {
-      ctx.strokeStyle = "#0000ff"; // 青色で2番目選択
+      ctx.strokeStyle = "#0000ff"; // 2
       ctx.lineWidth = 5;
     } else if (isSelected) {
       ctx.strokeStyle = "#ff8833";
@@ -100,7 +100,7 @@ export class CanvasDrawing {
     }
     ctx.strokeRect(panel.x, panel.y, panel.width, panel.height);
 
-    // パネル番号（入れ替え選択状態を優先）
+    // Panel number (override swap selection)
     let numberColor = isDarkMode ? "#ffffff" : "#333333";
     let numberBgColor = isDarkMode ? "rgba(0, 0, 0, 0.7)" : "rgba(255, 255, 255, 0.8)";
     
@@ -130,19 +130,19 @@ export class CanvasDrawing {
     ctx.fillStyle = numberColor;
     ctx.fillText(`${panel.id}`, textX, textY);
 
-    // 重要度マーカー表示
+    // 
     if (panel.importance === 'important' || panel.importance === 'climax') {
       const markerSize = 24;
       const markerX = panel.x + panel.width - markerSize - 8;
       const markerY = panel.y + 8;
       
-      // マーカー背景
+      // 
       ctx.fillStyle = panel.importance === 'climax' ? 'rgba(239, 68, 68, 0.9)' : 'rgba(245, 158, 11, 0.9)';
       ctx.beginPath();
       ctx.arc(markerX + markerSize/2, markerY + markerSize/2, markerSize/2, 0, Math.PI * 2);
       ctx.fill();
       
-      // マーカーアイコン
+      // 
       ctx.fillStyle = 'white';
       ctx.font = 'bold 14px Arial';
       ctx.textAlign = 'center';
@@ -150,10 +150,10 @@ export class CanvasDrawing {
       ctx.fillText(panel.importance === 'climax' ? '🔥' : '⭐', markerX + markerSize/2, markerY + markerSize/2);
     }
 
-    // コマメモ表示（panel.noteがあれば）
+    // panel.note
     if ((panel as any).note) {
       const note = (panel as any).note as string;
-      const noteLines = note.split('\n').slice(0, 4); // 最大4行
+      const noteLines = note.split('\n').slice(0, 4); // 4
       
       ctx.font = "bold 16px Arial";
       ctx.textAlign = "left";
@@ -163,17 +163,17 @@ export class CanvasDrawing {
       const noteY = panel.y + panel.height - 24 - (noteLines.length * 20);
       const maxWidth = panel.width - 32;
       
-      // 背景
+      // 
       const noteHeight = noteLines.length * 20 + 12;
       ctx.fillStyle = isDarkMode ? "rgba(0, 0, 0, 0.85)" : "rgba(255, 255, 255, 0.9)";
       ctx.fillRect(noteX - 6, noteY - 6, Math.min(maxWidth + 12, panel.width - 20), noteHeight);
       
-      // 枠線
+      // 
       ctx.strokeStyle = isDarkMode ? "#fbbf24" : "#f59e0b";
       ctx.lineWidth = 2;
       ctx.strokeRect(noteX - 6, noteY - 6, Math.min(maxWidth + 12, panel.width - 20), noteHeight);
       
-      // テキスト
+      // 
       ctx.fillStyle = isDarkMode ? "#fbbf24" : "#d97706";
       noteLines.forEach((line, i) => {
         const truncated = line.length > 25 ? line.substring(0, 25) + '...' : line;
@@ -181,14 +181,14 @@ export class CanvasDrawing {
       });
     }
 
-    // 編集モード時のハンドル描画
+    // Handle Drawing in Edit Mode
     if (isSelected && isEditMode) {
       CanvasDrawing.drawPanelEditHandles(ctx, panel, isDarkMode);
     }
   }
 
   /**
-   * パネル編集ハンドル描画
+   * 
    */
   static drawPanelEditHandles(
     ctx: CanvasRenderingContext2D,
@@ -199,7 +199,7 @@ export class CanvasDrawing {
     const handleColor = "#ff8833";
     const handleBorder = "#ffffff";
     
-    // 8方向のリサイズハンドル
+    // 8
     const resizeHandles = [
       { x: panel.x - handleSize/2, y: panel.y - handleSize/2, type: "nw" },
       { x: panel.x + panel.width/2 - handleSize/2, y: panel.y - handleSize/2, type: "n" },
@@ -211,7 +211,7 @@ export class CanvasDrawing {
       { x: panel.x - handleSize/2, y: panel.y + panel.height/2 - handleSize/2, type: "w" },
     ];
 
-    // リサイズハンドル描画
+    // 
     resizeHandles.forEach((handle) => {
       if (["nw", "ne", "se", "sw"].includes(handle.type)) {
         ctx.fillStyle = handleColor;
@@ -230,7 +230,7 @@ export class CanvasDrawing {
       }
     });
 
-    // 移動ハンドル（パネル中央）
+    // Movement handle (center of panel)
     const moveHandleSize = 30;
     const moveX = panel.x + panel.width/2 - moveHandleSize/2;
     const moveY = panel.y + panel.height/2 - moveHandleSize/2;
@@ -249,7 +249,7 @@ export class CanvasDrawing {
     ctx.textBaseline = "middle";
     ctx.fillText("✋", moveX + moveHandleSize/2, moveY + moveHandleSize/2);
 
-    // 分割ハンドル（右下角）
+    // 
     const splitHandleSize = 24;
     const splitX = panel.x + panel.width - splitHandleSize - 5;
     const splitY = panel.y + panel.height - splitHandleSize - 5;
@@ -266,7 +266,7 @@ export class CanvasDrawing {
     ctx.textBaseline = "middle";
     ctx.fillText("✂", splitX + splitHandleSize/2, splitY + splitHandleSize/2);
 
-    // 削除ハンドル（左上角）
+    // 
     const deleteHandleSize = 24;
     const deleteX = panel.x - deleteHandleSize/2;
     const deleteY = panel.y - deleteHandleSize/2;
@@ -285,7 +285,7 @@ export class CanvasDrawing {
   }
 
   /**
-   * スナップライン描画
+   * 
    */
   static drawSnapLines(
     ctx: CanvasRenderingContext2D,
@@ -307,7 +307,7 @@ export class CanvasDrawing {
   }
 
   /**
-   * Canvas背景描画
+   * Canvas
    */
   static drawBackground(
     ctx: CanvasRenderingContext2D,
@@ -320,7 +320,7 @@ export class CanvasDrawing {
   }
 
   /**
-   * Canvas全体をクリア
+   * Canvas
    */
   static clearCanvas(
     ctx: CanvasRenderingContext2D,

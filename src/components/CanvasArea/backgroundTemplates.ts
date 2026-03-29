@@ -1,28 +1,28 @@
-// src/components/CanvasArea/backgroundTemplates.ts - 実際背景描画対応版
+// src/components/CanvasArea/backgroundTemplates.ts - 
 import { BackgroundTemplate } from '../../types';
 
-// 背景カテゴリ定義
+// 
 export const backgroundCategories = [
-  { id: 'nature', icon: '🌲', name: '自然' },
-  { id: 'indoor', icon: '🏠', name: '室内' },
-  { id: 'school', icon: '🏫', name: '学校' },
-  { id: 'city', icon: '🏙️', name: '街' },
-  { id: 'abstract', icon: '🎨', name: '抽象' },
-  { id: 'emotion', icon: '💭', name: '感情' },
+  { id: 'nature', icon: '🌲', name: '' },
+  { id: 'indoor', icon: '🏠', name: '' },
+  { id: 'school', icon: '🏫', name: '' },
+  { id: 'city', icon: '🏙️', name: '' },
+  { id: 'abstract', icon: '🎨', name: '' },
+  { id: 'emotion', icon: '💭', name: '' },
 ];
 
-// 🆕 実際背景描画対応版テンプレート定義
-// 各テンプレートは複数要素で構成されるが、UIでは1つの背景として表示される
+// 🆕 Actual Background Drawing Supported Version Template Definition
+// Each template is made up of multiple elements.UI1
 export const backgroundTemplates: BackgroundTemplate[] = [
   // ==========================================
-  // 自然系背景（複合描画）
+  // 
   // ==========================================
   {
     id: 'sky_blue',
-    name: '青空',
+    name: '',
     category: 'nature',
     elements: [
-      // 空のグラデーション
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 1,
@@ -31,7 +31,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#87CEEB', '#E0F6FF'],
         gradientDirection: 180
       },
-      // 雲パターン（白い円形パターン）
+      // Cloud pattern (white circular pattern)
       {
         type: 'pattern',
         x: 0, y: 0, width: 1, height: 0.4,
@@ -41,7 +41,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         patternSize: 12,
         patternSpacing: 40
       },
-      // より小さい雲
+      // 
       {
         type: 'pattern',
         x: 0.2, y: 0.1, width: 0.8, height: 0.3,
@@ -55,10 +55,10 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'sunset',
-    name: '夕焼け',
+    name: '',
     category: 'nature',
     elements: [
-      // 夕焼け空のグラデーション
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 1,
@@ -67,14 +67,14 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#FF6B6B', '#FFE66D', '#FF8E53'],
         gradientDirection: 180
       },
-      // 太陽
+      // 
       {
         type: 'solid',
         x: 0.7, y: 0.15, width: 0.15, height: 0.15,
         rotation: 0, zIndex: 1, opacity: 0.9,
         solidColor: '#FFF700'
       },
-      // 雲のシルエット
+      // 
       {
         type: 'pattern',
         x: 0, y: 0.2, width: 1, height: 0.3,
@@ -88,10 +88,10 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'forest',
-    name: '森',
+    name: '',
     category: 'nature',
     elements: [
-      // 空の背景
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 0.4,
@@ -100,14 +100,14 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#87CEEB', '#98FB98'],
         gradientDirection: 180
       },
-      // 遠景の山
+      // 
       {
         type: 'solid',
         x: 0, y: 0.25, width: 1, height: 0.35,
         rotation: 0, zIndex: 1, opacity: 0.7,
         solidColor: '#228B22'
       },
-      // 森のシルエット（縦線パターン）
+      // Forest silhouette (vertical pattern)
       {
         type: 'pattern',
         x: 0, y: 0.4, width: 1, height: 0.6,
@@ -117,7 +117,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         patternSize: 3,
         patternSpacing: 15
       },
-      // 地面
+      // 
       {
         type: 'solid',
         x: 0, y: 0.85, width: 1, height: 0.15,
@@ -128,28 +128,28 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
 
   // ==========================================
-  // 室内系背景（具体的な要素追加）
+  // Indoor background (specific elements added)
   // ==========================================
   {
     id: 'living_room',
-    name: 'リビング',
+    name: '',
     category: 'indoor',
     elements: [
-      // 壁
+      // 
       {
         type: 'solid',
         x: 0, y: 0, width: 1, height: 0.7,
         rotation: 0, zIndex: 0, opacity: 1,
         solidColor: '#F5F5DC'
       },
-      // 床
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#DEB887'
       },
-      // 床の木目パターン
+      // 
       {
         type: 'pattern',
         x: 0, y: 0.7, width: 1, height: 0.3,
@@ -159,7 +159,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         patternSize: 2,
         patternSpacing: 12
       },
-      // 壁の装飾（額縁風）
+      // 
       {
         type: 'pattern',
         x: 0.2, y: 0.2, width: 0.6, height: 0.3,
@@ -173,10 +173,10 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'bedroom',
-    name: '寝室',
+    name: '',
     category: 'indoor',
     elements: [
-      // 壁（温かみのあるピンク）
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 0.7,
@@ -185,21 +185,21 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#FFB6C1', '#FFF0F5'],
         gradientDirection: 180
       },
-      // 床
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#F0E68C'
       },
-      // ベッド（簡易表現）
+      // 
       {
         type: 'solid',
         x: 0.1, y: 0.5, width: 0.8, height: 0.2,
         rotation: 0, zIndex: 2, opacity: 0.8,
         solidColor: '#FFFFFF'
       },
-      // カーテンパターン
+      // 
       {
         type: 'pattern',
         x: 0.7, y: 0.1, width: 0.25, height: 0.5,
@@ -213,24 +213,24 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'kitchen',
-    name: 'キッチン',
+    name: '',
     category: 'indoor',
     elements: [
-      // 壁
+      // 
       {
         type: 'solid',
         x: 0, y: 0, width: 1, height: 0.7,
         rotation: 0, zIndex: 0, opacity: 1,
         solidColor: '#FFFAF0'
       },
-      // 床（タイル調）
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#F0F0F0'
       },
-      // タイルのグリッドパターン
+      // 
       {
         type: 'pattern',
         x: 0, y: 0.7, width: 1, height: 0.3,
@@ -240,7 +240,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         patternSize: 1,
         patternSpacing: 20
       },
-      // キッチンカウンター
+      // 
       {
         type: 'solid',
         x: 0, y: 0.5, width: 1, height: 0.15,
@@ -251,35 +251,35 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
 
   // ==========================================
-  // 学校系背景（具体的な要素追加）
+  // School background (specific elements added)
   // ==========================================
   {
     id: 'classroom',
-    name: '教室',
+    name: '',
     category: 'school',
     elements: [
-      // 壁
+      // 
       {
         type: 'solid',
         x: 0, y: 0, width: 1, height: 0.7,
         rotation: 0, zIndex: 0, opacity: 1,
         solidColor: '#F0F8FF'
       },
-      // 床
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#DEB887'
       },
-      // 黒板
+      // 
       {
         type: 'solid',
         x: 0.1, y: 0.15, width: 0.8, height: 0.35,
         rotation: 0, zIndex: 2, opacity: 1,
         solidColor: '#2F4F2F'
       },
-      // 机の配置（ドットパターンで表現）
+      // Desk placement (expressed in a dot pattern)
       {
         type: 'pattern',
         x: 0.1, y: 0.55, width: 0.8, height: 0.2,
@@ -293,10 +293,10 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'hallway',
-    name: '廊下',
+    name: '',
     category: 'school',
     elements: [
-      // 基本グラデーション
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 1,
@@ -305,14 +305,14 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#E6E6FA', '#F8F8FF'],
         gradientDirection: 90
       },
-      // 床
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#D2B48C'
       },
-      // 遠近感を表現する線
+      // 
       {
         type: 'pattern',
         x: 0, y: 0.4, width: 1, height: 0.3,
@@ -326,24 +326,24 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'library',
-    name: '図書館',
+    name: '',
     category: 'school',
     elements: [
-      // 壁
+      // 
       {
         type: 'solid',
         x: 0, y: 0, width: 1, height: 0.7,
         rotation: 0, zIndex: 0, opacity: 1,
         solidColor: '#FDF5E6'
       },
-      // 床
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#8B4513'
       },
-      // 本棚（縦線で表現）
+      // 
       {
         type: 'pattern',
         x: 0.05, y: 0.1, width: 0.9, height: 0.6,
@@ -353,7 +353,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         patternSize: 3,
         patternSpacing: 20
       },
-      // 本（横線で表現）
+      // 
       {
         type: 'pattern',
         x: 0.05, y: 0.1, width: 0.9, height: 0.6,
@@ -367,14 +367,14 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
 
   // ==========================================
-  // 街系背景（具体的な要素追加）
+  // Urban background (specific elements added)
   // ==========================================
   {
     id: 'street',
-    name: '街並み',
+    name: '',
     category: 'city',
     elements: [
-      // 空
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 0.4,
@@ -383,21 +383,21 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#87CEEB', '#B0C4DE'],
         gradientDirection: 180
       },
-      // ビル群のシルエット
+      // 
       {
         type: 'solid',
         x: 0, y: 0.25, width: 1, height: 0.5,
         rotation: 0, zIndex: 1, opacity: 0.8,
         solidColor: '#696969'
       },
-      // 道路
+      // 
       {
         type: 'solid',
         x: 0, y: 0.7, width: 1, height: 0.3,
         rotation: 0, zIndex: 2, opacity: 1,
         solidColor: '#2F2F2F'
       },
-      // 窓（グリッドパターン）
+      // 
       {
         type: 'pattern',
         x: 0, y: 0.25, width: 1, height: 0.45,
@@ -411,10 +411,10 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'park',
-    name: '公園',
+    name: '',
     category: 'city',
     elements: [
-      // 空
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 0.4,
@@ -423,14 +423,14 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#87CEEB', '#98FB98'],
         gradientDirection: 180
       },
-      // 芝生
+      // 
       {
         type: 'solid',
         x: 0, y: 0.4, width: 1, height: 0.6,
         rotation: 0, zIndex: 1, opacity: 1,
         solidColor: '#90EE90'
       },
-      // 木のシルエット（ドットパターン）
+      // Wooden silhouette (dot pattern)
       {
         type: 'pattern',
         x: 0.1, y: 0.2, width: 0.8, height: 0.4,
@@ -440,7 +440,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         patternSize: 15,
         patternSpacing: 50
       },
-      // 草のテクスチャ
+      // 
       {
         type: 'pattern',
         x: 0, y: 0.7, width: 1, height: 0.3,
@@ -454,11 +454,11 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
 
   // ==========================================
-  // 抽象系背景（シンプル維持）
+  // Abstract background (keep it simple)
   // ==========================================
   {
     id: 'white',
-    name: '白背景',
+    name: '',
     category: 'abstract',
     elements: [{
       type: 'solid',
@@ -469,7 +469,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'black',
-    name: '黒背景',
+    name: '',
     category: 'abstract',
     elements: [{
       type: 'solid',
@@ -480,14 +480,14 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
 
   // ==========================================
-  // 感情系背景（効果的な表現）
+  // Emotional Background (Effective Expression)
   // ==========================================
   {
     id: 'happy',
-    name: '明るい',
+    name: '',
     category: 'emotion',
     elements: [
-      // 放射状グラデーション
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 1,
@@ -496,7 +496,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#FFD700', '#FFF8DC'],
         gradientDirection: 0
       },
-      // 輝きパターン
+      // 
       {
         type: 'pattern',
         x: 0, y: 0, width: 1, height: 1,
@@ -519,10 +519,10 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'sad',
-    name: '暗い',
+    name: '',
     category: 'emotion',
     elements: [
-      // 暗いグラデーション
+      // 
       {
         type: 'gradient',
         x: 0, y: 0, width: 1, height: 1,
@@ -531,7 +531,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
         gradientColors: ['#2F4F4F', '#708090'],
         gradientDirection: 180
       },
-      // 雨のような線パターン
+      // 
       {
         type: 'pattern',
         x: 0, y: 0, width: 1, height: 1,
@@ -545,11 +545,11 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   
   // ==========================================
-  // 🏠 場所・環境系背景（漫画ネーム用）
+  // 🏠 Location/environment background (for comic names)
   // ==========================================
   {
     id: 'home',
-    name: '家',
+    name: '',
     category: 'indoor',
     elements: [
       {
@@ -564,7 +564,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'school',
-    name: '学校',
+    name: '',
     category: 'school',
     elements: [
       {
@@ -577,7 +577,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'office',
-    name: 'オフィス',
+    name: '',
     category: 'indoor',
     elements: [
       {
@@ -592,7 +592,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'hospital',
-    name: '病院',
+    name: '',
     category: 'indoor',
     elements: [
       {
@@ -605,7 +605,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'park',
-    name: '公園',
+    name: '',
     category: 'nature',
     elements: [
       {
@@ -619,7 +619,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'city',
-    name: '街',
+    name: '',
     category: 'city',
     elements: [
       {
@@ -634,7 +634,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'beach',
-    name: '海',
+    name: '',
     category: 'nature',
     elements: [
       {
@@ -649,7 +649,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'mountain',
-    name: '山',
+    name: '',
     category: 'nature',
     elements: [
       {
@@ -664,11 +664,11 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   
   // ==========================================
-  // ⏰ 時間帯・天候系背景（漫画ネーム用）
+  // ⏰ Time zone/weather background (for comic names)
   // ==========================================
   {
     id: 'morning',
-    name: '朝',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -683,7 +683,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'afternoon',
-    name: '午後',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -697,7 +697,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'evening',
-    name: '夕方',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -712,7 +712,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'night',
-    name: '夜',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -727,7 +727,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'rainy',
-    name: '雨',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -742,7 +742,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'cloudy',
-    name: '曇り',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -755,7 +755,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'snowy',
-    name: '雪',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -770,11 +770,11 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   
   // ==========================================
-  // 💫 感情・ムード系背景（漫画ネーム用）
+  // 💫 Emotional/mood-based background (for comic names)
   // ==========================================
   {
     id: 'tension',
-    name: '緊張感',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -789,7 +789,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'anxiety',
-    name: '不安',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -803,7 +803,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'excitement',
-    name: '興奮',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -818,7 +818,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'romantic',
-    name: 'ロマンチック',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -832,7 +832,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'nostalgic',
-    name: 'ノスタルジック',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -847,11 +847,11 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   
   // ==========================================
-  // ✨ 特殊効果系背景（漫画ネーム用）
+  // ✨ Special Effects Background (for Comic Names)
   // ==========================================
   {
     id: 'flash',
-    name: 'フラッシュ',
+    name: '',
     category: 'abstract',
     elements: [
       {
@@ -865,7 +865,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'explosion',
-    name: '爆発',
+    name: '',
     category: 'abstract',
     elements: [
       {
@@ -879,7 +879,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'magic',
-    name: '魔法',
+    name: '',
     category: 'abstract',
     elements: [
       {
@@ -894,7 +894,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'memory',
-    name: '回想',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -909,7 +909,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'dream',
-    name: '夢',
+    name: '',
     category: 'emotion',
     elements: [
       {
@@ -923,11 +923,11 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   
   // ==========================================
-  // 🚗 交通機関系背景（漫画ネーム用）
+  // 🚗 Transportation background (for comic names)
   // ==========================================
   {
     id: 'train',
-    name: '電車',
+    name: '',
     category: 'city',
     elements: [
       {
@@ -942,7 +942,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'car',
-    name: '車',
+    name: '',
     category: 'city',
     elements: [
       {
@@ -957,7 +957,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   },
   {
     id: 'bus',
-    name: 'バス',
+    name: '',
     category: 'city',
     elements: [
       {
@@ -970,7 +970,7 @@ export const backgroundTemplates: BackgroundTemplate[] = [
   }
 ];
 
-// 既存の関数は維持
+// 
 export const getBackgroundsByCategory = (category: string): BackgroundTemplate[] => {
   return backgroundTemplates.filter(template => template.category === category);
 };
@@ -1001,10 +1001,10 @@ export const getBackgroundTypeIcon = (type: string): string => {
 
 export const getBackgroundTypeName = (type: string): string => {
   switch (type) {
-    case 'solid': return '単色';
-    case 'gradient': return 'グラデーション';
-    case 'pattern': return 'パターン';
-    case 'image': return '画像';
-    default: return '不明';
+    case 'solid': return '';
+    case 'gradient': return '';
+    case 'pattern': return '';
+    case 'image': return '';
+    default: return '';
   }
 };

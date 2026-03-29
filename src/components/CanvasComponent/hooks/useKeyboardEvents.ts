@@ -15,8 +15,8 @@ export interface KeyboardEventHookProps {
 }
 
 /**
- * キーボードイベント処理を管理するカスタムhook
- * ショートカットキーの処理を一元化
+ * Custom to manage keyboard event processinghook
+ * Centralize shortcut key processing
  */
 export const useKeyboardEvents = ({
   state,
@@ -29,47 +29,47 @@ export const useKeyboardEvents = ({
 }: KeyboardEventHookProps) => {
 
   /**
-   * キーボードイベントハンドラー
+   * Keyboard Event Handler
    */
   const handleKeyDown = (e: KeyboardEvent) => {
-    // コピー操作 (Ctrl+C)
+    //  (Ctrl+C)
     if (e.ctrlKey && e.key === 'c') {
       e.preventDefault();
       if (state.selectedPanel) {
         contextMenuActions.onCopyToClipboard('panel', state.selectedPanel);
-        console.log("📋 パネルをクリップボードにコピー");
+        console.log("📋 Copy panel to clipboard");
       } else if (state.selectedCharacter) {
         contextMenuActions.onCopyToClipboard('character', state.selectedCharacter);
-        console.log("📋 キャラクターをクリップボードにコピー");
+        console.log("📋 Copy character to clipboard");
       } else if (state.selectedBubble) {
         contextMenuActions.onCopyToClipboard('bubble', state.selectedBubble);
-        console.log("📋 吹き出しをクリップボードにコピー");
+        console.log("📋 Copy callout to clipboard");
       }
     }
     
-    // ペースト操作 (Ctrl+V)
+    //  (Ctrl+V)
     if (e.ctrlKey && e.key === 'v') {
       e.preventDefault();
       contextMenuActions.onPasteFromClipboard();
-      console.log("📌 クリップボードからペースト");
+      console.log("📌 ");
     }
     
-    // 削除操作 (Delete / Backspace) - 吹き出し編集中は完全無効化
+    //  (Delete / Backspace) - 
     if ((e.key === 'Delete' || e.key === 'Backspace') && !state.editingBubble) {
       e.preventDefault();
       if (state.selectedPanel) {
         contextMenuActions.onDeletePanel(state.selectedPanel);
-        // コンソールログは無効化
+        // 
       } else if (state.selectedCharacter) {
         contextMenuActions.onDeleteElement('character', state.selectedCharacter);
-        // コンソールログは無効化
+        // 
       } else if (state.selectedBubble) {
         contextMenuActions.onDeleteElement('bubble', state.selectedBubble);
-        // コンソールログは無効化
+        // 
       }
     }
 
-    // 選択解除・クリップボードクリア (Escape)
+    // Deselect Clipboard Clear (Escape)
     if (e.key === 'Escape') {
       e.preventDefault();
       actions.setSelectedPanel(null);
@@ -78,34 +78,34 @@ export const useKeyboardEvents = ({
       setClipboard(null);
       if (onPanelSelect) onPanelSelect(null);
       if (onCharacterSelect) onCharacterSelect(null);
-      console.log("❌ すべての選択を解除・クリップボードクリア");
+      console.log("❌ Deselect all · Clear clipboard");
     }
 
-    // 全選択 (Ctrl+A) - 将来的な拡張用
+    //  (Ctrl+A) - 
     if (e.ctrlKey && e.key === 'a') {
       e.preventDefault();
-      // 全選択機能は将来実装予定
-      console.log("🔄 全選択（未実装）");
+      // 
+      console.log("🔄 ");
     }
 
-    // アンドゥ (Ctrl+Z) - 将来的な拡張用
+    //  (Ctrl+Z) - 
     if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
       e.preventDefault();
-      // アンドゥ機能は将来実装予定
-      console.log("↶ アンドゥ（未実装）");
+      // 
+      console.log("↶ ");
     }
 
-    // リドゥ (Ctrl+Shift+Z または Ctrl+Y) - 将来的な拡張用
+    //  (Ctrl+Shift+Z  Ctrl+Y) - 
     if ((e.ctrlKey && e.shiftKey && e.key === 'Z') || (e.ctrlKey && e.key === 'y')) {
       e.preventDefault();
-      // リドゥ機能は将来実装予定
-      console.log("↷ リドゥ（未実装）");
+      // 
+      console.log("↷ ");
     }
 
-    // デバッグ用：現在の状態を出力 (Ctrl+Shift+D)
+    // For debugging: outputs the current state (Ctrl+Shift+D)
     if (e.ctrlKey && e.shiftKey && e.key === 'D') {
       e.preventDefault();
-      console.log("🔍 デバッグ情報:", {
+      console.log("🔍 :", {
         selectedPanel: state.selectedPanel?.id,
         selectedCharacter: state.selectedCharacter?.name,
         selectedBubble: state.selectedBubble?.text,
@@ -117,7 +117,7 @@ export const useKeyboardEvents = ({
   };
 
   /**
-   * useEffectでイベントリスナーを登録・解除
+   * useEffectRegister/Unregister Event Listeners in
    */
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -129,11 +129,11 @@ export const useKeyboardEvents = ({
     state.selectedPanel, 
     state.selectedCharacter, 
     state.selectedBubble, 
-    state.editingBubble, // 🆕 吹き出し編集状態を監視
+    state.editingBubble, // 🆕 
     clipboard,
-    // その他の依存関係は関数内で参照されているため含める
+    // Include other dependencies because they are referenced in the function
   ]);
 
-  // このhookはイベントハンドラーのみ提供し、戻り値は不要
+  // hookprovides only event handlers and does not require a return value
   return null;
 };

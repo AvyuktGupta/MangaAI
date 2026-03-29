@@ -8,7 +8,7 @@ interface EffectRendererProps {
 }
 
 const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale }) => {
-  // スピード線を描画
+  // 
   const renderSpeedLines = (effect: EffectElement) => {
     const lines = [];
     const lineCount = Math.floor(effect.density * 50);
@@ -18,19 +18,19 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
       let x1, y1, x2, y2;
       
       if (effect.direction === 'horizontal') {
-        // 水平線
+        // 
         y1 = effect.y + (Math.random() * effect.height);
         x1 = effect.x + (Math.random() * (effect.width - lineLength));
         x2 = x1 + lineLength;
         y2 = y1;
       } else if (effect.direction === 'vertical') {
-        // 垂直線
+        // 
         x1 = effect.x + (Math.random() * effect.width);
         y1 = effect.y + (Math.random() * (effect.height - lineLength));
         x2 = x1;
         y2 = y1 + lineLength;
       } else {
-        // カスタム角度
+        // 
         const centerX = effect.x + effect.width / 2;
         const centerY = effect.y + effect.height / 2;
         const randomX = effect.x + (Math.random() * effect.width);
@@ -67,7 +67,7 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
     return lines;
   };
 
-  // 集中線・爆発線・フラッシュ線を描画（放射状）
+  // Draw concentrated, explosive, and flash lines (radial)
   const renderRadialLines = (effect: EffectElement) => {
     const lines = [];
     const lineCount = Math.floor(effect.density * 60);
@@ -86,13 +86,13 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
       
       let strokeWidth;
       if (effect.type === 'focus') {
-        // 集中線：中心が太く外側が細い
+        // Concentration line: thick center and thin outside
         strokeWidth = Math.max(0.3, effect.intensity * 2 * canvasScale * (1 - length / (maxRadius * effect.length)));
       } else if (effect.type === 'explosion') {
-        // 爆発線：均一で太い
+        // 
         strokeWidth = Math.max(0.5, effect.intensity * 4 * canvasScale);
       } else {
-        // フラッシュ線：細くて繊細
+        // 
         strokeWidth = Math.max(0.2, effect.intensity * 1.5 * canvasScale);
       }
       
@@ -116,25 +116,25 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
     return lines;
   };
 
-  // 選択ハンドルを描画
+  // 
   const renderSelectionHandles = (effect: EffectElement) => {
     if (!effect.selected) return null;
     
     const handleSize = 8 / canvasScale;
     const handles = [
-      { x: effect.x, y: effect.y }, // 左上
-      { x: effect.x + effect.width, y: effect.y }, // 右上
-      { x: effect.x + effect.width, y: effect.y + effect.height }, // 右下
-      { x: effect.x, y: effect.y + effect.height }, // 左下
-      { x: effect.x + effect.width / 2, y: effect.y }, // 上中央
-      { x: effect.x + effect.width, y: effect.y + effect.height / 2 }, // 右中央
-      { x: effect.x + effect.width / 2, y: effect.y + effect.height }, // 下中央
-      { x: effect.x, y: effect.y + effect.height / 2 }, // 左中央
+      { x: effect.x, y: effect.y }, // 
+      { x: effect.x + effect.width, y: effect.y }, // 
+      { x: effect.x + effect.width, y: effect.y + effect.height }, // 
+      { x: effect.x, y: effect.y + effect.height }, // 
+      { x: effect.x + effect.width / 2, y: effect.y }, // 
+      { x: effect.x + effect.width, y: effect.y + effect.height / 2 }, // 
+      { x: effect.x + effect.width / 2, y: effect.y + effect.height }, // 
+      { x: effect.x, y: effect.y + effect.height / 2 }, // 
     ];
     
     return (
       <g>
-        {/* 選択枠 */}
+        {/*  */}
         <rect
           x={effect.x}
           y={effect.y}
@@ -147,7 +147,7 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
           opacity={0.8}
         />
         
-        {/* 中心点（放射状効果用） */}
+        {/*  */}
         {effect.direction === 'radial' && (
           <circle
             cx={effect.centerX || (effect.x + effect.width / 2)}
@@ -159,7 +159,7 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
           />
         )}
         
-        {/* リサイズハンドル */}
+        {/*  */}
         {handles.map((handle, index) => (
           <rect
             key={`handle-${index}`}
@@ -181,7 +181,7 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
     <g className="effect-layer">
       {effects.map((effect) => (
         <g key={effect.id} className="effect-element">
-          {/* 効果線本体の描画 */}
+          {/*  */}
           {effect.direction === 'radial' ? (
             <g className="radial-effect">
               {renderRadialLines(effect)}
@@ -192,7 +192,7 @@ const EffectRenderer: React.FC<EffectRendererProps> = ({ effects, canvasScale })
             </g>
           )}
           
-          {/* 選択ハンドル */}
+          {/*  */}
           {renderSelectionHandles(effect)}
         </g>
       ))}

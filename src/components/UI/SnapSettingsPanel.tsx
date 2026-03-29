@@ -79,7 +79,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
           boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
         }}
       >
-        {/* ヘッダー */}
+        {/*  */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -92,7 +92,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
             fontWeight: 'bold',
             color: 'var(--text-primary)'
           }}>
-            ⚙️ スナップ設定
+            ⚙️ 
           </h2>
           <button
             onClick={onClose}
@@ -109,10 +109,10 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
           </button>
         </div>
 
-        {/* スナップ設定内容 */}
+        {/*  */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
-          {/* スナップ機能のON/OFF */}
+          {/* ON/OFF */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -124,10 +124,10 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
           }}>
             <div>
               <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
-                ✅ スナップ機能
+                ✅ 
               </h3>
               <p style={{ margin: 0, fontSize: '12px', opacity: 0.7 }}>
-                要素をグリッドに合わせて配置します
+                Align elements to grid
               </p>
             </div>
             <button
@@ -148,11 +148,11 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
             </button>
           </div>
 
-          {/* スナップ設定（ON時のみ表示） */}
+          {/* ON */}
           {snapSettings.enabled && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               
-              {/* グリッドサイズ */}
+              {/*  */}
               <div>
                 <label style={{ 
                   display: 'block', 
@@ -160,7 +160,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                   fontSize: '14px', 
                   fontWeight: '600' 
                 }}>
-                  📏 グリッドサイズ
+                  📏 
                 </label>
                 <select 
                   value={snapSettings.gridSize}
@@ -175,13 +175,13 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                     fontSize: '14px'
                   }}
                 >
-                  <option value={10}>10px - 細かいグリッド</option>
-                  <option value={20}>20px - 標準グリッド</option>
-                  <option value={40}>40px - 粗いグリッド</option>
+                  <option value={10}>10px - </option>
+                  <option value={20}>20px - </option>
+                  <option value={40}>40px - </option>
                 </select>
               </div>
 
-              {/* スナップ感度 */}
+              {/*  */}
               <div>
                 <label style={{ 
                   display: 'block', 
@@ -189,7 +189,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                   fontSize: '14px', 
                   fontWeight: '600' 
                 }}>
-                  🎯 スナップ感度
+                  🎯 
                 </label>
                 <select 
                   value={snapSettings.sensitivity}
@@ -204,13 +204,13 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                     fontSize: '14px'
                   }}
                 >
-                  <option value="weak">弱 - スナップしにくい</option>
-                  <option value="medium">中 - 標準感度</option>
-                  <option value="strong">強 - スナップしやすい</option>
+                  <option value="weak"> - </option>
+                  <option value="medium"> - </option>
+                  <option value="strong"> - </option>
                 </select>
               </div>
 
-              {/* グリッド表示 */}
+              {/*  */}
               <div>
                 <label style={{ 
                   display: 'block', 
@@ -218,7 +218,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                   fontSize: '14px', 
                   fontWeight: '600' 
                 }}>
-                  📐 グリッド表示
+                  📐 
                 </label>
                 <select 
                   value={snapSettings.gridDisplay}
@@ -233,13 +233,13 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                     fontSize: '14px'
                   }}
                 >
-                  <option value="always">常時表示 - 常にグリッドを表示</option>
-                  <option value="edit-only">編集時のみ - 要素を移動中のみ表示</option>
-                  <option value="hidden">非表示 - グリッドを表示しない</option>
+                  <option value="always"> - </option>
+                  <option value="edit-only"> - </option>
+                  <option value="hidden"> - </option>
                 </select>
               </div>
 
-              {/* 現在の設定プレビュー */}
+              {/*  */}
               <div style={{
                 padding: '12px',
                 background: 'var(--bg-tertiary)',
@@ -247,15 +247,15 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
                 border: '1px solid var(--border-color)'
               }}>
                 <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: '600' }}>
-                  📊 現在の設定
+                  📊 
                 </h4>
                 <div style={{ fontSize: '12px', opacity: 0.8 }}>
-                  <div>グリッドサイズ: {snapSettings.gridSize}px</div>
-                  <div>スナップ感度: {snapSettings.sensitivity === 'weak' ? '弱' : snapSettings.sensitivity === 'medium' ? '中' : '強'}</div>
-                  <div>グリッド表示: {
-                    snapSettings.gridDisplay === 'always' ? '常時' : 
-                    snapSettings.gridDisplay === 'edit-only' ? '編集時のみ' : 
-                    '非表示'
+                  <div>: {snapSettings.gridSize}px</div>
+                  <div>: {snapSettings.sensitivity === 'weak' ? '' : snapSettings.sensitivity === 'medium' ? '' : ''}</div>
+                  <div>: {
+                    snapSettings.gridDisplay === 'always' ? '' : 
+                    snapSettings.gridDisplay === 'edit-only' ? '' : 
+                    ''
                   }</div>
                 </div>
               </div>
@@ -263,7 +263,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
           )}
         </div>
 
-        {/* フッター */}
+        {/*  */}
         <div style={{ 
           marginTop: '24px', 
           paddingTop: '16px', 
@@ -283,7 +283,7 @@ const SnapSettingsPanel: React.FC<SnapSettingsPanelProps> = ({
               cursor: 'pointer'
             }}
           >
-            閉じる
+            
           </button>
         </div>
       </div>

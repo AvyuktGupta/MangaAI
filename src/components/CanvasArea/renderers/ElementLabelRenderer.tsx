@@ -1,4 +1,4 @@
-// ElementLabelRenderer.tsx - 要素ラベル表示コンポーネント（types.ts対応版）
+// ElementLabelRenderer.tsx - Element Label Display Component (types.ts
 import React from 'react';
 import { BackgroundElement, EffectElement, ToneElement, Panel } from '../../../types';
 
@@ -17,106 +17,106 @@ const ElementLabelRenderer: React.FC<ElementLabelRendererProps> = ({
   panels,
   canvasScale
 }) => {
-  // パネル情報取得ヘルパー
+  // 
   const getPanel = (panelId: number) => panels.find(p => p.id === panelId);
 
-  // 背景タイプの日本語名取得（ユーザーフレンドリー版）
+  // Get a Japanese name for the background type (user-friendly version)
   const getBackgroundLabel = (bg: BackgroundElement): string => {
-    console.log(`🎨 背景ラベル取得:`, {
+    console.log(`🎨 :`, {
       name: bg.name,
       templateName: bg.templateName,
       preset: bg.preset,
       type: bg.type
     });
     
-    // 手動背景と同じようにnameプロパティを最優先
+    // name
     if (bg.name) {
-      console.log(`✅ name使用: ${bg.name}`);
+      console.log(`✅ name: ${bg.name}`);
       return bg.name;
     }
     
-    // 統合テンプレートから生成された背景の場合、背景テンプレート名を表示
+    // Displays the background template name for backgrounds generated from the integration template
     if (bg.templateName) {
-      console.log(`✅ templateName使用: ${bg.templateName}`);
+      console.log(`✅ templateName: ${bg.templateName}`);
       return bg.templateName;
     }
     
-    // 背景プリセット名がある場合はそれを使用
+    // Use background preset name if any
     if (bg.preset) {
-      console.log(`✅ preset使用: ${bg.preset}`);
+      console.log(`✅ preset: ${bg.preset}`);
       const presetNames: { [key: string]: string } = {
-        'excitement': '興奮',
-        'cloudy': '曇り',
-        'tension': '緊張',
-        'city': '街',
-        'explosion': '爆発',
-        'flash': 'フラッシュ',
-        'night': '夜',
-        'home': '家',
-        'school': '学校',
-        'office': 'オフィス',
-        'hospital': '病院',
-        'park': '公園',
-        'beach': '海',
-        'mountain': '山',
-        'morning': '朝',
-        'afternoon': '午後',
-        'evening': '夕方',
-        'rainy': '雨',
-        'snowy': '雪',
-        'anxiety': '不安',
-        'romantic': 'ロマンチック',
-        'nostalgic': 'ノスタルジック',
-        'memory': '回想',
-        'dream': '夢',
-        'train': '電車',
-        'car': '車',
-        'bus': 'バス',
-        'neutral': 'ニュートラル',
-        'calm': '穏やか',
-        'happy': '喜び',
-        'sad': '悲しみ',
-        'angry': '怒り',
-        'speed': 'スピード',
-        'impact': '衝撃',
-        'determination': '決意',
-        'idea': 'ひらめき',
-        'tired': '疲れ',
-        'effort': '努力'
+        'excitement': '',
+        'cloudy': '',
+        'tension': '',
+        'city': '',
+        'explosion': '',
+        'flash': '',
+        'night': '',
+        'home': '',
+        'school': '',
+        'office': '',
+        'hospital': '',
+        'park': '',
+        'beach': '',
+        'mountain': '',
+        'morning': '',
+        'afternoon': '',
+        'evening': '',
+        'rainy': '',
+        'snowy': '',
+        'anxiety': '',
+        'romantic': '',
+        'nostalgic': '',
+        'memory': '',
+        'dream': '',
+        'train': '',
+        'car': '',
+        'bus': '',
+        'neutral': '',
+        'calm': '',
+        'happy': '',
+        'sad': '',
+        'angry': '',
+        'speed': '',
+        'impact': '',
+        'determination': '',
+        'idea': '',
+        'tired': '',
+        'effort': ''
       };
       return presetNames[bg.preset] || bg.preset;
     }
     
-    // フォールバック: 技術的な表示
-    console.log(`⚠️ フォールバック使用: type=${bg.type}`);
+    // : 
+    console.log(`⚠️ : type=${bg.type}`);
     switch (bg.type) {
       case 'solid':
-        return `単色背景`;
+        return ``;
       case 'gradient':
-        return `グラデーション背景`;
+        return ``;
       case 'pattern':
-        return `パターン背景`;
+        return ``;
       case 'image':
-        return `画像背景`;
+        return ``;
       default:
-        return '背景';
+        return '';
     }
   };
 
-  // 効果線タイプの日本語名取得（types.tsに基づく）
+  // Obtained the Japanese name of the effect line type (types.ts
   const getEffectLabel = (effect: EffectElement): string => {
     const typeNames = {
-      'speed': 'スピード線',
-      'focus': '集中線',
-      'explosion': '爆発線',
-      'flash': 'フラッシュ線'
+      'speed': '',
+      'focus': '',
+      'explosion': '',
+      'flash': ''
     };
     
     const directionNames = {
-      'horizontal': '水平',
-      'vertical': '垂直',
-      'radial': '放射状',
-      'custom': 'カスタム'
+      'horizontal': '',
+      'vertical': '',
+      'radial': '',
+      'custom': ''
     };
     
     const typeName = typeNames[effect.type] || effect.type;
@@ -125,44 +125,44 @@ const ElementLabelRenderer: React.FC<ElementLabelRendererProps> = ({
     return `${typeName} (${directionName})`;
   };
 
-  // トーンパターンの日本語名取得（types.tsに基づく）
+  // Acquisition of the Japanese name of the tone pattern (types.ts
   const getToneLabel = (tone: ToneElement): string => {
     const patternNames = {
-      // 網点系
-      'dots_60': 'ドット60%',
-      'dots_85': 'ドット85%',
-      'dots_100': 'ドット100%',
-      'dots_120': 'ドット120%',
-      'dots_150': 'ドット150%',
-      // 線系
-      'lines_horizontal': '水平線',
-      'lines_vertical': '垂直線',
-      'lines_diagonal': '斜線',
-      'lines_cross': 'クロス線',
-      // グラデーション系
-      'gradient_linear': '線形グラデーション',
-      'gradient_radial': '放射状グラデーション',
-      'gradient_diamond': 'ダイヤモンドグラデーション',
-      // ノイズ系
-      'noise_fine': '細かいノイズ',
-      'noise_coarse': '粗いノイズ',
-      'noise_grain': 'グレインノイズ',
-      // 特殊効果
-      'speed_lines': 'スピードライン',
-      'focus_lines': 'フォーカスライン',
-      'explosion': '爆発'
+      // 
+      'dots_60': '60%',
+      'dots_85': '85%',
+      'dots_100': '100%',
+      'dots_120': '120%',
+      'dots_150': '150%',
+      // 
+      'lines_horizontal': '',
+      'lines_vertical': '',
+      'lines_diagonal': '',
+      'lines_cross': '',
+      // 
+      'gradient_linear': '',
+      'gradient_radial': '',
+      'gradient_diamond': '',
+      // 
+      'noise_fine': '',
+      'noise_coarse': '',
+      'noise_grain': '',
+      // 
+      'speed_lines': '',
+      'focus_lines': '',
+      'explosion': ''
     };
     
     const patternName = patternNames[tone.pattern] || tone.pattern;
-    return `${patternName}トーン`;
+    return `${patternName}`;
   };
 
-  // 座標変換ヘルパー（相対座標→絶対座標）
+  // →
   const getAbsolutePosition = (element: BackgroundElement | EffectElement | ToneElement) => {
     const panel = getPanel(element.panelId);
     if (!panel) return { x: element.x, y: element.y, width: element.width, height: element.height };
 
-    // 相対座標（0-1）の場合はパネル内絶対座標に変換
+    // 0-1) is converted to the absolute coordinates in the panel
     if (element.x <= 1 && element.y <= 1) {
       return {
         x: panel.x + (element.x * panel.width),
@@ -172,13 +172,13 @@ const ElementLabelRenderer: React.FC<ElementLabelRendererProps> = ({
       };
     }
     
-    // 既に絶対座標の場合はそのまま
+    // If it is already absolute coordinates, leave it as it is.
     return { x: element.x, y: element.y, width: element.width, height: element.height };
   };
 
   return (
     <g className="element-labels">
-      {/* 背景ラベル */}
+      {/*  */}
       {backgrounds.map((bg, index) => {
         const pos = getAbsolutePosition(bg);
         return (
@@ -208,7 +208,7 @@ const ElementLabelRenderer: React.FC<ElementLabelRendererProps> = ({
         );
       })}
 
-      {/* 効果線ラベル */}
+      {/*  */}
       {effects.map((effect, index) => {
         const pos = getAbsolutePosition(effect);
         return (
@@ -238,7 +238,7 @@ const ElementLabelRenderer: React.FC<ElementLabelRendererProps> = ({
         );
       })}
 
-      {/* トーンラベル */}
+      {/*  */}
       {tones.filter(tone => tone.visible !== false).map((tone, index) => {
         const pos = getAbsolutePosition(tone);
         return (

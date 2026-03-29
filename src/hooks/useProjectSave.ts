@@ -1,9 +1,9 @@
-// src/hooks/useProjectSave.ts - App.tsx互換性保持版
+// src/hooks/useProjectSave.ts - App.tsx
 import { useEffect, useRef, useCallback, useState } from 'react';
 import SaveService from '../services/SaveService';
 import { Panel, Character, SpeechBubble, BackgroundElement, EffectElement, ToneElement, DEFAULT_CANVAS_SETTINGS } from '../types';
 
-// 🔧 App.tsxの期待する戻り値型に合わせる
+// 🔧 App.tsxFit to expected return type of
 interface UseProjectSaveReturn {
   saveProject: (projectData: any, projectName?: string) => Promise<string | boolean>;
   loadProject: (projectKey?: string) => any | null;
@@ -13,7 +13,7 @@ interface UseProjectSaveReturn {
   isSaving: boolean;
   lastSaved: Date | null;
   
-  // 🆕 App.tsxが期待するプロパティを追加
+  // 🆕 App.tsx
   hasUnsavedChanges: boolean;
   isAutoSaving: boolean;
   currentProjectId: string | null;
@@ -28,7 +28,7 @@ interface UseProjectSaveReturn {
   checkForChanges: (currentData: any) => void;
 }
 
-// 🔧 引数なしで呼び出し可能にする
+// 🔧 Make it callable without arguments
 export const useProjectSave = (): UseProjectSaveReturn => {
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [currentProjectName, setCurrentProjectName] = useState<string | null>(null);
@@ -39,7 +39,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // プロジェクト保存（SaveService使用版）
+  // SaveService
   const saveProject = useCallback(async (
     projectData: any,
     projectName: string = 'untitled'
@@ -49,7 +49,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
     
     try {
 
-      // 🆕 SaveService.ts を使用して保存
+      // 🆕 SaveService.ts 
       const projectId = SaveService.saveProject(
         projectName,                                    // name
         projectData.panels || [],                       // panels
@@ -71,7 +71,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
       setCurrentProjectId(projectId);
       setCurrentProjectName(projectName);
       
-      // SaveServiceから実際の保存時刻を取得
+      // SaveService
       const savedProject = SaveService.loadProject(projectId);
       if (savedProject) {
         setLastSaved(new Date(savedProject.updatedAt));
@@ -84,36 +84,36 @@ export const useProjectSave = (): UseProjectSaveReturn => {
       
       return projectId;
     } catch (error) {
-      console.error('❌ プロジェクト保存エラー:', error);
-      setError(error instanceof Error ? error.message : '保存に失敗しました');
+      console.error('❌ :', error);
+      setError(error instanceof Error ? error.message : '');
       return false;
     } finally {
       setIsSaving(false);
     }
   }, [currentProjectId]);
 
-  // プロジェクト読み込み（SaveService使用版 + デバッグ強化）
+  // SaveService + 
   const loadProject = useCallback((projectKey?: string): any | null => {
     try {
-      console.log('📂 プロジェクト読み込み開始 - projectKey:', projectKey);
+      console.log('📂  - projectKey:', projectKey);
       
       const projectId = projectKey || SaveService.getCurrentProjectId();
-      console.log('🆔 使用するプロジェクトID:', projectId);
+      console.log('🆔 ID:', projectId);
       
       if (!projectId) {
-        console.log('❌ プロジェクトIDがありません');
+        console.log('❌ ID');
         return null;
       }
 
       const projectData = SaveService.loadProject(projectId);
-      console.log('📊 SaveServiceから取得したデータ:', projectData ? 'データあり' : 'データなし');
+      console.log('📊 SaveService:', projectData ? '' : '');
       
       if (!projectData) {
-        console.log('❌ プロジェクトデータが見つかりません');
+        console.log('❌ Project data not found');
         return null;
       }
       
-      console.log('📋 プロジェクトデータ構造:', {
+      console.log('📋 :', {
         id: projectData.id,
         name: projectData.name,
         dataKeys: Object.keys(projectData.data),
@@ -121,7 +121,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
         charactersCount: projectData.data.characters?.length || 0
       });
 
-      // 🔧 App.tsxが期待する形式でデータを返す（data.プロパティではなく直接プロパティ）
+      // 🔧 App.tsxreturns data in the format expected by (data.Direct properties, not properties)
       const loadedData = {
         panels: projectData.data.panels || [],
         characters: projectData.data.characters || [],
@@ -135,7 +135,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
         characterSettings: projectData.data.characterSettings || {},
         pages: projectData.data.pages,
         currentPageIndex: projectData.data.currentPageIndex,
-        canvasSettings: projectData.data.canvasSettings || DEFAULT_CANVAS_SETTINGS  // この1行を追加
+        canvasSettings: projectData.data.canvasSettings || DEFAULT_CANVAS_SETTINGS  // 1
       };
 
 
@@ -147,16 +147,16 @@ export const useProjectSave = (): UseProjectSaveReturn => {
 
       return loadedData;
     } catch (error) {
-      console.error('❌ プロジェクト読み込みエラー:', error);
-      setError(error instanceof Error ? error.message : '読み込みに失敗しました');
+      console.error('❌ :', error);
+      setError(error instanceof Error ? error.message : '');
       return null;
     }
   }, []);
 
-  // プロジェクト名がない場合はcurrentProjectIdをクリア
+  // currentProjectId
   useEffect(() => {
     if (currentProjectId && (currentProjectName === null || currentProjectName === '')) {
-      // プロジェクトは存在するが名前がない場合は、そのプロジェクトを削除して新規状態に戻す
+      // If the project exists but has no name, delete the project and revert to a new state
       localStorage.removeItem('name_tool_current_project');
       setCurrentProjectId(null);
       setCurrentProjectName(null);
@@ -164,7 +164,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
     }
   }, [currentProjectId, currentProjectName]);
 
-  // 自動保存
+  // 
   const autoSave = useCallback(async (projectData: any): Promise<void> => {
     if (isAutoSaving) return;
     
@@ -178,15 +178,15 @@ export const useProjectSave = (): UseProjectSaveReturn => {
       };
       
       localStorage.setItem(autoSaveKey, JSON.stringify(autoSaveData));
-      console.log('💾 自動保存完了');
+      console.log('💾 ');
     } catch (error) {
-      console.error('❌ 自動保存エラー:', error);
+      console.error('❌ :', error);
     } finally {
       setIsAutoSaving(false);
     }
   }, [isAutoSaving]);
 
-  // プロジェクト一覧取得（SaveService使用版）
+  // SaveService
   const getProjectList = useCallback((): Array<{key: string, name: string, timestamp: string}> => {
     try {
       const projects = SaveService.getProjectList();
@@ -196,12 +196,12 @@ export const useProjectSave = (): UseProjectSaveReturn => {
         timestamp: project.updatedAt
       }));
     } catch (error) {
-      console.error('❌ プロジェクト一覧取得エラー:', error);
+      console.error('❌ :', error);
       return [];
     }
   }, []);
 
-  // プロジェクト削除（SaveService使用版）
+  // SaveService
   const deleteProject = useCallback((projectKey: string): boolean => {
     try {
       const result = SaveService.deleteProject(projectKey);
@@ -212,21 +212,21 @@ export const useProjectSave = (): UseProjectSaveReturn => {
       }
       return result;
     } catch (error) {
-      console.error('❌ プロジェクト削除エラー:', error);
+      console.error('❌ :', error);
       return false;
     }
   }, [currentProjectId]);
 
-  // 新規プロジェクト
+  // 
   const newProject = useCallback(() => {
     setCurrentProjectId(null);
     setLastSaved(null);
     setHasUnsavedChanges(false);
     setError(null);
-    console.log('📄 新規プロジェクト作成');
+    console.log('📄 ');
   }, []);
 
-  // 初期化（SaveService使用版）
+  // SaveService
   useEffect(() => {
     const currentId = SaveService.getCurrentProjectId();
     if (currentId) {
@@ -238,7 +238,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
     }
   }, []);
 
-  // saveStatus オブジェクト
+  // saveStatus 
   const saveStatus = {
     isAutoSaving,
     lastSaved,
@@ -246,7 +246,7 @@ export const useProjectSave = (): UseProjectSaveReturn => {
     error
   };
 
-  // 変更検知用の関数を追加
+  // 
   const checkForChanges = useCallback((currentData: any) => {
     const currentDataString = JSON.stringify(currentData);
     const hasChanges = currentDataString !== lastSavedData;

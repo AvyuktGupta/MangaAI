@@ -10,7 +10,7 @@ import {
 } from '../types';
 
 /**
- * スケール変換の計算
+ * 
  */
 export interface ScaleTransform {
   scaleX: number;
@@ -26,7 +26,7 @@ export const calculateScaleTransform = (
 });
 
 /**
- * パネル専用のスケール変換
+ * 
  */
 export const scalePanel = (panel: Panel, { scaleX, scaleY }: ScaleTransform): Panel => {
   const scaledPanel = {
@@ -65,23 +65,23 @@ export const scalePanel = (panel: Panel, { scaleX, scaleY }: ScaleTransform): Pa
 };
 
 /**
- * キャラクター専用のスケール変換
+ * Character Specific Scale Conversion
  */
 export const scaleCharacter = (character: Character, { scaleX, scaleY }: ScaleTransform): Character => {
-  // サイズは縦横の小さい方の倍率を使用（アスペクト比維持）
+  // Use smaller scale for size (maintain aspect ratio)
   const sizeScale = Math.min(scaleX, scaleY);
   
   return {
     ...character,
     x: Math.round(character.x * scaleX),
     y: Math.round(character.y * scaleY),
-    // scaleは変更せず、基本サイズで調整
+    // scaleis unchanged and adjusted to base size
     scale: character.scale
   };
 };
 
 /**
- * 吹き出し専用のスケール変換
+ * 
  */
 export const scaleBubble = (bubble: SpeechBubble, { scaleX, scaleY }: ScaleTransform): SpeechBubble => {
   return {
@@ -95,7 +95,7 @@ export const scaleBubble = (bubble: SpeechBubble, { scaleX, scaleY }: ScaleTrans
 };
 
 /**
- * 背景要素専用のスケール変換
+ * 
  */
 export const scaleBackground = (background: BackgroundElement, { scaleX, scaleY }: ScaleTransform): BackgroundElement => ({
   ...background,
@@ -106,7 +106,7 @@ export const scaleBackground = (background: BackgroundElement, { scaleX, scaleY 
 });
 
 /**
- * 効果線専用のスケール変換
+ * 
  */
 export const scaleEffect = (effect: EffectElement, { scaleX, scaleY }: ScaleTransform): EffectElement => ({
   ...effect,
@@ -117,7 +117,7 @@ export const scaleEffect = (effect: EffectElement, { scaleX, scaleY }: ScaleTran
 });
 
 /**
- * トーン専用のスケール変換
+ * 
  */
 export const scaleTone = (tone: ToneElement, { scaleX, scaleY }: ScaleTransform): ToneElement => ({
   ...tone,
@@ -128,18 +128,18 @@ export const scaleTone = (tone: ToneElement, { scaleX, scaleY }: ScaleTransform)
 });
 
 /**
- * スケール変換の検証
+ * 
  */
 export const validateScaleTransform = (transform: ScaleTransform): boolean => {
   const { scaleX, scaleY } = transform;
   
-  // 0以下や無限大、NaNをチェック
+  // 0NaN
   if (scaleX <= 0 || scaleY <= 0 || !isFinite(scaleX) || !isFinite(scaleY)) {
     console.error('Invalid scale transform:', transform);
     return false;
   }
   
-  // 極端なスケール値をチェック（0.1倍～10倍の範囲）
+  // Check extreme scale values (0.110
   if (scaleX < 0.1 || scaleX > 10 || scaleY < 0.1 || scaleY > 10) {
     console.warn('Extreme scale transform detected:', transform);
   }
@@ -148,7 +148,7 @@ export const validateScaleTransform = (transform: ScaleTransform): boolean => {
 };
 
 /**
- * スケール変換のログ出力
+ * 
  */
 export const logScaleTransform = (
   oldSettings: CanvasSettings,

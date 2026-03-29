@@ -23,3 +23,6 @@ beta.env
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local translation cache (may contain CJK)
+scripts/cjk-translation-cache.json

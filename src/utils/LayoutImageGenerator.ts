@@ -1,10 +1,10 @@
 // src/utils/LayoutImageGenerator.ts
-// NanoBanana用レイアウト画像生成ユーティリティ
+// NanoBananaLayout Image Generation Utility for
 
 import { Panel, LayoutImageOptions, DEFAULT_LAYOUT_IMAGE_OPTIONS, PaperSize } from '../types';
 
 /**
- * NanoBanana用のレイアウト画像を生成するクラス
+ * NanoBananaClass to generate layout image for
  */
 export class LayoutImageGenerator {
   private static instance: LayoutImageGenerator;
@@ -17,7 +17,7 @@ export class LayoutImageGenerator {
   }
 
   /**
-   * パネル配置からレイアウト画像を生成
+   * Generate layout image from panel alignment
    */
   public async generateLayoutImage(
     panels: Panel[],
@@ -26,7 +26,7 @@ export class LayoutImageGenerator {
   ): Promise<Blob> {
     const finalOptions = { ...DEFAULT_LAYOUT_IMAGE_OPTIONS, ...options };
     
-    // Canvas要素を作成
+    // Canvas
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     
@@ -34,28 +34,28 @@ export class LayoutImageGenerator {
       throw new Error('Canvas context could not be created');
     }
 
-    // キャンバスサイズを設定（用紙サイズに基づく）
+    // Set canvas size (based on paper size)
     canvas.width = paperSize.pixelWidth;
     canvas.height = paperSize.pixelHeight;
 
-    // 背景を塗りつぶし
+    // 
     ctx.fillStyle = finalOptions.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // グリッド描画（オプション）
+    // 
     if (finalOptions.showGrid) {
       this.drawGrid(ctx, canvas.width, canvas.height, finalOptions);
     }
 
-    // パネル描画
+    // 
     this.drawPanels(ctx, panels, finalOptions);
 
-    // パネル番号描画（オプション）
+    // Panel number drawing (optional)
     if (finalOptions.showPanelNumbers) {
       this.drawPanelNumbers(ctx, panels, finalOptions);
     }
 
-    // Blobに変換して返す
+    // Blob
     return new Promise((resolve, reject) => {
       canvas.toBlob(
         (blob) => {
@@ -72,7 +72,7 @@ export class LayoutImageGenerator {
   }
 
   /**
-   * グリッドを描画
+   * 
    */
   private drawGrid(
     ctx: CanvasRenderingContext2D, 
@@ -80,13 +80,13 @@ export class LayoutImageGenerator {
     height: number, 
     options: LayoutImageOptions
   ): void {
-    const gridSize = 20; // グリッドサイズ（ピクセル）
+    const gridSize = 20; // 
     
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.lineWidth = 0.5;
     ctx.setLineDash([2, 2]);
 
-    // 縦線
+    // 
     for (let x = 0; x <= width; x += gridSize) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
@@ -94,7 +94,7 @@ export class LayoutImageGenerator {
       ctx.stroke();
     }
 
-    // 横線
+    // 
     for (let y = 0; y <= height; y += gridSize) {
       ctx.beginPath();
       ctx.moveTo(0, y);
@@ -102,11 +102,11 @@ export class LayoutImageGenerator {
       ctx.stroke();
     }
 
-    ctx.setLineDash([]); // 点線リセット
+    ctx.setLineDash([]); // 
   }
 
   /**
-   * パネル枠を描画
+   * 
    */
   private drawPanels(
     ctx: CanvasRenderingContext2D, 
@@ -115,21 +115,21 @@ export class LayoutImageGenerator {
   ): void {
     ctx.strokeStyle = options.borderColor;
     ctx.lineWidth = options.borderWidth;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0)'; // 透明
+    ctx.fillStyle = 'rgba(255, 255, 255, 0)'; // 
 
     panels.forEach(panel => {
-      // パネル枠描画
+      // 
       ctx.beginPath();
       ctx.rect(panel.x, panel.y, panel.width, panel.height);
       ctx.stroke();
       
-      // 内側を透明で塗りつぶし（コマの境界を明確にする）
+      // Fill Inside with Transparency (Clear Frame Boundaries)
       ctx.fill();
     });
   }
 
   /**
-   * パネル番号を描画
+   * 
    */
   private drawPanelNumbers(
     ctx: CanvasRenderingContext2D, 
@@ -141,7 +141,7 @@ export class LayoutImageGenerator {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // 背景用の設定
+    // 
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 3;
 
@@ -150,16 +150,16 @@ export class LayoutImageGenerator {
       const centerY = panel.y + panel.height / 2;
       const panelNumber = (index + 1).toString();
 
-      // 文字の背景（白い縁取り）
+      // 
       ctx.strokeText(panelNumber, centerX, centerY);
       
-      // 文字本体
+      // 
       ctx.fillText(panelNumber, centerX, centerY);
     });
   }
 
   /**
-   * 高品質レイアウト画像を生成（デバッグ用詳細版）
+   * Generate High Quality Layout Images (Detailed for Debugging)
    */
   public async generateDetailedLayoutImage(
     panels: Panel[],
@@ -201,7 +201,7 @@ export class LayoutImageGenerator {
   }
 
   /**
-   * レイアウト画像のプレビューを生成（小さいサイズ）
+   * Generate layout image preview (small size)
    */
   public async generatePreview(
     panels: Panel[],
@@ -209,7 +209,7 @@ export class LayoutImageGenerator {
     maxWidth: number = 300,
     maxHeight: number = 400
   ): Promise<Blob> {
-    // アスペクト比を維持してサイズを計算
+    // Maintain aspect ratio to calculate size
     const aspectRatio = paperSize.pixelWidth / paperSize.pixelHeight;
     let previewWidth = maxWidth;
     let previewHeight = maxWidth / aspectRatio;
@@ -219,14 +219,14 @@ export class LayoutImageGenerator {
       previewWidth = maxHeight * aspectRatio;
     }
 
-    // プレビュー用の一時的な用紙サイズ
+    // Temporary paper size for preview
     const previewPaperSize: PaperSize = {
       ...paperSize,
       pixelWidth: Math.round(previewWidth),
       pixelHeight: Math.round(previewHeight)
     };
 
-    // パネルサイズも比例して縮小
+    // 
     const scaleX = previewWidth / paperSize.pixelWidth;
     const scaleY = previewHeight / paperSize.pixelHeight;
 
@@ -238,7 +238,7 @@ export class LayoutImageGenerator {
       height: Math.round(panel.height * scaleY)
     }));
 
-    // プレビュー用オプション
+    // 
     const previewOptions: LayoutImageOptions = {
       showPanelNumbers: true,
       showGrid: false,
@@ -254,7 +254,7 @@ export class LayoutImageGenerator {
   }
 
   /**
-   * バッチ処理用：複数ページのレイアウト画像を生成
+   * For Batch Processing: Generate Multi-Page Layout Images
    */
   public async generateMultipleLayouts(
     pagesData: Array<{ panels: Panel[]; paperSize: PaperSize; title: string }>,
@@ -287,7 +287,7 @@ export class LayoutImageGenerator {
 }
 
 /**
- * 簡単にレイアウト画像を生成するヘルパー関数
+ * Helper function to easily generate layout images
  */
 export const generateLayoutImage = async (
   panels: Panel[],

@@ -1,14 +1,12 @@
-// src/utils/backgroundUtils.ts - 背景名統合管理ユーティリティ
+// src/utils/backgroundUtils.ts - infer integrated background labels
 import { BackgroundElement } from '../types';
 
-/**
- * パネル内の背景要素から統合された背景名を推測する共通関数
- */
+/** Guess a human-readable background name from panel background elements */
 export const getIntegratedBackgroundName = (backgrounds: BackgroundElement[], panelId: number): string => {
   const panelBackgrounds = backgrounds.filter(bg => bg.panelId === panelId);
   if (panelBackgrounds.length === 0) return '';
 
-  // 特徴的なパターンから背景を判定
+  // Pattern heuristics
   const hasGradientBlue = panelBackgrounds.some(bg => 
     bg.type === 'gradient' && 
     bg.gradientColors?.includes('#87CEEB')
@@ -81,42 +79,37 @@ export const getIntegratedBackgroundName = (backgrounds: BackgroundElement[], pa
     bg.gradientColors?.includes('#2F4F4F')
   );
 
-  // 判定ロジック
-  if (hasGradientBlue && panelBackgrounds.some(bg => bg.type === 'pattern')) return '青空';
-  if (hasSunsetGradient) return '夕焼け';
-  if (hasForestPattern) return '森';
-  if (hasBlackboard) return '教室';
-  if (hasLivingRoomColor && panelBackgrounds.length > 1) return 'リビング';
-  if (hasBedroomGradient) return '寝室';
-  if (hasKitchenColor && panelBackgrounds.some(bg => bg.type === 'pattern')) return 'キッチン';
-  if (hasClassroomColor && hasBlackboard) return '教室';
-  if (hasHallwayGradient) return '廊下';
-  if (hasLibraryColor && panelBackgrounds.some(bg => bg.type === 'pattern')) return '図書館';
-  if (hasStreetGradient) return '街並み';
-  if (hasParkGreen) return '公園';
-  if (hasHappyRadial) return '明るい';
-  if (hasSadGradient) return '暗い';
+  if (hasGradientBlue && panelBackgrounds.some(bg => bg.type === 'pattern')) return 'Blue sky';
+  if (hasSunsetGradient) return 'Sunset';
+  if (hasForestPattern) return 'Forest';
+  if (hasBlackboard) return 'Classroom';
+  if (hasLivingRoomColor && panelBackgrounds.length > 1) return 'Living room';
+  if (hasBedroomGradient) return 'Bedroom';
+  if (hasKitchenColor && panelBackgrounds.some(bg => bg.type === 'pattern')) return 'Kitchen';
+  if (hasClassroomColor && hasBlackboard) return 'Classroom';
+  if (hasHallwayGradient) return 'Hallway';
+  if (hasLibraryColor && panelBackgrounds.some(bg => bg.type === 'pattern')) return 'Library';
+  if (hasStreetGradient) return 'Street';
+  if (hasParkGreen) return 'Park';
+  if (hasHappyRadial) return 'Bright';
+  if (hasSadGradient) return 'Moody';
 
-  // 単色背景
   const firstBg = panelBackgrounds[0];
   if (panelBackgrounds.length === 1 && firstBg.type === 'solid') {
-    if (firstBg.solidColor === '#FFFFFF') return '白背景';
-    if (firstBg.solidColor === '#000000') return '黒背景';
+    if (firstBg.solidColor === '#FFFFFF') return 'White';
+    if (firstBg.solidColor === '#000000') return 'Black';
   }
 
-  // デフォルト
-  return 'カスタム背景';
+  return 'Custom background';
 };
 
-/**
- * 背景要素が同じ統合背景グループに属するかチェック
- */
+/** Whether two background elements belong to the same applied group */
 export const isSameBackgroundGroup = (
   bg1: BackgroundElement, 
   bg2: BackgroundElement,
   backgrounds: BackgroundElement[]
 ): boolean => {
-  // 同じパネル内で、同じタイムスタンプで作成された背景要素
+  // Same panel and creation batch (id timestamp)
   if (bg1.panelId !== bg2.panelId) return false;
   
   const timestamp1 = bg1.id.split('_')[1];
@@ -125,15 +118,13 @@ export const isSameBackgroundGroup = (
   return timestamp1 === timestamp2;
 };
 
-/**
- * 背景要素のメイン要素（最初に作成された要素）を取得
- */
+/** First-created background element in a panel (main layer) */
 export const getMainBackgroundElement = (
   panelBackgrounds: BackgroundElement[]
 ): BackgroundElement | null => {
   if (panelBackgrounds.length === 0) return null;
   
-  // IDからタイムスタンプとインデックスを抽出してソート
+  // Sort by id timestamp and index
   const sorted = panelBackgrounds.sort((a, b) => {
     const aTimestamp = parseInt(a.id.split('_')[1]);
     const bTimestamp = parseInt(b.id.split('_')[1]);
@@ -149,32 +140,27 @@ export const getMainBackgroundElement = (
   return sorted[0];
 };
 
-/**
- * キャンバス上での背景表示名を取得（統合名優先）
- */
+/** Display label for canvas (prefers integrated name) */
 export const getCanvasBackgroundDisplayName = (
   backgroundElement: BackgroundElement,
   allBackgrounds: BackgroundElement[]
 ): string => {
   const integratedName = getIntegratedBackgroundName(allBackgrounds, backgroundElement.panelId);
   
-  if (integratedName && integratedName !== 'カスタム背景') {
+  if (integratedName && integratedName !== 'Custom background') {
     return integratedName;
   }
-  
-  // フォールバック: 従来の個別名
+
   switch (backgroundElement.type) {
-    case 'solid': return '単色';
-    case 'gradient': return 'グラデーション';
-    case 'pattern': return 'パターン';
-    case 'image': return '画像';
-    default: return '背景';
+    case 'solid': return 'Solid';
+    case 'gradient': return 'Gradient';
+    case 'pattern': return 'Pattern';
+    case 'image': return 'Image';
+    default: return 'Background';
   }
 };
 
-/**
- * 背景要素のプレビューカラーを取得
- */
+/** Swatch color for UI preview */
 export const getBackgroundPreviewColor = (backgroundElement: BackgroundElement): string => {
   if (backgroundElement.type === 'solid') {
     return backgroundElement.solidColor || '#CCCCCC';

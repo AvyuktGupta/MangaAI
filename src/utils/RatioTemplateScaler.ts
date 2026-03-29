@@ -1,9 +1,9 @@
-// src/utils/RatioTemplateScaler.ts - 比率ベーステンプレートスケーラー
+// src/utils/RatioTemplateScaler.ts - Ratio Based Template Scaler
 import { Panel, CanvasSettings } from '../types';
 import { ratioTemplates } from '../components/CanvasArea/ratioTemplates';
 
 /**
- * 比率ベースのテンプレートを現在のキャンバスサイズに適用
+ * Apply ratio-based template to current canvas size
  */
 export const applyRatioTemplate = (
   templateKey: string, 
@@ -17,9 +17,9 @@ export const applyRatioTemplate = (
 
   const { pixelWidth, pixelHeight } = canvasSettings.paperSize;
   
-  // コンソールログは無効化
+  // 
   
-  // 比率を実際のピクセル座標に変換
+  // Convert ratio to actual pixel coordinates
   const scaledPanels = template.panels.map(panel => {
     const scaledPanel = {
       ...panel,
@@ -29,19 +29,19 @@ export const applyRatioTemplate = (
       height: Math.round(panel.height * pixelHeight)
     };
     
-    // コンソールログは無効化
+    // 
     
     return scaledPanel;
   });
   
-  // コンソールログは無効化
-  // コンソールログは無効化
+  // 
+  // 
   
   return scaledPanels;
 };
 
 /**
- * テンプレート情報を取得
+ * 
  */
 export const getRatioTemplateInfo = (templateKey: string) => {
   const template = ratioTemplates[templateKey];
@@ -55,7 +55,7 @@ export const getRatioTemplateInfo = (templateKey: string) => {
 };
 
 /**
- * 利用可能な比率テンプレート一覧を取得
+ * Get a list of available ratio templates
  */
 export const getAvailableRatioTemplates = () => {
   return Object.keys(ratioTemplates);

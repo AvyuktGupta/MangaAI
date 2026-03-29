@@ -1,6 +1,6 @@
-/* src/App.css (シーンテンプレート+ダークモード対応) */
+/* src/App.css (+) */
 
-/* ダークモードのデフォルト設定 */
+/*  */
 :root {
   --bg-primary: #1a1a1a;
   --bg-secondary: #2d2d2d;
@@ -16,7 +16,7 @@
   --danger-color: #f44336;
 }
 
-/* ライトモード設定 */
+/*  */
 [data-theme="light"] {
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
@@ -32,7 +32,7 @@
   --danger-color: #dc3545;
 }
 
-/* 基本レイアウト */
+/*  */
 * {
   margin: 0;
   padding: 0;
@@ -52,7 +52,7 @@ body {
   color: var(--text-primary);
 }
 
-/* ヘッダー */
+/*  */
 .header {
   background-color: var(--bg-secondary);
   padding: 1rem 2rem;
@@ -86,14 +86,14 @@ body {
   transform: scale(1.05);
 }
 
-/* メインレイアウト */
+/*  */
 .main-content {
   display: flex;
   height: calc(100vh - 80px);
-  min-width: 0; /* フレックスアイテムの最小幅を0に設定 */
+  min-width: 0; /* 0 */
 }
 
-/* サイドバー */
+/*  */
 .sidebar {
   width: 300px;
   background-color: var(--bg-secondary);
@@ -104,24 +104,24 @@ body {
 }
 
 
-/* キャンバスエリア - 縦並び修正 */
+/*  -  */
 .canvas-area {
   flex: 1;
   background-color: var(--bg-primary);
   display: flex;
-  flex-direction: column; /* ← これを追加！縦並びにする */
+  flex-direction: column; /* ←  */
   align-items: center;
-  justify-content: flex-start; /* 上寄せに変更 */
-  padding: 10px; /* 20px → 10px に縮小 */
+  justify-content: flex-start; /*  */
+  padding: 10px; /* 20px → 10px  */
   overflow: auto;
-  max-height: calc(100vh - 80px); /* ヘッダー分を引いた高さ制限 */
-  overflow-x: auto; /* 横スクロールを有効化 */
-  overflow-y: auto; /* 縦スクロールも有効化 */
-  min-width: 0; /* フレックスアイテムの最小幅を0に設定 */
+  max-height: calc(100vh - 80px); /*  */
+  overflow-x: auto; /*  */
+  overflow-y: auto; /*  */
+  min-width: 0; /* 0 */
 }
 
 
-/* セクション */
+/*  */
 .section {
   margin-bottom: 2rem;
   padding: 1rem;
@@ -147,7 +147,7 @@ body {
   border-left: 3px solid var(--accent-color);
 }
 
-/* テンプレートグリッド */
+/*  */
 .template-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -183,7 +183,7 @@ body {
   opacity: 0.8;
 }
 
-/* シーンテンプレートグリッド（新機能） */
+/*  */
 .scene-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -233,7 +233,7 @@ body {
   text-align: center;
 }
 
-/* キャラクターグリッド */
+/*  */
 .character-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -270,7 +270,7 @@ body {
   font-size: 1.5rem;
 }
 
-/* 吹き出しタイプ */
+/*  */
 .dialogue-input {
   width: 100%;
   height: 60px;
@@ -319,7 +319,7 @@ body {
   color: white;
 }
 
-/* エクスポートボタン */
+/*  */
 .export-buttons {
   display: flex;
   flex-direction: column;
@@ -366,7 +366,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* レスポンシブ対応（左右サイドバー考慮） */
+/*  */
 @media (max-width: 1200px) {
   .right-sidebar {
     width: 250px;
@@ -416,7 +416,7 @@ body {
   }
 }
 
-/* アニメーション */
+/*  */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -432,10 +432,10 @@ body {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* スクロールバー（ダークモード対応） */
+/*  */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px; /* 横スクロールバーの高さも設定 */
+  height: 8px; /*  */
 }
 
 ::-webkit-scrollbar-track {
@@ -452,7 +452,7 @@ body {
   background: var(--accent-color);
 }
 
-/* キャンバスエリア専用のスクロールバー */
+/*  */
 .canvas-area::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -473,24 +473,24 @@ body {
   background: var(--accent-hover);
 }
 
-/* キャンバスコントロール - コンパクト化 */
+/*  -  */
 .canvas-controls {
   width: auto;
   max-width: 600px;
   min-width: 400px;
-  margin-bottom: 0.75rem; /* 1rem → 0.5rem に縮小 */
+  margin-bottom: 0.75rem; /* 1rem → 0.5rem  */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.75rem; /* 1rem → 0.75rem に縮小 */
-  padding: 0.5rem 1rem; /* 1rem → 0.5rem 1rem に縮小 */
+  gap: 0.75rem; /* 1rem → 0.75rem  */
+  padding: 0.5rem 1rem; /* 1rem → 0.5rem 1rem  */
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 3px; /* 8px → 6px に縮小 */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* 影も小さく */
+  border-radius: 3px; /* 8px → 6px  */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /*  */
 }
 
-/* ボタンもコンパクトに */
+/*  */
 .control-btn {
   padding: 0.4rem 0.8rem; /* 0.5rem 1rem → 0.4rem 0.8rem */
   border: 1px solid var(--border-color);
@@ -505,14 +505,14 @@ body {
   align-items: center;
   gap: 0.2rem; /* 0.25rem → 0.2rem */
 }
-/* ボタングループ */
+/*  */
 .undo-redo-buttons {
   display: flex;
   gap: 0.5rem;
 }
 
 
-/* 通常のコントロールボタン（戻る・進む） */
+/*  */
 .control-btn:not(.delete-btn):hover:not(:disabled) {
   background-color: var(--accent-color);
   color: white;
@@ -527,7 +527,7 @@ body {
   border-color: var(--border-color);
 }
 
-/* 削除ボタン */
+/*  */
 .control-btn.delete-btn {
   background-color: var(--bg-primary);
   border-color: var(--danger-color);
@@ -548,7 +548,7 @@ body {
   cursor: not-allowed;
 }
 
-/* キャンバス情報もコンパクトに */
+/*  */
 .canvas-info {
   font-size: 0.75rem; /* 0.8rem → 0.75rem */
   color: var(--text-muted);
@@ -556,12 +556,12 @@ body {
   flex: 1;
 }
 
-  /* レスポンシブ対応 */
+  /*  */
   @media (max-width: 768px) {
     .canvas-controls {
       width: calc(100% - 2rem);
       min-width: auto;
-      padding: 0.4rem 0.8rem; /* さらに小さく */
+      padding: 0.4rem 0.8rem; /*  */
     }
   
   .undo-redo-buttons {

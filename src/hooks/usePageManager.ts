@@ -1,4 +1,4 @@
-// src/hooks/usePageManager.ts - ページ管理状態Hook
+// src/hooks/usePageManager.ts - Hook
 
 import { useState, useCallback, useMemo } from 'react';
 import { 
@@ -14,7 +14,7 @@ import {
 import { BetaUtils } from '../config/betaConfig';
 
 interface UsePageManagerProps {
-  // 現在の単一ページデータ（既存システムから）
+  // Current single page data (from existing system)
   panels: Panel[];
   characters: Character[];
   bubbles: SpeechBubble[];
@@ -22,7 +22,7 @@ interface UsePageManagerProps {
   effects: EffectElement[];
   tones: ToneElement[];
   
-  // データ更新コールバック（既存システムへ）
+  // Data update callback (to existing system)
   onDataUpdate: (pageData: {
     panels: Panel[];
     characters: Character[];
@@ -36,11 +36,11 @@ interface UsePageManagerProps {
 export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn => {
   const { panels, characters, bubbles, backgrounds, effects, tones, onDataUpdate } = props;
 
-  // ページ配列の状態管理
+  // 
   const [pages, setPages] = useState<Page[]>(() => [
     {
       id: generatePageId(),
-      title: 'ページ 1',
+      title: ' 1',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       panels: [],
@@ -54,10 +54,10 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
 
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
 
-  // 現在のページデータ（既存システムのデータを使用）
+  // Current page data (using data from an existing system)
   const currentPage = useMemo((): Page => ({
     id: pages[currentPageIndex]?.id || generatePageId(),
-    title: pages[currentPageIndex]?.title || `ページ ${currentPageIndex + 1}`,
+    title: pages[currentPageIndex]?.title || ` ${currentPageIndex + 1}`,
     note: pages[currentPageIndex]?.note,
     createdAt: pages[currentPageIndex]?.createdAt || new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -69,17 +69,17 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
     tones
   }), [pages, currentPageIndex, panels, characters, bubbles, backgrounds, effects, tones]);
 
-  // ページ追加
+  // 
   const addPage = useCallback(() => {
-    // 🔒 ベータ版制限: ページ数制限チェック
+    // 🔒 : 
     if (!BetaUtils.canAddPage(pages.length)) {
-      alert('ベータ版では1ページのみ作成できます。\nフル版では複数ページが利用可能です！');
+      alert('1\nMultiple pages available in full version!');
       return;
     }
 
     const newPage: Page = {
       id: generatePageId(),
-      title: `ページ ${pages.length + 1}`,
+      title: ` ${pages.length + 1}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       panels: [],
@@ -92,11 +92,11 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
 
     setPages(prev => [...prev, newPage]);
     
-    // 新しいページに切り替え
+    // 
     const newIndex = pages.length;
     setCurrentPageIndex(newIndex);
     
-    // 既存システムを空のデータに更新
+    // Update existing system to empty data
     onDataUpdate({
       panels: [],
       characters: [],
@@ -106,28 +106,28 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
       tones: []
     });
 
-    console.log(`📄 新しいページを追加: ${newPage.title}`);
+    console.log(`📄 : ${newPage.title}`);
   }, [pages.length, onDataUpdate]);
 
-  // ページ削除
+  // 
   const deletePage = useCallback((pageIndex: number) => {
     if (pages.length <= 1) {
-      console.warn('⚠️ 最後のページは削除できません');
+      console.warn('⚠️ The last page cannot be deleted');
       return;
     }
 
     const pageToDelete = pages[pageIndex];
     if (!pageToDelete) return;
 
-    if (window.confirm(`「${pageToDelete.title}」を削除しますか？`)) {
+    if (window.confirm(`${pageToDelete.title}`)) {
       const newPages = pages.filter((_, index) => index !== pageIndex);
       setPages(newPages);
 
-      // 現在のページインデックスを調整
+      // Adjust current page index
       const newCurrentIndex = Math.min(currentPageIndex, newPages.length - 1);
       setCurrentPageIndex(newCurrentIndex);
 
-      // 調整後のページデータで既存システムを更新
+      // Update existing system with adjusted page data
       const targetPage = newPages[newCurrentIndex];
       if (targetPage) {
         onDataUpdate({
@@ -140,18 +140,18 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
         });
       }
 
-      console.log(`🗑️ ページを削除: ${pageToDelete.title}`);
+      console.log(`🗑️ : ${pageToDelete.title}`);
     }
   }, [pages, currentPageIndex, onDataUpdate]);
 
-  // ページ複製
+  // 
   const duplicatePage = useCallback((pageIndex: number) => {
     const pageToClone = pages[pageIndex];
     if (!pageToClone) return;
 
     const clonedPage: Page = {
       id: generatePageId(),
-      title: `${pageToClone.title} のコピー`,
+      title: `${pageToClone.title} `,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       panels: JSON.parse(JSON.stringify(pageToClone.panels)),
@@ -166,11 +166,11 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
     newPages.splice(pageIndex + 1, 0, clonedPage);
     setPages(newPages);
 
-    // 複製したページに切り替え
+    // 
     const newIndex = pageIndex + 1;
     setCurrentPageIndex(newIndex);
     
-    // 既存システムを複製データで更新
+    // Update existing system with duplicate data
     onDataUpdate({
       panels: clonedPage.panels,
       characters: clonedPage.characters,
@@ -180,10 +180,10 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
       tones: clonedPage.tones
     });
 
-    console.log(`📋 ページを複製: ${pageToClone.title} → ${clonedPage.title}`);
+    console.log(`📋 : ${pageToClone.title} → ${clonedPage.title}`);
   }, [pages, onDataUpdate]);
 
-  // ページ名前変更
+  // 
   const renamePage = useCallback((pageIndex: number, newTitle: string) => {
     if (!newTitle.trim()) return;
 
@@ -193,23 +193,23 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
         : page
     ));
 
-    console.log(`✏️ ページ名を変更: ${pages[pageIndex]?.title} → ${newTitle}`);
+    console.log(`✏️ : ${pages[pageIndex]?.title} → ${newTitle}`);
   }, [pages]);
 
-  // ページ切り替え
+  // 
   const switchToPage = useCallback((pageIndex: number) => {
     if (pageIndex < 0 || pageIndex >= pages.length) return;
 
-    // 現在のページデータを保存
+    // 
     const updatedCurrentPage = { ...currentPage };
     setPages(prev => prev.map((page, index) => 
       index === currentPageIndex ? updatedCurrentPage : page
     ));
 
-    // 新しいページに切り替え
+    // 
     setCurrentPageIndex(pageIndex);
     
-    // 切り替え先のページデータで既存システムを更新
+    // Update existing system with switching page data
     const targetPage = pages[pageIndex];
     onDataUpdate({
       panels: targetPage.panels,
@@ -220,10 +220,10 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
       tones: targetPage.tones
     });
 
-    console.log(`📄 ページ切り替え: ${targetPage.title} (${pageIndex + 1}/${pages.length})`);
+    console.log(`📄 : ${targetPage.title} (${pageIndex + 1}/${pages.length})`);
   }, [currentPage, currentPageIndex, pages, onDataUpdate]);
 
-  // ページ順序変更
+  // 
   const reorderPages = useCallback((fromIndex: number, toIndex: number) => {
     if (fromIndex === toIndex) return;
 
@@ -233,7 +233,7 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
     
     setPages(newPages);
 
-    // 現在のページインデックスを調整
+    // Adjust current page index
     let newCurrentIndex = currentPageIndex;
     if (currentPageIndex === fromIndex) {
       newCurrentIndex = toIndex;
@@ -245,12 +245,12 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
     
     setCurrentPageIndex(newCurrentIndex);
 
-    console.log(`🔄 ページ順序変更: ${fromIndex} → ${toIndex}`);
+    console.log(`🔄 : ${fromIndex} → ${toIndex}`);
   }, [pages, currentPageIndex]);
 
-  // 現在ページデータ更新（既存システムから呼び出される）
+  // Current page data update (called from an existing system)
   const updateCurrentPageData = useCallback((data: Partial<Page>) => {
-    // pages配列の現在ページを更新
+    // pages
     setPages(prev => prev.map((page, index) => 
       index === currentPageIndex 
         ? { ...page, ...data, updatedAt: new Date().toISOString() }
@@ -258,15 +258,15 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
     ));
   }, [currentPageIndex]);
 
-  // 削除可能判定
+  // 
   const canDeletePage = useMemo(() => pages.length > 1, [pages.length]);
 
-  // 未保存変更の検知（簡易版）
+  // 
   const hasUnsavedChanges = useMemo(() => {
     const savedPage = pages[currentPageIndex];
     if (!savedPage) return false;
 
-    // 現在のデータと保存されたデータを比較
+    // Compare current data with saved data
     return (
       JSON.stringify(savedPage.panels) !== JSON.stringify(panels) ||
       JSON.stringify(savedPage.characters) !== JSON.stringify(characters) ||
@@ -293,7 +293,7 @@ export const usePageManager = (props: UsePageManagerProps): UsePageManagerReturn
   };
 };
 
-// ユニークID生成
+// ID
 const generatePageId = (): string => {
   return `page_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };

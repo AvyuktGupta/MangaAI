@@ -1,15 +1,15 @@
-// src/components/CanvasArea/renderers/ToneRenderer.tsx - パフォーマンス最適化版
+// src/components/CanvasArea/renderers/ToneRenderer.tsx - 
 import React from 'react';
 import { ToneElement, Panel } from '../../../types';
 
 /**
- * 漫画制作用トーン描画エンジン（パフォーマンス最適化版）
- * 重い処理を軽量化・無限ループ防止・描画制限
+ * Manga Production Tone Drawing Engine (Performance Optimized Version)
+ * Reduces heavy processing weight, prevents infinite loops, and limits drawing
  */
 export class ToneRenderer {
   
   /**
-   * 単一トーンを描画（メイン関数）- パフォーマンス最適化版
+   * Draw single tone (main function)- 
    */
   static renderTone(
     ctx: CanvasRenderingContext2D,
@@ -17,19 +17,19 @@ export class ToneRenderer {
     panel: Panel,
     isSelected: boolean = false
   ): void {
-    // パネル内の絶対座標を計算
+    // 
     const absoluteX = panel.x + tone.x * panel.width;
     const absoluteY = panel.y + tone.y * panel.height;
     const absoluteWidth = tone.width * panel.width;
     const absoluteHeight = tone.height * panel.height;
 
-    // 非表示または範囲外の場合は描画しない
+    // Do not draw if hidden or out of range
     if (!tone.visible || absoluteWidth <= 0 || absoluteHeight <= 0) return;
 
-    // 🚀 サイズ制限（パフォーマンス保護）
-    const MAX_AREA = 50000; // 最大描画エリア
+    // 🚀 Size Limit (Performance Protection)
+    const MAX_AREA = 50000; // 
     if (absoluteWidth * absoluteHeight > MAX_AREA) {
-      console.warn("⚠️ トーン描画エリアが大きすぎます。軽量描画モードに切り替えます。");
+      console.warn("⚠️ The tone drawing area is too large. Switches to lightweight drawing mode.");
       this.renderSimpleTone(ctx, tone, panel, absoluteX, absoluteY, absoluteWidth, absoluteHeight);
       if (isSelected) {
         this.drawToneSelectionClipped(ctx, tone, panel, absoluteX, absoluteY, absoluteWidth, absoluteHeight);
@@ -39,18 +39,18 @@ export class ToneRenderer {
 
     ctx.save();
 
-    // パネル内にクリッピング
+    // 
     ctx.beginPath();
     ctx.rect(panel.x, panel.y, panel.width, panel.height);
     ctx.clip();
 
-    // ブレンドモード設定
+    // 
     this.applyBlendMode(ctx, tone.blendMode);
 
-    // グローバル透明度設定
+    // 
     ctx.globalAlpha = Math.max(0.1, Math.min(1.0, tone.opacity));
 
-    // トーンタイプ別描画（軽量版）
+    // Drawing by Tone Type (Lightweight Version)
     switch (tone.type) {
       case 'halftone':
         this.renderHalftoneOptimized(ctx, tone, absoluteX, absoluteY, absoluteWidth, absoluteHeight);
@@ -77,14 +77,14 @@ export class ToneRenderer {
 
     ctx.restore();
 
-    // 選択状態の描画
+    // 
     if (isSelected) {
       this.drawToneSelectionClipped(ctx, tone, panel, absoluteX, absoluteY, absoluteWidth, absoluteHeight);
     }
   }
 
   /**
-   * 🚀 簡易トーン描画（超軽量版）
+   * 🚀 
    */
   private static renderSimpleTone(
     ctx: CanvasRenderingContext2D,
@@ -100,7 +100,7 @@ export class ToneRenderer {
     ctx.fillStyle = '#CCCCCC';
     ctx.fillRect(x, y, width, height);
     
-    // 簡易パターン表示
+    // 
     ctx.globalAlpha = tone.opacity * 0.6;
     ctx.strokeStyle = '#999999';
     ctx.lineWidth = 1;
@@ -111,7 +111,7 @@ export class ToneRenderer {
   }
 
   /**
-   * 🚀 網点トーン描画（最適化版）
+   * 🚀 
    */
   private static renderHalftoneOptimized(
     ctx: CanvasRenderingContext2D,
@@ -124,15 +124,15 @@ export class ToneRenderer {
     const density = Math.max(0.1, Math.min(1.0, tone.density));
     const scale = Math.max(0.5, Math.min(3.0, tone.scale || 1.0));
     
-    // 🚀 最適化：スペーシングを制限
+    // 🚀 
     const spacing = Math.max(3, Math.min(20, 8 * scale));
     const dotSize = Math.max(0.5, Math.min(spacing * 0.4, density * 4));
     
     ctx.save();
     ctx.fillStyle = tone.invert ? '#ffffff' : '#000000';
     
-    // 🚀 描画範囲制限（無限ループ防止）
-    const maxDots = 1000; // 最大ドット数
+    // 🚀 Drawing range limit (infinite loop prevention)
+    const maxDots = 1000; // 
     let dotCount = 0;
     
     const startX = Math.floor(x / spacing) * spacing;
@@ -142,12 +142,12 @@ export class ToneRenderer {
     
     for (let px = startX; px < endX && dotCount < maxDots; px += spacing) {
       for (let py = startY; py < endY && dotCount < maxDots; py += spacing) {
-        // チェッカーボードパターンでオフセット
+        // Offset with checkerboard pattern
         const offsetX = ((Math.floor(py / spacing) % 2) === 0) ? 0 : spacing / 2;
         const dotX = px + offsetX;
         const dotY = py;
         
-        // 範囲内チェック
+        // 
         if (dotX >= x - dotSize && dotX <= endX + dotSize &&
             dotY >= y - dotSize && dotY <= endY + dotSize) {
           
@@ -163,7 +163,7 @@ export class ToneRenderer {
   }
 
   /**
-   * 🚀 グラデーション描画（最適化版）
+   * 🚀 Gradient Drawing (Optimized)
    */
   private static renderGradientOptimized(
     ctx: CanvasRenderingContext2D,
@@ -179,10 +179,10 @@ export class ToneRenderer {
     const centerX = x + width / 2;
     const centerY = y + height / 2;
 
-    // 簡素化されたグラデーション
+    // 
     gradient = ctx.createLinearGradient(x, y, x + width, y + height);
 
-    // グラデーション色設定
+    // 
     const baseOpacity = Math.max(0.1, Math.min(1.0, tone.density));
     const startColor = tone.invert ? 
       `rgba(255, 255, 255, ${baseOpacity})` : 
@@ -201,7 +201,7 @@ export class ToneRenderer {
   }
 
   /**
-   * 🚀 クロスハッチング描画（最適化版）
+   * 🚀 Crosshatch Drawing (Optimized)
    */
   private static renderCrosshatchOptimized(
     ctx: CanvasRenderingContext2D,
@@ -220,11 +220,11 @@ export class ToneRenderer {
     ctx.strokeStyle = tone.invert ? '#ffffff' : '#000000';
     ctx.lineWidth = lineWidth;
 
-    // 🚀 線数制限（パフォーマンス保護）
+    // 🚀 Line Limit (Performance Protection)
     const maxLines = 50;
     const lineCount = Math.min(maxLines, Math.floor((width + height) / spacing));
     
-    // 斜線描画（45度のみ、簡素化）
+    // 45
     ctx.beginPath();
     for (let i = 0; i < lineCount; i++) {
       const offset = (i * spacing) - Math.max(width, height);
@@ -242,7 +242,7 @@ export class ToneRenderer {
   }
 
   /**
-   * 🚀 ドット描画（最適化版）
+   * 🚀 
    */
   private static renderDotsOptimized(
     ctx: CanvasRenderingContext2D,
@@ -260,7 +260,7 @@ export class ToneRenderer {
     ctx.save();
     ctx.fillStyle = tone.invert ? '#ffffff' : '#000000';
 
-    // 🚀 ドット数制限
+    // 🚀 
     const maxDots = 500;
     let dotCount = 0;
 
@@ -277,7 +277,7 @@ export class ToneRenderer {
   }
 
   /**
-   * 🚀 ライン描画（最適化版）
+   * 🚀 
    */
   private static renderLinesOptimized(
     ctx: CanvasRenderingContext2D,
@@ -296,11 +296,11 @@ export class ToneRenderer {
     ctx.strokeStyle = tone.invert ? '#ffffff' : '#000000';
     ctx.lineWidth = lineWidth;
 
-    // 🚀 線数制限
+    // 🚀 
     const maxLines = 100;
     const lineCount = Math.min(maxLines, Math.floor(height / spacing));
 
-    // 水平線のみ（簡素化）
+    // 
     ctx.beginPath();
     for (let i = 0; i < lineCount; i++) {
       const y_pos = y + (i * spacing);
@@ -315,7 +315,7 @@ export class ToneRenderer {
   }
 
   /**
-   * 🚀 ノイズ描画（最適化版）
+   * 🚀 
    */
   private static renderNoiseOptimized(
     ctx: CanvasRenderingContext2D,
@@ -332,7 +332,7 @@ export class ToneRenderer {
 
     ctx.fillStyle = tone.invert ? '#ffffff' : '#000000';
 
-    // 🚀 パーティクル数を大幅制限（無限ループ防止）
+    // 🚀 Dramatically limit the number of particles (infinite loop prevention)
     const maxParticles = Math.min(200, Math.floor(width * height * density * 0.001));
     
     for (let i = 0; i < maxParticles; i++) {
@@ -351,10 +351,10 @@ export class ToneRenderer {
   }
 
   /**
-   * ブレンドモード適用（軽量版）
+   * Blend mode application (lightweight version)
    */
   private static applyBlendMode(ctx: CanvasRenderingContext2D, blendMode: string): void {
-    // 重いブレンドモードを制限
+    // 
     switch (blendMode) {
       case 'multiply':
         ctx.globalCompositeOperation = 'multiply';
@@ -370,9 +370,9 @@ export class ToneRenderer {
   }
 
   /**
-   * 🔧 トーン選択状態の描画（パネル境界対応版）
+   * 🔧 Drawing the tone selection state (panel boundary compatible version)
    */
-  // 6️⃣ drawToneSelectionClipped関数を以下に置き換え（パネル境界対応版）
+  // 6️⃣ drawToneSelectionClippedReplace the function with the following (panel boundary compatible version)
 private static drawToneSelectionClipped(
   ctx: CanvasRenderingContext2D,
   tone: ToneElement,
@@ -384,7 +384,7 @@ private static drawToneSelectionClipped(
 ): void {
   ctx.save();
   
-  // パネル境界でクリッピングされた選択領域を計算
+  // Calculate the selected area clipped at the panel boundary
   const clippedX = Math.max(absoluteX, panel.x);
   const clippedY = Math.max(absoluteY, panel.y);
   const clippedRight = Math.min(absoluteX + absoluteWidth, panel.x + panel.width);
@@ -392,17 +392,17 @@ private static drawToneSelectionClipped(
   const clippedWidth = clippedRight - clippedX;
   const clippedHeight = clippedBottom - clippedY;
   
-  // クリッピングされた領域が有効な場合のみ描画
+  // Draw only when clipped area is enabled
   if (clippedWidth > 0 && clippedHeight > 0) {
     ctx.globalAlpha = 0.8;
     
-    // 選択枠（パネル境界内のみ）
+    // 
     ctx.strokeStyle = '#00a8ff';
     ctx.lineWidth = 2;
     ctx.setLineDash([4, 4]);
     ctx.strokeRect(clippedX, clippedY, clippedWidth, clippedHeight);
     
-    // 🔧 改良版リサイズハンドル（パネル境界内のみ）
+    // 🔧 Improved resize handle (only within panel boundaries)
     const handleSize = 8;
     const handles = [
       { x: clippedX - handleSize/2, y: clippedY - handleSize/2, direction: 'nw' },
@@ -416,16 +416,16 @@ private static drawToneSelectionClipped(
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1;
     
-    // パネル境界内にあるハンドルのみ描画
+    // Draw only handles within panel boundaries
     handles.forEach(handle => {
       const handleCenterX = handle.x + handleSize/2;
       const handleCenterY = handle.y + handleSize/2;
       
-      // ハンドルの中心がパネル境界内にある場合のみ描画
+      // Draw only if the center of the handle is within the panel boundary
       if (handleCenterX >= panel.x && handleCenterX <= panel.x + panel.width &&
           handleCenterY >= panel.y && handleCenterY <= panel.y + panel.height) {
         
-        // さらにハンドル領域をパネル境界でクリッピング
+        // further clipping the handle area at the panel boundary
         const handleClippedX = Math.max(handle.x, panel.x);
         const handleClippedY = Math.max(handle.y, panel.y);
         const handleClippedRight = Math.min(handle.x + handleSize, panel.x + panel.width);
@@ -440,17 +440,17 @@ private static drawToneSelectionClipped(
       }
     });
 
-    // 🆕 パネル境界表示（トーンがパネルをはみ出している場合）
+    // 🆕 Panel boundary display (if the tone is overhanging the panel)
     if (absoluteX < panel.x || absoluteY < panel.y || 
         absoluteX + absoluteWidth > panel.x + panel.width ||
         absoluteY + absoluteHeight > panel.y + panel.height) {
       
-      // はみ出し警告テキスト
+      // 
       ctx.globalAlpha = 0.8;
       ctx.fillStyle = '#ff4444';
       ctx.font = 'bold 12px Arial';
       ctx.textAlign = 'center';
-      ctx.fillText('⚠️ パネル外', clippedX + clippedWidth/2, clippedY - 5);
+      ctx.fillText('⚠️ ', clippedX + clippedWidth/2, clippedY - 5);
     }
   }
   
@@ -458,7 +458,7 @@ private static drawToneSelectionClipped(
 }
 
   /**
-   * 複数トーンの一括描画（zIndex順）
+   * zIndex
    */
   static renderTones(
     ctx: CanvasRenderingContext2D,
@@ -466,17 +466,17 @@ private static drawToneSelectionClipped(
     panels: Panel[],
     selectedTone: ToneElement | null = null
   ): void {
-    // 🚀 トーン数制限（パフォーマンス保護）
+    // 🚀 Tone Limit (Performance Protection)
     const MAX_TONES_PER_PANEL = 10;
     
     panels.forEach(panel => {
-      // パネル内のトーンを取得してzIndex順にソート
+      // zIndex
       const panelTones = tones
         .filter(tone => tone.panelId === panel.id && tone.visible)
         .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
-        .slice(0, MAX_TONES_PER_PANEL); // 🚀 トーン数制限
+        .slice(0, MAX_TONES_PER_PANEL); // 🚀 
 
-      // パネル内のトーンを順番に描画
+      // Draw the tones in the panel sequentially
       panelTones.forEach(tone => {
         const isSelected = selectedTone?.id === tone.id;
         this.renderTone(ctx, tone, panel, isSelected);

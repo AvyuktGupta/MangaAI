@@ -1,11 +1,11 @@
 // src/components/CanvasArea/renderers/CharacterRenderer/drawing/CharacterHair.ts
-// 💇 キャラクター髪の毛描画専用クラス（型修正版）
+// 💇 Character Hair Drawing Class (Modified)
 
 import { Character } from "../../../../../types";
 
 export class CharacterHair {
   
-  // 🎯 髪の毛描画メイン制御
+  // 🎯 
   static drawHair(
     ctx: CanvasRenderingContext2D,
     character: Character,
@@ -18,7 +18,7 @@ export class CharacterHair {
     
     ctx.fillStyle = hairColor;
 
-    // 髪型別描画
+    // 
     switch (hairStyle) {
       case "long":
         CharacterHair.drawLongHair(ctx, headX, headY, headSize, direction);
@@ -40,30 +40,30 @@ export class CharacterHair {
     }
   }
 
-  // 🎯 キャラクタータイプ別髪色・髪型決定
+  // 🎯 Determining hair color and hairstyle by character type
   static getHairStyle(character: Character): { hairColor: string; hairStyle: string } {
-    let hairColor = "#8B4513"; // デフォルト茶色
+    let hairColor = "#8B4513"; // 
     let hairStyle = "normal";
     
     switch (character.type) {
       case "heroine": 
-        hairColor = "#D2691E"; // 明るい茶色
+        hairColor = "#D2691E"; // 
         hairStyle = "long";
         break;
       case "rival": 
-        hairColor = "#2F4F4F"; // ダークグレー
+        hairColor = "#2F4F4F"; // 
         hairStyle = "spiky";
         break;
       case "friend":
-        hairColor = "#A0522D"; // 赤茶色
+        hairColor = "#A0522D"; // 
         hairStyle = "curly";
         break;
       case "mentor":
-        hairColor = "#696969"; // グレー
+        hairColor = "#696969"; // 
         hairStyle = "short";
         break;
       case "sister":
-        hairColor = "#CD853F"; // 薄茶色
+        hairColor = "#CD853F"; // 
         hairStyle = "ponytail";
         break;
       default: 
@@ -74,7 +74,7 @@ export class CharacterHair {
     return { hairColor, hairStyle };
   }
 
-  // 💇 普通の髪（主人公）
+  // 💇 
   static drawNormalHair(
     ctx: CanvasRenderingContext2D, 
     headX: number, 
@@ -82,43 +82,43 @@ export class CharacterHair {
     headSize: number, 
     direction: string
   ) {
-    const hairHeight = headSize * 0.3; // 🔧 修正: 0.4 → 0.3 に縮小
+    const hairHeight = headSize * 0.3; // 🔧 : 0.4 → 0.3 
     const hairWidth = headSize * 0.8;
-    const hairY = headY - headSize * 0.1; // 🔧 修正: 髪を頭の上部に配置
+    const hairY = headY - headSize * 0.1; // 🔧 : 
     
     switch (direction) {
       case "back":
       case "leftBack":
       case "rightBack":
-        // 後ろ向き：髪の毛全体をカバー
+        // Backwards: Covers the entire hair
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.1, hairY, hairWidth, headSize * 0.6, 8);
         ctx.fill();
         break;
         
       case "left":
-        // 左向き：左側の髪のみ
+        // 
         ctx.beginPath();
         ctx.roundRect(headX, hairY, hairWidth * 0.7, hairHeight, 6);
         ctx.fill();
         break;
         
       case "right":
-        // 右向き：右側の髪のみ
+        // 
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.3, hairY, hairWidth * 0.7, hairHeight, 6);
         ctx.fill();
         break;
         
       default: // front, leftFront, rightFront
-        // 正面：前髪とサイド
+        // 
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.1, hairY, hairWidth, hairHeight, 6);
         ctx.fill();
     }
   }
 
-  // 💇 長い髪（ヒロイン）
+  // 💇 
   static drawLongHair(
     ctx: CanvasRenderingContext2D, 
     headX: number, 
@@ -126,31 +126,31 @@ export class CharacterHair {
     headSize: number, 
     direction: string
   ) {
-    const hairHeight = headSize * 0.4; // 🔧 修正: 0.5 → 0.4 に縮小
+    const hairHeight = headSize * 0.4; // 🔧 : 0.5 → 0.4 
     const hairWidth = headSize * 0.9;
-    const hairY = headY - headSize * 0.1; // 🔧 修正: 髪を頭の上部に配置
+    const hairY = headY - headSize * 0.1; // 🔧 : 
     
-    // 基本の髪（トップ）
+    // 
     ctx.beginPath();
     ctx.roundRect(headX + headSize * 0.05, hairY, hairWidth, hairHeight, 8);
     ctx.fill();
     
-    // 後ろ向きでなければサイドの長い髪も描画
+    // Draw long hair on the side if not facing backwards
     if (direction !== "back" && direction !== "leftBack" && direction !== "rightBack") {
       const sideHairW = headSize * 0.15;
       const sideHairH = headSize * 0.8;
       
-      // 左サイドの髪
+      // 
       ctx.beginPath();
       ctx.roundRect(headX - sideHairW / 2, headY + headSize * 0.3, sideHairW, sideHairH, 4);
       ctx.fill();
       
-      // 右サイドの髪
+      // 
       ctx.beginPath();
       ctx.roundRect(headX + headSize - sideHairW / 2, headY + headSize * 0.3, sideHairW, sideHairH, 4);
       ctx.fill();
       
-      // 髪の流れを表現する線
+      // 
       ctx.strokeStyle = ctx.fillStyle;
       ctx.lineWidth = 1;
       ctx.globalAlpha = 0.7;
@@ -182,7 +182,7 @@ export class CharacterHair {
     }
   }
 
-  // 💇 尖った髪（ライバル）
+  // 💇 
   static drawSpikyHair(
     ctx: CanvasRenderingContext2D, 
     headX: number, 
@@ -190,19 +190,19 @@ export class CharacterHair {
     headSize: number, 
     direction: string
   ) {
-    // 後ろ向きの場合は普通の髪で代用
+    // If facing backwards, substitute normal hair
     if (direction === "back" || direction === "leftBack" || direction === "rightBack") {
       CharacterHair.drawNormalHair(ctx, headX, headY, headSize, direction);
       return;
     }
     
-    // 尖った髪の毛を複数描画
+    // 
     const spikeCount = 6;
     for (let i = 0; i < spikeCount; i++) {
       const spikeX = headX + headSize * (0.1 + i * 0.15);
       const spikeY = headY;
       const spikeW = headSize * 0.08;
-      const spikeH = headSize * (0.25 + Math.random() * 0.1); // 少しランダムな高さ
+      const spikeH = headSize * (0.25 + Math.random() * 0.1); // 
       
       ctx.beginPath();
       ctx.moveTo(spikeX, spikeY + spikeH);
@@ -211,7 +211,7 @@ export class CharacterHair {
       ctx.closePath();
       ctx.fill();
       
-      // 影効果
+      // 
       ctx.fillStyle = CharacterHair.darkenColor(ctx.fillStyle as string, 0.2);
       ctx.beginPath();
       ctx.moveTo(spikeX + spikeW * 0.6, spikeY + spikeH);
@@ -220,13 +220,13 @@ export class CharacterHair {
       ctx.closePath();
       ctx.fill();
       
-      // 元の色に戻す
+      // 
       const { hairColor } = CharacterHair.getHairStyle({ type: "rival" } as Character);
       ctx.fillStyle = hairColor;
     }
   }
 
-  // 💇 ウェーブ髪（友人）
+  // 💇 
   static drawCurlyHair(
     ctx: CanvasRenderingContext2D, 
     headX: number, 
@@ -237,17 +237,17 @@ export class CharacterHair {
     const hairHeight = headSize * 0.45;
     const hairWidth = headSize * 0.85;
     
-    // ベースの髪
+    // 
     ctx.beginPath();
     ctx.roundRect(headX + headSize * 0.075, headY, hairWidth, hairHeight, 10);
     ctx.fill();
     
-    // 後ろ向きでなければウェーブの装飾を追加
+    // Add wave decoration if not backwards
     if (direction !== "back" && direction !== "leftBack" && direction !== "rightBack") {
       const originalFillStyle = ctx.fillStyle;
       ctx.fillStyle = CharacterHair.lightenColor(originalFillStyle as string, 0.1);
       
-      // ウェーブパターンを描画
+      // 
       for (let row = 0; row < 4; row++) {
         const waveY = headY + headSize * (0.08 + row * 0.08);
         const waveCount = 4;
@@ -266,7 +266,7 @@ export class CharacterHair {
     }
   }
 
-  // 💇 短髪（先輩・メンター）
+  // 💇 
   static drawShortHair(
     ctx: CanvasRenderingContext2D, 
     headX: number, 
@@ -281,33 +281,33 @@ export class CharacterHair {
       case "back":
       case "leftBack":
       case "rightBack":
-        // 後ろ向き：短くて自然な髪
+        // 
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.125, headY, hairWidth, headSize * 0.6, 6);
         ctx.fill();
         break;
         
       case "left":
-        // 左向き：左側のみ
+        // 
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.05, headY, hairWidth * 0.6, hairHeight, 4);
         ctx.fill();
         break;
         
       case "right":
-        // 右向き：右側のみ
+        // 
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.35, headY, hairWidth * 0.6, hairHeight, 4);
         ctx.fill();
         break;
         
       default:
-        // 正面：きちんとした短髪
+        // 
         ctx.beginPath();
         ctx.roundRect(headX + headSize * 0.125, headY, hairWidth, hairHeight, 4);
         ctx.fill();
         
-        // 分け目を表現
+        // 
         ctx.strokeStyle = CharacterHair.darkenColor(ctx.fillStyle as string, 0.3);
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -317,7 +317,7 @@ export class CharacterHair {
     }
   }
 
-  // 💇 ポニーテール（妹キャラ）
+  // 💇 
   static drawPonytailHair(
     ctx: CanvasRenderingContext2D, 
     headX: number, 
@@ -328,17 +328,17 @@ export class CharacterHair {
     const hairHeight = headSize * 0.35;
     const hairWidth = headSize * 0.8;
     
-    // 基本の髪（前髪・サイド）
+    // 
     ctx.beginPath();
     ctx.roundRect(headX + headSize * 0.1, headY, hairWidth, hairHeight, 6);
     ctx.fill();
     
-    // ポニーテール部分
+    // 
     switch (direction) {
       case "back":
       case "leftBack":
       case "rightBack":
-        // 後ろ向き：ポニーテールが見える
+        // Backwards: Ponytail visible
         const ponytailX = headX + headSize * 0.5;
         const ponytailY = headY + headSize * 0.4;
         const ponytailW = headSize * 0.12;
@@ -348,7 +348,7 @@ export class CharacterHair {
         ctx.roundRect(ponytailX - ponytailW/2, ponytailY, ponytailW, ponytailH, 3);
         ctx.fill();
         
-        // ゴム部分
+        // 
         ctx.fillStyle = "#8B4513";
         ctx.beginPath();
         ctx.roundRect(ponytailX - ponytailW/2 - 1, ponytailY, ponytailW + 2, headSize * 0.05, 2);
@@ -356,7 +356,7 @@ export class CharacterHair {
         break;
         
       case "left":
-        // 左向き：右側のポニーテール
+        // 
         const leftPonytailX = headX + headSize * 0.85;
         const leftPonytailY = headY + headSize * 0.4;
         
@@ -366,7 +366,7 @@ export class CharacterHair {
         break;
         
       case "right":
-        // 右向き：左側のポニーテール
+        // 
         const rightPonytailX = headX + headSize * 0.05;
         const rightPonytailY = headY + headSize * 0.4;
         
@@ -376,11 +376,11 @@ export class CharacterHair {
         break;
         
       default:
-        // 正面：ポニーテールは見えないが髪の束ねた跡を表現
+        // Front: Ponytail invisible but hair bundled
         ctx.strokeStyle = CharacterHair.darkenColor(ctx.fillStyle as string, 0.2);
         ctx.lineWidth = 1;
         
-        // 髪をまとめた跡の線
+        // 
         for (let i = 0; i < 3; i++) {
           ctx.beginPath();
           ctx.moveTo(headX + headSize * (0.3 + i * 0.2), headY + headSize * 0.25);
@@ -395,9 +395,9 @@ export class CharacterHair {
     }
   }
 
-  // 🎨 色調整ヘルパー関数
+  // 🎨 
   static darkenColor(color: string, factor: number): string {
-    // 簡易的な色の暗化処理
+    // 
     if (color.startsWith('#')) {
       const r = parseInt(color.slice(1, 3), 16);
       const g = parseInt(color.slice(3, 5), 16);
@@ -413,7 +413,7 @@ export class CharacterHair {
   }
 
   static lightenColor(color: string, factor: number): string {
-    // 簡易的な色の明化処理
+    // 
     if (color.startsWith('#')) {
       const r = parseInt(color.slice(1, 3), 16);
       const g = parseInt(color.slice(3, 5), 16);
@@ -428,7 +428,7 @@ export class CharacterHair {
     return color;
   }
 
-  // 🎯 髪色バリエーション取得
+  // 🎯 
   static getHairColorVariations(): Record<string, string> {
     return {
       black: "#2C1B18",
@@ -446,7 +446,7 @@ export class CharacterHair {
     };
   }
 
-  // 🎯 キャラクタータイプ別推奨髪色
+  // 🎯 Recommended hair color by character type
   static getRecommendedHairColor(characterType: string): string {
     const colors = CharacterHair.getHairColorVariations();
     
@@ -463,7 +463,7 @@ export class CharacterHair {
     }
   }
 
-  // 🎯 髪型リスト取得
+  // 🎯 
   static getAvailableHairStyles(): Array<{
     id: string;
     name: string;
@@ -473,57 +473,57 @@ export class CharacterHair {
     return [
       {
         id: "normal",
-        name: "普通の髪",
-        description: "オーソドックスなショートヘア",
+        name: "",
+        description: "Orthodox short hair",
         suitableFor: ["protagonist", "friend"]
       },
       {
         id: "long", 
-        name: "ロングヘア",
-        description: "長くて美しい髪",
+        name: "",
+        description: "",
         suitableFor: ["heroine", "mysterious"]
       },
       {
         id: "spiky",
-        name: "尖った髪", 
-        description: "元気でワイルドな印象",
+        name: "", 
+        description: "",
         suitableFor: ["rival", "protagonist"]
       },
       {
         id: "curly",
-        name: "ウェーブヘア",
-        description: "優しく親しみやすい印象", 
+        name: "",
+        description: "", 
         suitableFor: ["friend", "sister"]
       },
       {
         id: "short",
-        name: "短髪",
-        description: "きちんとした大人の印象",
+        name: "",
+        description: "",
         suitableFor: ["mentor", "teacher"]
       },
       {
         id: "ponytail", 
-        name: "ポニーテール",
-        description: "活発で若々しい印象",
+        name: "",
+        description: "",
         suitableFor: ["sister", "athlete"]
       }
     ];
   }
 
-  // 🎯 デバッグ用髪型情報出力（修正版）
+  // 🎯 Hair information output for debugging (modified version)
   static debugHairInfo(character: Character, headSize: number): void {
     const { hairColor, hairStyle } = CharacterHair.getHairStyle(character);
     
-    console.log(`💇 髪型デバッグ [${character.name}]:`, {
+    console.log(`💇  [${character.name}]:`, {
       characterType: character.type,
       hairStyle,
       hairColor,
       headSize: Math.round(headSize),
-      bodyDirection: character.facing || "front" // 🔧 修正: bodyDirection/faceAngle → facing
+      bodyDirection: character.facing || "front" // 🔧 : bodyDirection/faceAngle → facing
     });
   }
 
-  // 🎯 髪の毛アニメーション用（将来拡張）
+  // 🎯 For hair animation (future expansion)
   static calculateHairAnimation(
     character: Character,
     animationFrame: number,
@@ -535,7 +535,7 @@ export class CharacterHair {
   } {
     const { hairStyle } = CharacterHair.getHairStyle(character);
     
-    // 髪型に応じたアニメーション強度
+    // Animation intensity according to hairstyle
     let animationStrength = 1.0;
     switch (hairStyle) {
       case "long": animationStrength = 1.5; break;
@@ -551,7 +551,7 @@ export class CharacterHair {
     return {
       offsetX: baseWave * windStrength * 2,
       offsetY: Math.abs(baseWave) * windStrength,
-      waveIntensity: baseWave * 0.5 + 0.5 // 0-1の範囲
+      waveIntensity: baseWave * 0.5 + 0.5 // 0-1
     };
   }
 }

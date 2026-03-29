@@ -1,4 +1,4 @@
-// src/components/CanvasComponent.tsx - 型エラー完全修正版
+// src/components/CanvasComponent.tsx - 
 import React, { useRef, useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { Panel, Character, SpeechBubble, BackgroundElement, EffectElement, ToneElement, CanvasComponentProps } from "../types";
 import { templates } from "./CanvasArea/templates";
@@ -15,24 +15,24 @@ import EditBubbleModal from "./CanvasArea/EditBubbleModal";
 import { BackgroundRenderer } from "./CanvasArea/renderers/BackgroundRenderer";
 import { ContextMenuHandler, ContextMenuState, ContextMenuActions, ClipboardState } from "./CanvasArea/ContextMenuHandler";
 
-// 1. インポートを追加
+// 1. 
 import ElementLabelRenderer from "./CanvasArea/renderers/ElementLabelRenderer";
 
 import { getCanvasBackgroundDisplayName } from '../utils/backgroundUtils';
 
 /**
- * 🔧 ExtendedCanvasComponentProps - 型競合修正版
- * selectedTone, onToneSelectはCanvasComponentPropsで既に必須として定義済み
- * 新規プロパティのみ追加
+ * 🔧 ExtendedCanvasComponentProps - 
+ * selectedTone, onToneSelectCanvasComponentProps
+ * 
  */
-// CanvasComponent.tsx - 順番修正版
+// CanvasComponent.tsx - 
 
 interface ExtendedCanvasComponentProps extends CanvasComponentProps {
-  characterNames?: Record<string, string>; // 🆕 追加
+  characterNames?: Record<string, string>; // 🆕 
 }
 
 /**
- * Canvas操作の中核となるコンポーネント（型エラー完全修正版）
+ * CanvasComponents that are the core of the operation (type error fully corrected version)
  */
 const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentProps>((props, ref) => {
   const {
@@ -47,16 +47,16 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     setBackgrounds,
     effects,
     setEffects,
-    // 🔧 トーン関連（CanvasComponentPropsから継承・必須プロパティ）
+    // 🔧 CanvasComponentProps
     tones,
     setTones,
-    selectedTone,      // 🔧 必須プロパティとして直接使用
-    onToneSelect,      // 🔧 必須プロパティとして直接使用
-    showTonePanel,     // 🔧 必須プロパティとして直接使用
-    // 🆕 新規プロパティ（拡張分）
+    selectedTone,      // 🔧 Use directly as required property
+    onToneSelect,      // 🔧 Use directly as required property
+    showTonePanel,     // 🔧 Use directly as required property
+    // 🆕 
     onTonePanelToggle,
-    characterNames, // 🆕 ここに追加
-    // 既存のprops
+    characterNames, // 🆕 
+    // props
     onCharacterAdd,
     onBubbleAdd,
     onPanelSelect,
@@ -71,43 +71,43 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
       sensitivity: 'medium',
       gridDisplay: 'edit-only'
     },
-    // 🆕 入れ替え選択状態
+    // 🆕 
     swapPanel1,
     swapPanel2
   } = props;
 
-  // 🆕 キャラクター表示名取得関数（関数内に移動）
+  // 🆕 Character display name acquisition function (move into function)
   const getCharacterDisplayName = (character: Character) => {
-    return characterNames?.[character.type] || character.name || 'キャラクター';
+    return characterNames?.[character.type] || character.name || '';
   };
 
   // Canvas ref
   const canvasRef = useRef<HTMLCanvasElement>(null!);
   useImperativeHandle(ref, () => canvasRef.current!, []);
 
-  // 状態管理hook使用
+  // hook
   const [state, actions] = useCanvasState();
 
-  // 背景選択状態
+  // 
   const [selectedBackground, setSelectedBackground] = useState<BackgroundElement | null>(null);
   const [isBackgroundDragging, setIsBackgroundDragging] = useState<boolean>(false);
   const [isBackgroundResizing, setIsBackgroundResizing] = useState<boolean>(false);
   
-  // 効果線選択状態
+  // 
   const [selectedEffect, setSelectedEffect] = useState<EffectElement | null>(null);
   const [isEffectDragging, setIsEffectDragging] = useState<boolean>(false);
   const [isEffectResizing, setIsEffectResizing] = useState<boolean>(false);
 
-  // 🔧 トーン操作状態（selectedToneはpropsから直接使用）
+  // 🔧 selectedToneprops
   const [isToneDragging, setIsToneDragging] = useState<boolean>(false);
   const [isToneResizing, setIsToneResizing] = useState<boolean>(false);
 
-  // 🔧 トーン選択ハンドラー（必須プロパティとして扱う）
+  // 🔧 Tone selection handler (treat as required property)
   const handleToneSelect = (tone: ToneElement | null) => {
-    onToneSelect(tone);  // 🔧 必須プロパティのため直接呼び出し
+    onToneSelect(tone);  // 🔧 Called directly because of required properties
   };
 
-  // ContextMenu & Clipboard 状態
+  // ContextMenu & Clipboard 
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     visible: false,
     x: 0,
@@ -117,13 +117,13 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
   });
   const [clipboard, setClipboard] = useState<ClipboardState | null>(null);
 
-  // ContextMenuActions実装（トーン対応版）
+  // ContextMenuActions
   const contextMenuActions: ContextMenuActions = {
     onDuplicateCharacter: (character: Character) => {
       const newCharacter = {
         ...character,
         id: `char_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-        name: `${character.name}(コピー)`,
+        name: `${character.name}()`,
         x: character.x + 30,
         y: character.y + 30,
       };
@@ -170,7 +170,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         panelId: newPanelId,
       }));
 
-      // 背景も複製
+      // 
       const panelBackgrounds = backgrounds.filter(bg => bg.panelId === panel.id);
       const newBackgrounds = panelBackgrounds.map(bg => ({
         ...bg,
@@ -178,7 +178,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         panelId: newPanelId,
       }));
 
-      // 効果線も複製
+      // 
       const panelEffects = effects.filter(effect => effect.panelId === panel.id);
       const newEffects = panelEffects.map(effect => ({
         ...effect,
@@ -186,7 +186,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         panelId: newPanelId,
       }));
 
-      // トーンも複製
+      // 
       const panelTones = tones.filter(tone => tone.panelId === panel.id);
       const newTones = panelTones.map(tone => ({
         ...tone,
@@ -234,7 +234,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
           const newBubble = {
             ...data as SpeechBubble,
             id: `bubble_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-            text: `${(data as SpeechBubble).text}(コピー)`,
+            text: `${(data as SpeechBubble).text}()`,
             x: (data as SpeechBubble).x + 30,
             y: (data as SpeechBubble).y + 30,
           };
@@ -264,7 +264,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
           setSelectedEffect(newEffect);
           break;
 
-        // トーンペースト
+        // 
         case 'tone':
           const newTone = {
             ...data as ToneElement,
@@ -286,28 +286,28 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         setCharacters(newCharacters);
         actions.setSelectedCharacter(null);
         if (onCharacterSelect) onCharacterSelect(null);
-        // コンソールログは無効化
+        // 
       } else if (type === 'bubble') {
         const newBubbles = speechBubbles.filter(bubble => bubble.id !== element.id);
         setSpeechBubbles(newBubbles);
         actions.setSelectedBubble(null);
-        // コンソールログは無効化
+        // 
       } else if (type === 'background') {
         const newBackgrounds = backgrounds.filter(bg => bg.id !== element.id);
         setBackgrounds(newBackgrounds);
         setSelectedBackground(null);
-        // コンソールログは無効化
+        // 
       } else if (type === 'effect') {
         const newEffects = effects.filter(effect => effect.id !== element.id);
         setEffects(newEffects);
         setSelectedEffect(null);
-        // コンソールログは無効化
+        // 
       } else if (type === 'tone') {
-        // トーン削除
+        // 
         const newTones = tones.filter(tone => tone.id !== element.id);
         setTones(newTones);
         handleToneSelect(null);
-        // コンソールログは無効化
+        // 
       }
     },
 
@@ -318,23 +318,23 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
       const panelEffects = effects.filter(effect => effect.panelId === panel.id);
       const panelTones = tones.filter(tone => tone.panelId === panel.id);
       
-      let confirmMessage = `コマ ${panel.id} を削除しますか？`;
+      let confirmMessage = ` ${panel.id} `;
       if (panelCharacters.length > 0 || panelBubbles.length > 0 || panelBackgrounds.length > 0 || panelEffects.length > 0 || panelTones.length > 0) {
-        confirmMessage += `\n含まれる要素も一緒に削除されます:`;
+        confirmMessage += `\nIncluded elements will also be removed:`;
         if (panelCharacters.length > 0) {
-          confirmMessage += `\n・キャラクター: ${panelCharacters.length}体`;
+          confirmMessage += `\n: ${panelCharacters.length}`;
         }
         if (panelBubbles.length > 0) {
-          confirmMessage += `\n・吹き出し: ${panelBubbles.length}個`;
+          confirmMessage += `\n: ${panelBubbles.length}`;
         }
         if (panelBackgrounds.length > 0) {
-          confirmMessage += `\n・背景: ${panelBackgrounds.length}個`;
+          confirmMessage += `\n: ${panelBackgrounds.length}`;
         }
         if (panelEffects.length > 0) {
-          confirmMessage += `\n・効果線: ${panelEffects.length}個`;
+          confirmMessage += `\n: ${panelEffects.length}`;
         }
         if (panelTones.length > 0) {
-          confirmMessage += `\n・トーン: ${panelTones.length}個`;
+          confirmMessage += `\n: ${panelTones.length}`;
         }
       }
       
@@ -365,7 +365,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
       if (onPanelSelect) onPanelSelect(null);
       if (onCharacterSelect) onCharacterSelect(null);
       
-      // コンソールログは無効化
+      // 
     },
 
     onFlipHorizontal: () => {
@@ -393,7 +393,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         x: 1 - effect.x - effect.width,
         angle: effect.type === 'speed' ? 180 - effect.angle : effect.angle
       }));
-      // トーンも反転
+      // 
       const flippedTones = tones.map(tone => ({
         ...tone,
         x: 1 - tone.x - tone.width,
@@ -433,7 +433,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         y: 1 - effect.y - effect.height,
         angle: effect.type === 'speed' ? -effect.angle : effect.angle
       }));
-      // トーンも反転
+      // 
       const flippedTones = tones.map(tone => ({
         ...tone,
         y: 1 - tone.y - tone.height,
@@ -458,7 +458,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
       if (onPanelSelect) onPanelSelect(panel);
       if (onCharacterSelect) onCharacterSelect(null);
       if (onPanelEditModeToggle) onPanelEditModeToggle(true);
-      // コンソールログは無効化
+      // 
     },
 
     onSplitPanel: (panel: Panel, direction: 'horizontal' | 'vertical') => {
@@ -514,7 +514,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         if (onCharacterSelect) onCharacterSelect(null);
         if (onPanelSelect) onPanelSelect(null);
       } else if (type === 'tone') {
-        // トーン選択
+        // 
         handleToneSelect(element as ToneElement);
         actions.setSelectedCharacter(null);
         actions.setSelectedBubble(null);
@@ -554,7 +554,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
       setSelectedEffect(newEffect);
     },
 
-    // トーン複製
+    // 
     onDuplicateTone: (tone: ToneElement) => {
       const newTone = {
         ...tone,
@@ -567,19 +567,19 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     },
 
     onOpenBackgroundPanel: (background: BackgroundElement) => {
-      // コンソールログは無効化
+      // 
     },
 
     onOpenEffectPanel: (effect: EffectElement) => {
-      // コンソールログは無効化
+      // 
     },
 
-    // トーン設定パネル
+    // 
     onOpenTonePanel: (tone: ToneElement) => {
       if (onTonePanelToggle) {
         onTonePanelToggle();
       }
-      // コンソールログは無効化
+      // 
     },
 
     onDeselectAll: () => {
@@ -594,7 +594,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     },
   };
 
-  // マウスイベントhook使用（トーン対応版）
+  // hook
   const mouseEventHandlers = useMouseEvents({
     canvasRef,
     state,
@@ -613,7 +613,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     setEffects,
     selectedEffect,
     setSelectedEffect,
-    // トーン関連プロパティ
+    // 
     tones,
     setTones,
     selectedTone,
@@ -628,10 +628,10 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     onPanelSplit,
   });
 
-  // キーボードイベント処理（トーンパネル表示制御追加）
+  // Keyboard event processing (tone panel display control added)
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      // Ctrl+T でトーンパネル開閉
+      // Ctrl+T 
       if (e.ctrlKey && e.key.toLowerCase() === 't') {
         e.preventDefault();
         if (onTonePanelToggle) {
@@ -640,11 +640,11 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         return;
       }
 
-      // Ctrl+C, Ctrl+V処理
+      // Ctrl+C, Ctrl+V
       if (e.ctrlKey || e.metaKey) {
         switch (e.key.toLowerCase()) {
           case 'c':
-            // コピー処理（優先順位順）
+            // 
             if (state.selectedBubble) {
               contextMenuActions.onCopyToClipboard('bubble', state.selectedBubble);
               e.preventDefault();
@@ -652,7 +652,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
               contextMenuActions.onCopyToClipboard('character', state.selectedCharacter);
               e.preventDefault();
             } else if (selectedTone) {
-              // トーンコピー
+              // 
               contextMenuActions.onCopyToClipboard('tone', selectedTone);
               e.preventDefault();
             } else if (selectedEffect) {
@@ -675,32 +675,32 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         }
       }
       
-      // Delete/Backspace処理（トーン対応・優先順位順）
+      // Delete/BackspaceProcessing (tone correspondence/priority order)
       if (e.key === 'Delete' || e.key === 'Backspace') {
         if (state.selectedBubble) {
           contextMenuActions.onDeleteElement('bubble', state.selectedBubble);
-          // コンソールログは無効化
+          // 
           e.preventDefault();
         } else if (state.selectedCharacter) {
           contextMenuActions.onDeleteElement('character', state.selectedCharacter);
-          // コンソールログは無効化
+          // 
           e.preventDefault();
         } else if (selectedTone) {
-          // トーン削除
+          // 
           contextMenuActions.onDeleteElement('tone', selectedTone);
-          // コンソールログは無効化
+          // 
           e.preventDefault();
         } else if (selectedEffect) {
           contextMenuActions.onDeleteElement('effect', selectedEffect);
-          // コンソールログは無効化
+          // 
           e.preventDefault();
         } else if (selectedBackground) {
           contextMenuActions.onDeleteElement('background', selectedBackground);
-          // コンソールログは無効化
+          // 
           e.preventDefault();
         } else if (state.selectedPanel && isPanelEditMode) {
           contextMenuActions.onDeletePanel(state.selectedPanel);
-          // コンソールログは無効化
+          // 
           e.preventDefault();
         }
       }
@@ -714,14 +714,14 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     state.selectedPanel,
     selectedBackground,
     selectedEffect,
-    selectedTone, // トーン選択状態
+    selectedTone, // 
     clipboard,
     contextMenuActions,
-    onTonePanelToggle, // トーンパネル開閉
+    onTonePanelToggle, // 
     isPanelEditMode
   ]);
 
-  // Canvas描画hook使用
+  // Canvashook
   const { drawCanvas } = useCanvasDrawing({
     canvasRef,
     state,
@@ -736,12 +736,12 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     selectedTone,
     isPanelEditMode,
     snapSettings,
-    getCharacterDisplayName, // 🔧 この行が重要！確実に渡す
-    swapPanel1, // 🆕 入れ替え選択1
-    swapPanel2, // 🆕 入れ替え選択2
+    getCharacterDisplayName, // 🔧 
+    swapPanel1, // 🆕 1
+    swapPanel2, // 🆕 2
   });
 
-  // 要素追加・編集hook使用
+  // hook
   const { handleEditComplete, handleEditCancel } = useElementActions({
     state,
     actions,
@@ -756,12 +756,12 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     onCharacterSelect,
   });
 
-  // テンプレート変更時の処理（App.tsxで処理されるため、ここでは選択状態のみリセット）
+  // App.tsxwill be processed in, so only the selected state will be reset here)
   useEffect(() => {
     if (selectedTemplate) {
-      // コンソールログは無効化
+      // 
       
-      // 選択状態をリセット
+      // 
       actions.setSelectedPanel(null);
       actions.setSelectedCharacter(null);
       actions.setSelectedBubble(null);
@@ -773,7 +773,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
     }
   }, [selectedTemplate]);
 
-  // ContextMenu外クリック処理
+  // ContextMenu
   useEffect(() => {
     const handleClickOutside = () => {
       setContextMenu({ ...contextMenu, visible: false });
@@ -787,7 +787,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
 
   return (
     <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "flex-start", padding: "0px", minWidth: "fit-content" }}>
-      {/* Canvas要素 */}
+      {/* Canvas */}
       <canvas
         ref={canvasRef}
         width={800}
@@ -809,7 +809,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         }}
       />
 
-      {/* 編集モーダル */}
+      {/*  */}
       <EditBubbleModal
         editingBubble={state.editingBubble}
         editText={state.editText}
@@ -825,7 +825,7 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         }}
       />
 
-      {/* 右クリックメニュー */}
+      {/*  */}
       {ContextMenuHandler.renderContextMenu(
         contextMenu,
         clipboard,
@@ -837,13 +837,13 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
         (e: React.MouseEvent) => e.stopPropagation()
       )}
 
-      {/* 選択状態表示を削除 */}
+      {/*  */}
     
-        {/* キャラクター選択状態表示を削除 */}
+        {/* Delete character selection status display */}
       
-      {/* 吹き出し選択状態表示を削除 */}
+      {/*  */}
 
-      {/* 背景選択状態表示 */}
+      {/*  */}
       {selectedBackground && (
         <div
           style={{
@@ -862,21 +862,21 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
             fontWeight: "bold",
           }}
         >
-          {isBackgroundResizing ? "背景リサイズ中" : 
-          isBackgroundDragging ? "背景移動中" : 
-          `背景選択中`}
+          {isBackgroundResizing ? "" : 
+          isBackgroundDragging ? "" : 
+          ``}
           <br/>
-          // ✅ 修正後
+          // ✅ 
             <small>
-              {getCanvasBackgroundDisplayName(selectedBackground, backgrounds)} | 透明度: {Math.round(selectedBackground.opacity * 100)}%
+              {getCanvasBackgroundDisplayName(selectedBackground, backgrounds)} | : {Math.round(selectedBackground.opacity * 100)}%
             </small>
         </div>
       )}
 
-      {/* 効果線選択状態表示 */}
-      {/* 効果線選択状態表示を削除 */}
+      {/*  */}
+      {/*  */}
 
-      {/* 🔧 トーン選択状態表示（型安全版） */}
+      {/* 🔧 Tone selection status display (type safety version) */}
       {selectedTone && (
         <div
           style={{
@@ -895,27 +895,27 @@ const CanvasComponent = forwardRef<HTMLCanvasElement, ExtendedCanvasComponentPro
             fontWeight: "bold",
           }}
         >
-          {isToneResizing ? "トーンリサイズ中" : 
-          isToneDragging ? "トーン移動中" : 
-          `トーン選択中`}
+          {isToneResizing ? "" : 
+          isToneDragging ? "" : 
+          ``}
           <br/>
           <small>
-            {selectedTone.type} | 密度: {selectedTone.density} | 透明度: {Math.round(selectedTone.opacity * 100)}%
+            {selectedTone.type} | : {selectedTone.density} | : {Math.round(selectedTone.opacity * 100)}%
           </small>
         </div>
       )}
 
-      {/* トーンパネル表示状態は無効化 */}
+      {/* Tone panel visibility disabled */}
 
-      {/* クリップボード状態表示は無効化 */}
+      {/* Clipboard state display disabled */}
 
-      {/* スナップ設定状態表示 - 表示を無効化
+      {/*  - 
       {snapSettings.enabled && (
         ...
       )}
       */}
 
-      {/* デバッグ情報は無効化 */}
+      {/*  */}
     </div>
   );
 });

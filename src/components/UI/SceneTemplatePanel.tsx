@@ -1,4 +1,4 @@
-// src/components/UI/SceneTemplatePanel.tsx - 統合シーンテンプレート
+// src/components/UI/SceneTemplatePanel.tsx - 
 import React, { useState, useCallback } from 'react';
 import { Panel, Character, SpeechBubble, BackgroundElement, EffectElement, ToneElement } from '../../types';
 import { getAllSceneTemplates, getTemplatesByCategory, applyEnhancedSceneTemplate } from '../CanvasArea/sceneTemplates';
@@ -40,22 +40,22 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
   selectedCharacter,
   setSelectedCharacter,
 }) => {
-  // 修正後
+  // 
   const [selectedCategory, setSelectedCategory] = useState<'emotion' | 'action' | 'daily' | 'special'>('emotion');
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
-  // プレビュー機能を一時的に無効化
+  // Temporarily disable preview
   // const [showPreview, setShowPreview] = useState<boolean>(false);
 
-  // カテゴリ別テンプレート取得
+  // 
   const currentTemplates = getTemplatesByCategory(selectedCategory);
   
-  // デバッグ: キャラクター情報を確認
-  console.log('🔍 SceneTemplatePanel - キャラクター情報:', {
+  // : 
+  console.log('🔍 SceneTemplatePanel - :', {
     charactersCount: characters.length,
     characters: characters.map(char => ({ id: char.id, name: char.name, characterId: char.characterId }))
   });
 
-  // キャラクター情報を直接受け取るテンプレート適用関数
+  // Template application function to receive character information directly
   const handleApplyTemplateWithCharacter = useCallback((templateKey: string, character: any) => {
     console.log('🔍 handleApplyTemplateWithCharacter called:', {
       templateKey,
@@ -64,40 +64,40 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
     });
 
     if (!panels || panels.length === 0) {
-      alert('❌ パネルテンプレートを先に選択してください');
+      alert('❌ Please select a panel template first');
       return;
     }
 
     if (!character) {
       console.log('❌ character is null:', character);
-      alert('❌ キャラクターを先に選択してください');
+      alert('❌ Please select a character first');
       return;
     }
 
     const template = getAllSceneTemplates()[templateKey];
     if (!template) {
-      alert('❌ テンプレートが見つかりません');
+      alert('❌ template not found');
       return;
     }
 
-    // 🔧 選択されたパネルを強制的に確認・取得
+    // 🔧 Force Review/Retrieve Selected Panels
     let targetPanel = selectedPanel;
     
-    // selectedPanelがnullの場合の対策
+    // selectedPanelnull
     if (!targetPanel) {
-      // 最後にクリックされたパネルを探す（パネルの選択状態を確認）
+      // Find the last panel clicked (check the selection status of the panel)
       const lastSelectedPanel = panels.find(panel => {
-        // パネルが何らかの形で選択状態を保持している場合
+        // If the panel holds the selection in some way
         return (panel as any).isSelected || (panel as any).selected;
       });
       
       if (lastSelectedPanel) {
         targetPanel = lastSelectedPanel;
-        console.log(`🔧 選択状態から対象パネルを復元: パネル${targetPanel.id}`);
+        console.log(`🔧 Restore target panel from selected state: ${targetPanel.id}`);
       } else {
-        // それでもない場合は確認ダイアログ
+        // Confirmation dialog if not yet
         const panelId = prompt(
-          `どのパネルに配置しますか？\n利用可能なパネル: ${panels.map(p => p.id).join(', ')}`,
+          `\n: ${panels.map(p => p.id).join(', ')}`,
           panels[0].id.toString()
         );
         
@@ -105,29 +105,29 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
           const specifiedPanel = panels.find(p => p.id.toString() === panelId);
           if (specifiedPanel) {
             targetPanel = specifiedPanel;
-            console.log(`🔧 ユーザー指定でパネル${targetPanel.id}に配置`);
+            console.log(`🔧 ${targetPanel.id}`);
           }
         }
         
-        // それでもない場合は最初のパネル
+        // If not, go to the first panel
         if (!targetPanel) {
           targetPanel = panels[0];
-          console.log(`⚠️ 最初のパネル${targetPanel.id}にフォールバック`);
+          console.log(`⚠️ ${targetPanel.id}`);
         }
       }
     }
 
-    console.log(`🎭 テンプレート適用: ${template.name} → パネル${targetPanel.id}`);
-    console.log(`📊 選択状態: selectedPanel=${selectedPanel?.id || 'null'}, targetPanel=${targetPanel.id}`);
-    console.log(`👤 選択されたキャラクター: ${character.name} (ID: ${character.id})`);
+    console.log(`🎭 : ${template.name} → ${targetPanel.id}`);
+    console.log(`📊 : selectedPanel=${selectedPanel?.id || 'null'}, targetPanel=${targetPanel.id}`);
+    console.log(`👤 : ${character.name} (ID: ${character.id})`);
 
-    // 🔧 既存のパネル内要素をクリア（統合テンプレート適用前に）
+    // 🔧 Clear existing in-panel elements (before applying the integration template)
     if (!targetPanel) {
       console.error('❌ targetPanel is null');
       return;
     }
     
-    // TypeScriptの型ガード: targetPanelが確実にnullでないことを保証
+    // TypeScript: targetPanelnull
     const panelId = targetPanel.id;
     
     const filteredCharacters = characters.filter(char => char.panelId !== panelId);
@@ -136,7 +136,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
     const filteredEffects = effects.filter(effect => effect.panelId !== panelId);
     const filteredTones = tones.filter(tone => tone.panelId !== panelId);
     
-    console.log(`🧹 パネル${panelId}の既存要素をクリア:`, {
+    console.log(`🧹 ${panelId}:`, {
       characters: characters.length - filteredCharacters.length,
       bubbles: speechBubbles.length - filteredBubbles.length,
       backgrounds: backgrounds.length - filteredBackgrounds.length,
@@ -145,21 +145,21 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
     });
 
 
-    // 統合テンプレート適用（選択されたキャラクター情報を渡す）
+    // Apply unified template (pass selected character information)
     const result = applyEnhancedSceneTemplate(
       templateKey,
       panels,
-      filteredCharacters,  // 🔧 クリア済みのキャラクター配列を使用
-      filteredBubbles,    // 🔧 クリア済みの吹き出し配列を使用
-      filteredBackgrounds, // 🔧 クリア済みの背景配列を使用
-      filteredEffects,    // 🔧 クリア済みの効果配列を使用
-      filteredTones,      // 🔧 クリア済みのトーン配列を使用
-      targetPanel,  // 🔧 確実に取得したパネルを使用
-      character  // 🔧 選択されたキャラクター情報を渡す
+      filteredCharacters,  // 🔧 Use Cleared Character Array
+      filteredBubbles,    // 🔧 Use cleared callout arrays
+      filteredBackgrounds, // 🔧 
+      filteredEffects,    // 🔧 
+      filteredTones,      // 🔧 Use Cleared Tone Array
+      targetPanel,  // 🔧 
+      character  // 🔧 Pass selected character information
     );
 
 
-    // 状態更新
+    // 
     setCharacters(result.characters);
     setSpeechBubbles(result.speechBubbles);
     setBackgrounds(result.backgrounds);
@@ -168,20 +168,20 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
 
     setSelectedTemplate(templateKey);
     
-    // 成功メッセージ
-    console.log(`🎭 「${template.name}」をパネル${targetPanel.id}に適用しました`);
+    // 
+    console.log(`🎭 ${template.name}${targetPanel.id}`);
     
-    // トースト通知（実装されている場合）
+    // Toast notification (if implemented)
     if (typeof window !== 'undefined' && (window as any).showToast) {
-      (window as any).showToast(`🎭 「${template.name}」をパネル${targetPanel.id}に適用`, 'success');
+      (window as any).showToast(`🎭 ${template.name}${targetPanel.id}`, 'success');
     }
     
-    // 適用後に対象パネルを選択状態にする
-    // この部分は親コンポーネントのonPanelSelectがあれば使用
+    // Select the target panel after applying
+    // This part is the parent component'sonPanelSelect
   }, [panels, characters, speechBubbles, backgrounds, effects, tones, selectedPanel, setCharacters, setSpeechBubbles, setBackgrounds, setEffects, setTones, setSelectedTemplate]);
 
-  // 統合シーンテンプレート適用
-  // handleApplyTemplate関数の修正版
+  // 
+  // handleApplyTemplate
   const handleApplyTemplate = useCallback((templateKey: string) => {
     console.log('🔍 handleApplyTemplate called:', {
       templateKey,
@@ -190,40 +190,40 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
     });
 
     if (!panels || panels.length === 0) {
-      alert('❌ パネルテンプレートを先に選択してください');
+      alert('❌ Please select a panel template first');
       return;
     }
 
     if (!selectedCharacter) {
       console.log('❌ selectedCharacter is null:', selectedCharacter);
-      alert('❌ キャラクターを先に選択してください');
+      alert('❌ Please select a character first');
       return;
     }
 
     const template = getAllSceneTemplates()[templateKey];
     if (!template) {
-      alert('❌ テンプレートが見つかりません');
+      alert('❌ template not found');
       return;
     }
 
-    // 🔧 選択されたパネルを強制的に確認・取得
+    // 🔧 Force Review/Retrieve Selected Panels
     let targetPanel = selectedPanel;
     
-    // selectedPanelがnullの場合の対策
+    // selectedPanelnull
     if (!targetPanel) {
-      // 最後にクリックされたパネルを探す（パネルの選択状態を確認）
+      // Find the last panel clicked (check the selection status of the panel)
       const lastSelectedPanel = panels.find(panel => {
-        // パネルが何らかの形で選択状態を保持している場合
+        // If the panel holds the selection in some way
         return (panel as any).isSelected || (panel as any).selected;
       });
       
       if (lastSelectedPanel) {
         targetPanel = lastSelectedPanel;
-        console.log(`🔧 選択状態から対象パネルを復元: パネル${targetPanel.id}`);
+        console.log(`🔧 Restore target panel from selected state: ${targetPanel.id}`);
       } else {
-        // それでもない場合は確認ダイアログ
+        // Confirmation dialog if not yet
         const panelId = prompt(
-          `どのパネルに配置しますか？\n利用可能なパネル: ${panels.map(p => p.id).join(', ')}`,
+          `\n: ${panels.map(p => p.id).join(', ')}`,
           panels[0].id.toString()
         );
         
@@ -231,23 +231,23 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
           const specifiedPanel = panels.find(p => p.id.toString() === panelId);
           if (specifiedPanel) {
             targetPanel = specifiedPanel;
-            console.log(`🔧 ユーザー指定でパネル${targetPanel.id}に配置`);
+            console.log(`🔧 ${targetPanel.id}`);
           }
         }
         
-        // それでもない場合は最初のパネル
+        // If not, go to the first panel
         if (!targetPanel) {
           targetPanel = panels[0];
-          console.log(`⚠️ 最初のパネル${targetPanel.id}にフォールバック`);
+          console.log(`⚠️ ${targetPanel.id}`);
         }
       }
     }
 
-    console.log(`🎭 テンプレート適用: ${template.name} → パネル${targetPanel.id}`);
-    console.log(`📊 選択状態: selectedPanel=${selectedPanel?.id || 'null'}, targetPanel=${targetPanel.id}`);
-    console.log(`👤 選択されたキャラクター: ${selectedCharacter.name} (ID: ${selectedCharacter.id})`);
+    console.log(`🎭 : ${template.name} → ${targetPanel.id}`);
+    console.log(`📊 : selectedPanel=${selectedPanel?.id || 'null'}, targetPanel=${targetPanel.id}`);
+    console.log(`👤 : ${selectedCharacter.name} (ID: ${selectedCharacter.id})`);
 
-    // 統合テンプレート適用（選択されたキャラクター情報を渡す）
+    // Apply unified template (pass selected character information)
     const result = applyEnhancedSceneTemplate(
       templateKey,
       panels,
@@ -256,11 +256,11 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
       backgrounds,
       effects,
       tones,
-      targetPanel,  // 🔧 確実に取得したパネルを使用
-      selectedCharacter  // 🔧 選択されたキャラクター情報を渡す
+      targetPanel,  // 🔧 
+      selectedCharacter  // 🔧 Pass selected character information
     );
 
-    // 状態更新
+    // 
     setCharacters(result.characters);
     setSpeechBubbles(result.speechBubbles);
     setBackgrounds(result.backgrounds);
@@ -269,32 +269,32 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
 
     setSelectedTemplate(templateKey);
     
-    // 成功メッセージ
-    console.log(`🎭 「${template.name}」をパネル${targetPanel.id}に適用しました`);
+    // 
+    console.log(`🎭 ${template.name}${targetPanel.id}`);
     
-    // トースト通知（実装されている場合）
+    // Toast notification (if implemented)
     if (typeof window !== 'undefined' && (window as any).showToast) {
-      (window as any).showToast(`🎭 「${template.name}」をパネル${targetPanel.id}に適用`, 'success');
+      (window as any).showToast(`🎭 ${template.name}${targetPanel.id}`, 'success');
     }
     
-    // 適用後に対象パネルを選択状態にする
-    // この部分は親コンポーネントのonPanelSelectがあれば使用
+    // Select the target panel after applying
+    // This part is the parent component'sonPanelSelect
     // onPanelSelect?.(targetPanel);
     
   }, [panels, selectedPanel, characters, speechBubbles, backgrounds, effects, tones, setCharacters, setSpeechBubbles, setBackgrounds, setEffects, setTones]);
 
-  // プレビュー表示を一時的に無効化
+  // Temporarily disable preview display
   const handlePreview = useCallback((templateKey: string) => {
     setSelectedTemplate(templateKey);
-    // setShowPreview(true); // 一時的にコメントアウト
+    // setShowPreview(true); // 
   }, []);
 
-  // カテゴリ情報
+  // 
   const categoryInfo = {
-    emotion: { icon: '😢', name: '感情', description: '感情表現', color: '#ff6b6b' },
-    action: { icon: '💨', name: 'アクション', description: '動きのあるシーン', color: '#4ecdc4' },
-    daily: { icon: '💬', name: '日常', description: '日常的なシーン', color: '#45b7d1' },
-    special: { icon: '✨', name: '特別', description: '特別なシーン', color: '#9b59b6' }
+    emotion: { icon: '😢', name: '', description: '', color: '#ff6b6b' },
+    action: { icon: '💨', name: '', description: '', color: '#4ecdc4' },
+    daily: { icon: '💬', name: '', description: '', color: '#45b7d1' },
+    special: { icon: '✨', name: '', description: '', color: '#9b59b6' }
   };
 
   const currentCategory = categoryInfo[selectedCategory];
@@ -302,18 +302,18 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
   return (
     <div className="scene-template-panel">
       <div className="section-header">
-        <h3>🎭 統合シーンテンプレート</h3>
+        <h3>🎭 </h3>
         <div className="template-info" style={{
           fontSize: '12px',
           color: isDarkMode ? '#aaa' : '#666',
           marginTop: '4px',
           lineHeight: '1.4'
         }}>
-          キャラ + 背景 + 効果線 + トーンを一括配置
+           +  +  + 
         </div>
       </div>
 
-      {/* キャラクター選択 */}
+      {/*  */}
       <div className="character-selection" style={{
         marginBottom: '12px',
         padding: '8px',
@@ -327,7 +327,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
           marginBottom: '8px',
           color: isDarkMode ? '#fff' : '#333'
         }}>
-          👤 キャラクター選択
+          👤 
         </div>
         
         <div style={{
@@ -338,20 +338,20 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
           <button
             onClick={() => {
               if (!selectedPanel) {
-                alert('パネルを選択してください');
+                alert('');
                 return;
               }
-              // 主人公キャラクターを作成
+              // 
               const protagonistChar = {
                 id: `char_${Date.now()}_protagonist`,
                 characterId: 'protagonist',
-                name: '主人公',
+                name: '',
                 x: selectedPanel.x + selectedPanel.width * 0.5,
                 y: selectedPanel.y + selectedPanel.height * 0.7,
                 panelId: selectedPanel.id,
                 isGlobalPosition: true,
                 scale: 2.0,
-                type: 'character_1',  // 🔧 修正: character → character_1
+                type: 'character_1',  // 🔧 : character → character_1
                 expression: 'neutral',
                 action: 'standing',
                 facing: 'at_viewer',
@@ -360,9 +360,9 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
                 handGesture: 'none',
                 viewType: 'upper_body' as const
               };
-              // 🔧 キャラクター選択のみ（描画はしない）
+              // 🔧 Character selection only (do not draw)
               setSelectedCharacter(protagonistChar);
-              console.log('👤 主人公選択:', protagonistChar);
+              console.log('👤 :', protagonistChar);
             }}
             style={{
               padding: '4px 8px',
@@ -375,25 +375,25 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               transition: 'all 0.2s ease'
             }}
           >
-            👤 主人公
+            👤 
           </button>
           <button
             onClick={() => {
               if (!selectedPanel) {
-                alert('パネルを選択してください');
+                alert('');
                 return;
               }
-              // ヒロインキャラクターを作成
+              // 
               const heroineChar = {
                 id: `char_${Date.now()}_heroine`,
                 characterId: 'heroine',
-                name: 'ヒロイン',
+                name: '',
                 x: selectedPanel.x + selectedPanel.width * 0.5,
                 y: selectedPanel.y + selectedPanel.height * 0.7,
                 panelId: selectedPanel.id,
                 isGlobalPosition: true,
                 scale: 2.0,
-                type: 'character_2',  // 🔧 修正: character → character_2
+                type: 'character_2',  // 🔧 : character → character_2
                 expression: 'neutral',
                 action: 'standing',
                 facing: 'at_viewer',
@@ -402,9 +402,9 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
                 handGesture: 'none',
                 viewType: 'upper_body' as const
               };
-              // 🔧 キャラクター選択のみ（描画はしない）
+              // 🔧 Character selection only (do not draw)
               setSelectedCharacter(heroineChar);
-              console.log('👩 ヒロイン選択:', heroineChar);
+              console.log('👩 :', heroineChar);
             }}
             style={{
               padding: '4px 8px',
@@ -417,25 +417,25 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               transition: 'all 0.2s ease'
             }}
           >
-            👩 ヒロイン
+            👩 
           </button>
           <button
             onClick={() => {
               if (!selectedPanel) {
-                alert('パネルを選択してください');
+                alert('');
                 return;
               }
-              // ライバルキャラクターを作成
+              // 
               const rivalChar = {
                 id: `char_${Date.now()}_rival`,
                 characterId: 'rival',
-                name: 'ライバル',
+                name: '',
                 x: selectedPanel.x + selectedPanel.width * 0.5,
                 y: selectedPanel.y + selectedPanel.height * 0.7,
                 panelId: selectedPanel.id,
                 isGlobalPosition: true,
                 scale: 2.0,
-                type: 'character_3',  // 🔧 修正: character → character_3
+                type: 'character_3',  // 🔧 : character → character_3
                 expression: 'neutral',
                 action: 'standing',
                 facing: 'at_viewer',
@@ -444,9 +444,9 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
                 handGesture: 'none',
                 viewType: 'upper_body' as const
               };
-              // 🔧 キャラクター選択のみ（描画はしない）
+              // 🔧 Character selection only (do not draw)
               setSelectedCharacter(rivalChar);
-              console.log('👨 ライバル選択:', rivalChar);
+              console.log('👨 :', rivalChar);
             }}
             style={{
               padding: '4px 8px',
@@ -459,25 +459,25 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               transition: 'all 0.2s ease'
             }}
           >
-            👨 ライバル
+            👨 
           </button>
           <button
             onClick={() => {
               if (!selectedPanel) {
-                alert('パネルを選択してください');
+                alert('');
                 return;
               }
-              // 友人キャラクターを作成
+              // 
               const friendChar = {
                 id: `char_${Date.now()}_friend`,
                 characterId: 'friend',
-                name: '友人',
+                name: '',
                 x: selectedPanel.x + selectedPanel.width * 0.5,
                 y: selectedPanel.y + selectedPanel.height * 0.7,
                 panelId: selectedPanel.id,
                 isGlobalPosition: true,
                 scale: 2.0,
-                type: 'character_4',  // 🔧 修正: character_3 → character_4
+                type: 'character_4',  // 🔧 : character_3 → character_4
                 expression: 'neutral',
                 action: 'standing',
                 facing: 'at_viewer',
@@ -486,9 +486,9 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
                 handGesture: 'none',
                 viewType: 'upper_body' as const
               };
-              // 🔧 キャラクター選択のみ（描画はしない）
+              // 🔧 Character selection only (do not draw)
               setSelectedCharacter(friendChar);
-              console.log('👫 友人選択:', friendChar);
+              console.log('👫 :', friendChar);
             }}
             style={{
               padding: '4px 8px',
@@ -501,12 +501,12 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               transition: 'all 0.2s ease'
             }}
           >
-            👫 友人
+            👫 
           </button>
         </div>
       </div>
 
-      {/* カテゴリ選択タブ */}
+      {/*  */}
       <div className="category-tabs" style={{
         display: 'flex',
         gap: '4px',
@@ -543,7 +543,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
         ))}
       </div>
 
-      {/* カテゴリ説明 */}
+      {/*  */}
       <div style={{
         background: isDarkMode ? '#333' : '#f9f9f9',
         border: `1px solid ${currentCategory.color}`,
@@ -560,7 +560,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
         {currentCategory.description}
       </div>
 
-      {/* テンプレート一覧 */}
+      {/*  */}
       <div className="template-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
@@ -584,16 +584,16 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
             }}
             onClick={() => {
               if (!selectedCharacter) {
-                alert('キャラクターを先に選択してください');
+                alert('Please select a character first');
                 return;
               }
               handleApplyTemplateWithCharacter(key, selectedCharacter);
             }}
-            // プレビューを一時的に無効化してチカチカを防ぐ
+            // Prevent chikachika by temporarily deactivating the preview
             // onMouseEnter={() => handlePreview(key)}
             // onMouseLeave={() => setShowPreview(false)}
           >
-            {/* テンプレート名 */}
+            {/*  */}
             <div style={{
               fontSize: '13px',
               fontWeight: 'bold',
@@ -606,7 +606,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               {template.name}
             </div>
 
-            {/* テンプレート説明 */}
+            {/*  */}
             <div style={{
               fontSize: '10px',
               color: isDarkMode ? '#aaa' : '#666',
@@ -616,7 +616,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               {template.description}
             </div>
 
-            {/* 要素数表示 */}
+            {/*  */}
             <div style={{
               display: 'flex',
               gap: '6px',
@@ -630,7 +630,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               {template.tones && template.tones.length > 0 && <span>🎯{template.tones.length}</span>}
             </div>
 
-            {/* 選択インジケーター */}
+            {/*  */}
             {selectedTemplate === key && (
               <div style={{
                 position: 'absolute',
@@ -653,7 +653,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
         ))}
       </div>
 
-      {/* 適用状況表示 */}
+      {/*  */}
       <div style={{
         background: isDarkMode ? '#333' : '#f0f0f0',
         border: `1px solid ${isDarkMode ? '#555' : '#ddd'}`,
@@ -663,21 +663,21 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
         color: isDarkMode ? '#ccc' : '#666'
       }}>
         <div style={{ marginBottom: '4px' }}>
-          <strong>📍 適用先: </strong>
-          {selectedPanel ? `パネル${selectedPanel.id}` : '最初のパネル'}
+          <strong>📍 : </strong>
+          {selectedPanel ? `${selectedPanel.id}` : ''}
         </div>
         <div style={{ marginBottom: '4px' }}>
-          <strong>📊 現在の要素数: </strong>
+          <strong>📊 : </strong>
           👥{characters.length} 💬{speechBubbles.length} 🎨{backgrounds.length} ⚡{effects.length} 🎯{tones.length}
         </div>
         {panels.length === 0 && (
           <div style={{ color: '#ff6b6b', fontWeight: 'bold' }}>
-            ⚠️ パネルテンプレートを先に選択してください
+            ⚠️ Please select a panel template first
           </div>
         )}
       </div>
 
-      {/* プレビューモーダルを一時的に無効化してチカチカを防ぐ */}
+      {/* Prevent Chikachika by temporarily disabling the preview modal */}
       {/*
       {showPreview && selectedTemplate && getAllSceneTemplates()[selectedTemplate] && (
         <div 
@@ -707,7 +707,7 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
             gap: '6px'
           }}>
             {getAllSceneTemplates()[selectedTemplate].name}
-            <span style={{ fontSize: '10px', color: isDarkMode ? '#888' : '#666' }}>プレビュー</span>
+            <span style={{ fontSize: '10px', color: isDarkMode ? '#888' : '#666' }}></span>
           </div>
           
           <div style={{
@@ -726,17 +726,17 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
             fontSize: '10px',
             color: isDarkMode ? '#aaa' : '#777'
           }}>
-            <div><strong>含まれる要素:</strong></div>
-            <div>👥 キャラクター: {getAllSceneTemplates()[selectedTemplate].characters.length}体</div>
-            <div>💬 吹き出し: {getAllSceneTemplates()[selectedTemplate].speechBubbles.length}個</div>
+            <div><strong>:</strong></div>
+            <div>👥 : {getAllSceneTemplates()[selectedTemplate].characters.length}</div>
+            <div>💬 : {getAllSceneTemplates()[selectedTemplate].speechBubbles.length}</div>
             {getAllSceneTemplates()[selectedTemplate].backgrounds && (
-              <div>🎨 背景: {getAllSceneTemplates()[selectedTemplate].backgrounds!.length}個</div>
+              <div>🎨 : {getAllSceneTemplates()[selectedTemplate].backgrounds!.length}</div>
             )}
             {getAllSceneTemplates()[selectedTemplate].effects && (
-              <div>⚡ 効果線: {getAllSceneTemplates()[selectedTemplate].effects!.length}個</div>
+              <div>⚡ : {getAllSceneTemplates()[selectedTemplate].effects!.length}</div>
             )}
             {getAllSceneTemplates()[selectedTemplate].tones && (
-              <div>🎯 トーン: {getAllSceneTemplates()[selectedTemplate].tones!.length}個</div>
+              <div>🎯 : {getAllSceneTemplates()[selectedTemplate].tones!.length}</div>
             )}
           </div>
 
@@ -755,13 +755,13 @@ export const SceneTemplatePanel: React.FC<SceneTemplatePanelProps> = ({
               cursor: 'pointer'
             }}
           >
-            🎭 このシーンを適用
+            🎭 
           </button>
         </div>
       )}
       */}
 
-      {/* 背景オーバーレイも一時的に無効化 */}
+      {/* Background overlays are also temporarily disabled */}
       {/*
       {showPreview && (
         <div

@@ -1,4 +1,4 @@
-// src/components/UI/TonePanel.tsx - React Hooks ルール修正版
+// src/components/UI/TonePanel.tsx - React Hooks 
 import React, { useState, useCallback, useMemo } from 'react';
 import { ToneElement, ToneTemplate, Panel, BlendMode } from '../../types';
 import { 
@@ -10,7 +10,7 @@ import {
 } from '../CanvasArea/toneTemplates';
 
 /**
- * BackgroundPanel/EffectPanelと同じプロパティ構造
+ * BackgroundPanel/EffectPanel
  */
 interface TonePanelProps {
   isOpen: boolean;
@@ -21,13 +21,13 @@ interface TonePanelProps {
   isDarkMode?: boolean;
   selectedPanel?: Panel | null;
   tones?: ToneElement[];
-  // 互換性用（削除予定）
+  // 
   selectedPanelId?: number;
   darkMode?: boolean;
 }
 
 /**
- * トーン選択・設定パネル（React Hooks ルール修正版）
+ * React Hooks 
  */
 const TonePanel: React.FC<TonePanelProps> = ({
   isOpen,
@@ -41,16 +41,16 @@ const TonePanel: React.FC<TonePanelProps> = ({
   selectedPanelId,
   darkMode
 }) => {
-  // 🔧 React Hooks ルール修正: useStateを早期リターンより前に移動
-  // UI状態管理
+  // 🔧 React Hooks : useState
+  // UI
   const [activeTab, setActiveTab] = useState<'shadow' | 'highlight' | 'texture' | 'background' | 'effect' | 'mood'>('shadow');
   const [selectedTemplate, setSelectedTemplate] = useState<ToneTemplate | null>(null);
   const [previewTone, setPreviewTone] = useState<ToneElement | null>(null);
 
-  // ダークモード統一
+  // 
   const isThemeDark = isDarkMode || darkMode || false;
 
-  // 🔧 利用可能なパネルを取得（BackgroundPanelと同じ方式）
+  // 🔧 BackgroundPanel
   const getAvailablePanels = () => {
     if (selectedPanel) return [selectedPanel];
     
@@ -68,33 +68,33 @@ const TonePanel: React.FC<TonePanelProps> = ({
   const availablePanels = getAvailablePanels();
   const currentPanel = selectedPanel || availablePanels[0] || null;
 
-  // トーン追加処理（BackgroundPanelのapplyBackgroundTemplateと同じ構造）
+  // BackgroundPanelapplyBackgroundTemplate
   const applyToneTemplate = (template: ToneTemplate) => {
     if (!currentPanel) {
-      alert('パネルを選択するか、既存のトーンがあるパネルから選択してください');
+      alert('Select a panel or choose from a panel with existing tones');
       return;
     }
 
-    // createToneFromTemplateを使用してトーンを作成
+    // createToneFromTemplate
     if (createToneFromTemplate && typeof createToneFromTemplate === 'function') {
       try {
-        // ✅ パネル全体にフィット
+        // ✅ 
         const newTone = createToneFromTemplate(
           template,
           currentPanel.id,
-          0,   // ← x位置（パネル左端）
-          0,   // ← y位置（パネル上端）
-          1,   // ← width（パネル幅100%）
-          1    // ← height（パネル高100%）
+          0,   // ← x
+          0,   // ← y
+          1,   // ← width100%
+          1    // ← height100%
         );
         onAddTone(newTone);
-        console.log(`✨ トーン「${template.name}」をパネル${currentPanel.id}に適用しました`);
+        console.log(`✨ ${template.name}${currentPanel.id}`);
       } catch (error) {
-        console.error('トーン追加エラー:', error);
-        alert('トーンの追加に失敗しました');
+        console.error(':', error);
+        alert('');
       }
     } else {
-      // フォールバック: 手動でトーンを作成
+      // : 
       const newTone: ToneElement = {
         id: `tone_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
         panelId: currentPanel.id,
@@ -119,7 +119,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
         zIndex: 0,
         isGlobalPosition: false,
         visible: true,
-        // 描画用プロパティ
+        // 
         color: '#000000',
         intensity: 0.5,
         angle: 0,
@@ -129,31 +129,31 @@ const TonePanel: React.FC<TonePanelProps> = ({
     }
   };
 
-  // トーン削除（BackgroundPanelと同じ構造）
+  // BackgroundPanel
   const deleteTone = (toneId: string) => {
-    if (window.confirm('このトーンを削除しますか？')) {
-      // 削除処理はCanvasComponentで実装されているため、ここでは何もしない
-      console.log('トーン削除:', toneId);
-      // 実際の削除はcontextMenuActionsで処理される
+    if (window.confirm('')) {
+      // CanvasComponentWe don't do anything here because it's implemented in
+      console.log(':', toneId);
+      // contextMenuActions
     }
   };
 
-  // 現在のパネルのトーン取得（BackgroundPanelと同じ構造）
+  // BackgroundPanel
   const panelTones = currentPanel 
     ? tones.filter(tone => tone.panelId === currentPanel.id)
     : [];
 
-  // カテゴリ情報取得
+  // 
   const categoryInfo = getToneCategoryInfo ? getToneCategoryInfo() : {
-    shadow: { icon: '🌑', name: '影・陰影', description: 'シャドウトーン' },
-    highlight: { icon: '✨', name: 'ハイライト', description: '光・反射' },
-    texture: { icon: '🎨', name: 'テクスチャ', description: '質感表現' },
-    background: { icon: '🖼️', name: '背景', description: '背景パターン' },
-    effect: { icon: '💫', name: '効果', description: '特殊効果' },
-    mood: { icon: '🌈', name: '雰囲気', description: 'ムード演出' }
+    shadow: { icon: '🌑', name: '', description: '' },
+    highlight: { icon: '✨', name: '', description: '' },
+    texture: { icon: '🎨', name: '', description: '' },
+    background: { icon: '🖼️', name: '', description: '' },
+    effect: { icon: '💫', name: '', description: '' },
+    mood: { icon: '🌈', name: '', description: '' }
   };
 
-  // トーンタイプのアイコン取得
+  // 
   const getToneTypeIcon = (type: string) => {
     switch (type) {
       case 'halftone': return '⚫';
@@ -166,20 +166,20 @@ const TonePanel: React.FC<TonePanelProps> = ({
     }
   };
 
-  // トーンタイプ名取得
+  // 
   const getToneTypeName = (type: string) => {
     switch (type) {
-      case 'halftone': return 'ハーフトーン';
-      case 'gradient': return 'グラデーション';
-      case 'crosshatch': return 'クロスハッチ';
-      case 'dots': return 'ドット';
-      case 'lines': return 'ライン';
-      case 'noise': return 'ノイズ';
+      case 'halftone': return '';
+      case 'gradient': return '';
+      case 'crosshatch': return '';
+      case 'dots': return '';
+      case 'lines': return '';
+      case 'noise': return '';
       default: return type;
     }
   };
 
-  // 🔧 モーダル表示判定をuseStateの後に移動
+  // 🔧 useState
   if (!isOpen) return null;
 
   return (
@@ -215,7 +215,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
           boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
         }}
       >
-        {/* ヘッダー（BackgroundPanel/EffectPanelと同じ構造） */}
+        {/* BackgroundPanel/EffectPanel */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -225,10 +225,10 @@ const TonePanel: React.FC<TonePanelProps> = ({
           paddingBottom: '16px'
         }}>
           <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>
-            🎨 トーン設定
+            🎨 
             {currentPanel && (
               <span style={{ fontSize: '16px', fontWeight: 'normal', marginLeft: '12px', color: 'var(--text-muted)' }}>
-                パネル{currentPanel.id}
+                {currentPanel.id}
               </span>
             )}
           </h2>
@@ -245,11 +245,11 @@ const TonePanel: React.FC<TonePanelProps> = ({
               fontSize: '14px'
             }}
           >
-            ✕ 閉じる
+            ✕ 
           </button>
         </div>
 
-        {/* パネル選択状況の表示（BackgroundPanelと同じ構造） */}
+        {/* BackgroundPanel */}
         {!currentPanel ? (
           <div style={{
             background: 'var(--bg-secondary)',
@@ -260,11 +260,11 @@ const TonePanel: React.FC<TonePanelProps> = ({
             textAlign: 'center',
             color: 'var(--accent-color)'
           }}>
-            📢 トーンを設定するパネルを先に選択してください
+            📢 Please select a panel to set the tone for first
             {availablePanels.length > 0 && (
               <div style={{ marginTop: '12px' }}>
                 <small style={{ display: 'block', marginBottom: '8px' }}>
-                  または、既存のトーンがあるパネルから選択:
+                  Or choose from a panel with existing tones:
                 </small>
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
                   {availablePanels.map(panel => (
@@ -280,10 +280,10 @@ const TonePanel: React.FC<TonePanelProps> = ({
                         fontSize: '12px'
                       }}
                       onClick={() => {
-                        console.log(`パネル${panel.id}を選択`);
+                        console.log(`${panel.id}`);
                       }}
                     >
-                      パネル{panel.id}
+                      {panel.id}
                     </button>
                   ))}
                 </div>
@@ -292,7 +292,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
           </div>
         ) : (
           <>
-            {/* カテゴリタブ（BackgroundPanelと同じ構造） */}
+            {/* BackgroundPanel */}
             <div style={{ marginBottom: '20px' }}>
               <div style={{ 
                 display: 'flex', 
@@ -322,14 +322,14 @@ const TonePanel: React.FC<TonePanelProps> = ({
               </div>
             </div>
 
-            {/* トーンテンプレート一覧（BackgroundPanelと同じ構造） */}
+            {/* BackgroundPanel */}
             <div style={{ marginBottom: '24px' }}>
               <h3 style={{ 
                 margin: '0 0 12px 0', 
                 fontSize: '18px',
                 color: 'var(--text-primary)'
               }}>
-                📋 テンプレート ({(toneTemplatesByCategory[activeTab as keyof typeof toneTemplatesByCategory] || []).length}個)
+                📋  ({(toneTemplatesByCategory[activeTab as keyof typeof toneTemplatesByCategory] || []).length})
               </h3>
               
               <div style={{
@@ -366,7 +366,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    {/* トーンプレビュー */}
+                    {/*  */}
                     <div style={{
                       width: '100%',
                       height: '60px',
@@ -390,7 +390,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                       {template.description}
                     </div>
                     
-                    {/* パラメータ表示 */}
+                    {/*  */}
                     <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', flexWrap: 'wrap' }}>
                       <span style={{
                         background: 'var(--bg-tertiary)',
@@ -399,7 +399,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                         fontSize: '9px',
                         color: 'var(--text-muted)'
                       }}>
-                        密度: {Math.round(template.density * 100)}%
+                        : {Math.round(template.density * 100)}%
                       </span>
                       <span style={{
                         background: 'var(--bg-tertiary)',
@@ -408,7 +408,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                         fontSize: '9px',
                         color: 'var(--text-muted)'
                       }}>
-                        透明度: {Math.round(template.opacity * 100)}%
+                        : {Math.round(template.opacity * 100)}%
                       </span>
                     </div>
                   </div>
@@ -416,7 +416,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
               </div>
             </div>
 
-            {/* 現在のトーン一覧（BackgroundPanelと同じ構造） */}
+            {/* BackgroundPanel */}
             {panelTones.length > 0 && (
               <div>
                 <h3 style={{ 
@@ -424,7 +424,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                   fontSize: '18px',
                   color: 'var(--text-primary)'
                 }}>
-                  🎯 現在のトーン ({panelTones.length}個)
+                  🎯  ({panelTones.length})
                 </h3>
                 
                 <div style={{
@@ -440,8 +440,8 @@ const TonePanel: React.FC<TonePanelProps> = ({
                     <div
                       key={tone.id}
                       onClick={() => {
-                        // トーン選択（実際の選択はCanvasComponentで処理）
-                        console.log('トーン選択:', tone.id);
+                        // CanvasComponent
+                        console.log(':', tone.id);
                       }}
                       style={{
                         display: 'flex',
@@ -459,7 +459,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                       <div>
                         <strong>{getToneTypeIcon(tone.type)} {getToneTypeName(tone.type)}</strong>
                         <div style={{ fontSize: '12px', opacity: 0.8 }}>
-                          密度: {Math.round(tone.density * 100)}% | 透明度: {Math.round(tone.opacity * 100)}% | {tone.pattern}
+                          : {Math.round(tone.density * 100)}% | : {Math.round(tone.opacity * 100)}% | {tone.pattern}
                         </div>
                       </div>
                       
@@ -486,7 +486,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
               </div>
             )}
 
-            {/* 選択中のトーン編集エリア（EffectPanelと同じ構造） */}
+            {/* EffectPanel */}
             {selectedTone && onUpdateTone && (
               <div style={{
                 marginTop: '20px',
@@ -500,7 +500,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                   fontSize: '16px',
                   color: 'var(--text-primary)'
                 }}>
-                  🎯 選択中のトーン: {getToneTypeIcon(selectedTone.type)} {getToneTypeName(selectedTone.type)}
+                  🎯 : {getToneTypeIcon(selectedTone.type)} {getToneTypeName(selectedTone.type)}
                 </h4>
                 
                 <div style={{
@@ -515,7 +515,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                       color: 'var(--text-muted)',
                       marginBottom: '4px'
                     }}>
-                      密度: {Math.round(selectedTone.density * 100)}%
+                      : {Math.round(selectedTone.density * 100)}%
                     </label>
                     <input
                       type="range"
@@ -544,7 +544,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
                       color: 'var(--text-muted)',
                       marginBottom: '4px'
                     }}>
-                      透明度: {Math.round(selectedTone.opacity * 100)}%
+                      : {Math.round(selectedTone.opacity * 100)}%
                     </label>
                     <input
                       type="range"
@@ -569,7 +569,7 @@ const TonePanel: React.FC<TonePanelProps> = ({
               </div>
             )}
 
-            {/* 操作ガイド（BackgroundPanel/EffectPanelと同じ構造） */}
+            {/* BackgroundPanel/EffectPanel */}
             <div style={{
               marginTop: '20px',
               padding: '12px',
@@ -579,13 +579,13 @@ const TonePanel: React.FC<TonePanelProps> = ({
               fontSize: '12px',
               color: 'var(--text-muted)'
             }}>
-              <strong>💡 操作ガイド:</strong><br/>
-              • テンプレートをクリックしてトーンを適用<br/>
-              • トーン要素をクリックして選択・編集<br/>
-              • キャンバス上でトーンをクリックして選択<br/>
-              • パネルを選択してからトーン設定パネルを開く<br/>
-              • Ctrl+T でトーンパネル開閉<br/>
-              • 🔧 BackgroundPanel/EffectPanelと同じモーダル実装に統合済み
+              <strong>💡 :</strong><br/>
+              • Click on the template to apply the tone<br/>
+              • Click on a tone element to select and edit it<br/>
+              • Click to select a tone on the canvas<br/>
+              • Select a panel and then open the Tone Settings panel<br/>
+              • Ctrl+T <br/>
+              • 🔧 BackgroundPanel/EffectPanelis integrated into the same modal implementation as
             </div>
           </>
         )}

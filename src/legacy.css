@@ -1,4 +1,4 @@
-/* ===== 基本リセット ===== */
+/* =====  ===== */
 * {
   margin: 0;
   padding: 0;
@@ -10,7 +10,7 @@ body {
   background: #f0f0f0;
 }
 
-/* ===== ヘッダー ===== */
+/* =====  ===== */
 .header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -28,7 +28,7 @@ body {
   opacity: 0.9;
 }
 
-/* ===== メインレイアウト ===== */
+/* =====  ===== */
 .container {
   display: flex;
   max-width: 1600px;
@@ -37,7 +37,7 @@ body {
   min-height: calc(100vh - 120px);
 }
 
-/* 左パネル：ストーリー構成 */
+/*  */
 .story-panel {
   width: 250px;
   background: #f8f9fa;
@@ -46,7 +46,7 @@ body {
   overflow-y: auto;
 }
 
-/* メインキャンバス */
+/*  */
 .main-canvas {
   flex: 1;
   padding: 20px;
@@ -54,7 +54,7 @@ body {
   position: relative;
 }
 
-/* 右パネル：制作ツール */
+/*  */
 .tools-panel {
   width: 350px;
   background: white;
@@ -63,7 +63,7 @@ body {
   overflow-y: auto;
 }
 
-/* ===== UI セクション ===== */
+/* ===== UI  ===== */
 .section {
   margin-bottom: 20px;
   padding: 12px;
@@ -80,7 +80,7 @@ body {
   font-size: 14px;
 }
 
-/* ===== テンプレート関連 ===== */
+/* =====  ===== */
 .template-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -119,7 +119,7 @@ body {
   opacity: 0.8;
 }
 
-/* ===== キャラ配置 ===== */
+/* =====  ===== */
 .character-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -157,7 +157,7 @@ body {
   font-weight: bold;
 }
 
-/* ===== セリフ・吹き出し ===== */
+/* =====  ===== */
 .dialogue-input {
   width: 100%;
   height: 60px;
@@ -192,7 +192,7 @@ body {
   background: #f8fff9;
 }
 
-/* ===== ボタン ===== */
+/* =====  ===== */
 .btn {
   padding: 8px 12px;
   border: none;
@@ -231,14 +231,14 @@ body {
   background: #218838;
 }
 
-/* 出力ボタン */
+/*  */
 .export-buttons {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* ===== ストーリー関連 ===== */
+/* =====  ===== */
 .story-timeline {
   display: flex;
   align-items: center;
@@ -269,7 +269,7 @@ body {
   resize: vertical;
 }
 
-/* ===== キャンバス関連 ===== */
+/* =====  ===== */
 .canvas-container {
   position: relative;
   display: inline-block;
@@ -288,7 +288,7 @@ body {
   font-size: 11px;
 }
 
-/* ===== ダークモード対応 ===== */
+/* =====  ===== */
 [data-theme="dark"] {
   --bg-primary: #1a1a1a;
   --bg-secondary: #2d2d2d;
@@ -300,7 +300,7 @@ body {
   --accent-color: #667eea;
 }
 
-/* ダークモード時の基本要素 */
+/*  */
 [data-theme="dark"] body {
   background-color: #1a1a1a !important;
   color: #e0e0e0 !important;
@@ -330,7 +330,7 @@ body {
   border-bottom-color: #667eea !important;
 }
 
-/* ダークモード時のキャンバス */
+/*  */
 [data-theme="dark"] .canvas-container {
   border-color: #555 !important;
   background-color: #404040 !important;
@@ -342,7 +342,7 @@ body {
   color: #e0e0e0 !important;
 }
 
-/* ダークモード時のボタン・カード類 */
+/*  */
 [data-theme="dark"] .template-card,
 [data-theme="dark"] .pattern-card,
 [data-theme="dark"] .char-item,
@@ -369,7 +369,7 @@ body {
   border-color: #8899ff !important;
 }
 
-/* ダークモード時の入力フィールド */
+/*  */
 [data-theme="dark"] .dialogue-input,
 [data-theme="dark"] .plot-input,
 [data-theme="dark"] .direction-memo {
@@ -391,7 +391,7 @@ body {
   border-color: #666666 !important;
 }
 
-/* ダークモード時のボタン */
+/*  */
 [data-theme="dark"] .btn {
   background-color: #404040 !important;
   color: #e0e0e0 !important;
@@ -425,7 +425,7 @@ body {
   color: #ffffff !important;
 }
 
-/* ダークモード時のタイムライン */
+/*  */
 [data-theme="dark"] .timeline-step {
   background-color: #404040 !important;
   color: #e0e0e0 !important;
@@ -437,7 +437,7 @@ body {
   color: #ffffff !important;
 }
 
-/* ダークモード時のページタブ */
+/*  */
 [data-theme="dark"] .page-tab {
   background-color: #404040 !important;
   color: #e0e0e0 !important;
@@ -454,21 +454,21 @@ body {
   color: #b0b0b0 !important;
 }
 
-/* ダークモード時の推奨パネル */
+/*  */
 [data-theme="dark"] .recommendation-panel {
   background-color: #2d2d2d !important;
   color: #e0e0e0 !important;
   border-color: #555555 !important;
 }
 
-/* ダークモード時のキャラクターアイコン */
+/*  */
 [data-theme="dark"] .char-icon {
   background-color: #667eea !important;
   color: #ffffff !important;
   border: 1px solid #8899ff !important;
 }
 
-/* ダークモード時のヘッダー */
+/*  */
 [data-theme="dark"] .header {
   background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%) !important;
   color: #e0e0e0 !important;
@@ -482,12 +482,12 @@ body {
   color: #b0b0b0 !important;
 }
 
-/* ダークモード時のコントロール */
+/*  */
 [data-theme="dark"] .control-group label {
   color: #e0e0e0 !important;
 }
 
-/* ダークモード時の操作状況バー */
+/*  */
 [data-theme="dark"] .operation-status {
   background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%) !important;
   border-color: #444 !important;
@@ -508,14 +508,14 @@ body {
   border-color: #555 !important;
 }
 
-/* ダークモード時のステータスバー */
+/*  */
 [data-theme="dark"] .status-bar {
   background-color: #2d2d2d !important;
   border-color: #555 !important;
   color: #e0e0e0 !important;
 }
 
-/* ダークモード時のキャンバス要素 */
+/*  */
 [data-theme="dark"] .character-placeholder {
   border-color: #0088ff !important;
   background: rgba(0, 136, 255, 0.15) !important;
@@ -538,7 +538,7 @@ body {
   border-color: #ff8833 !important;
 }
 
-/* ダークモード時のスクロールバー */
+/*  */
 [data-theme="dark"] ::-webkit-scrollbar {
   width: 8px;
   background: #2d2d2d;
@@ -553,7 +553,7 @@ body {
   background: #888888;
 }
 
-/* ダークモード時の選択状態をより明確に */
+/*  */
 [data-theme="dark"] .selected {
   box-shadow: 0 0 15px rgba(255, 136, 51, 0.8) !important;
   border-color: #ff8833 !important;

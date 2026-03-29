@@ -1,6 +1,22 @@
-// src/components/UI/StoryToComicModal.tsx - 2段階プレビュー対応版
+// src/components/UI/StoryToComicModal.tsx — two-step preview
 import React, { useState } from 'react';
-import { PanelContent } from '../../services/OpenAIService';
+import { PanelContent } from '../../services/OllamaService';
+
+const BUBBLE_LABEL: Record<string, string> = {
+  normal: 'normal',
+  shout: 'shout',
+  whisper: 'whisper',
+  thought: 'thought',
+  '\u666e\u901a': 'normal',
+  '\u53eb\u3073': 'shout',
+  '\u5c0f\u58f0': 'whisper',
+  '\u5fc3\u306e\u58f0': 'thought',
+};
+
+function bubbleLabel(t?: string) {
+  if (!t) return 'normal';
+  return BUBBLE_LABEL[t] || BUBBLE_LABEL[String(t).toLowerCase()] || t;
+}
 
 interface StoryToComicModalProps {
   isOpen: boolean;
@@ -13,8 +29,8 @@ interface StoryToComicModalProps {
   isDarkMode?: boolean;
   characterNames?: Record<string, string>;
   selectedPanelId?: number | null;
-  initialStory?: string; // ページメモからの初期値
-  initialMode?: 'full' | 'single'; // 初期モード（デフォルトはfull）
+  initialStory?: string;
+  initialMode?: 'full' | 'single';
 }
 
 export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
@@ -33,13 +49,12 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
 }) => {
   const [generationMode, setGenerationMode] = useState<'full' | 'single'>(initialMode);
   const [story, setStory] = useState(initialStory);
-  const [tone, setTone] = useState('コメディ');
+  const [tone, setTone] = useState('Comedy');
   const [previewData, setPreviewData] = useState<PanelContent[] | null>(null);
   const [singlePanelData, setSinglePanelData] = useState<PanelContent | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [step, setStep] = useState<'input' | 'preview'>('input');
 
-  // モーダルが開いた時にinitialStoryとinitialModeを反映
   React.useEffect(() => {
     if (isOpen) {
       if (initialStory) {
@@ -53,12 +68,12 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
 
   const handleGenerate = async () => {
     if (!story.trim()) {
-      alert('話の概要を入力してください');
+      alert('Enter a story summary');
       return;
     }
 
     if (generationMode === 'single' && !selectedPanelId) {
-      alert('生成したいコマを選択してください');
+      alert('Select a panel to generate');
       return;
     }
 
@@ -74,7 +89,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
       setStep('preview');
     } catch (error) {
       console.error('Preview generation error:', error);
-      alert('プレビュー生成に失敗しました');
+      alert('Preview generation failed');
     } finally {
       setIsGenerating(false);
     }
@@ -92,11 +107,10 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
 
   const handleClose = () => {
     setStory('');
-    setTone('コメディ');
+    setTone('Comedy');
     setPreviewData(null);
     setSinglePanelData(null);
     setStep('input');
-    // generationModeはリセットしない（initialModeで制御される）
     onClose();
   };
 
@@ -106,7 +120,6 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
 
   return (
     <>
-      {/* オーバーレイ */}
       <div
         style={{
           position: 'fixed',
@@ -120,7 +133,6 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
         onClick={handleClose}
       />
 
-      {/* モーダル */}
       <div
         style={{
           position: 'fixed',
@@ -140,23 +152,20 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ 
-          marginBottom: '20px', 
-          fontWeight: 'bold', 
+        <div style={{
+          marginBottom: '20px',
+          fontWeight: 'bold',
           fontSize: '18px',
           color: isDarkMode ? '#fff' : '#333'
         }}>
-          {generationMode === 'full' 
-            ? '📖 1ページ分のコマ内容を生成' 
-            : `🎯 コマ${selectedPanelId}の内容を生成`
-          }
-          {step === 'preview' && ' - プレビュー'}
+          {generationMode === 'full'
+            ? 'Generate full page'
+            : `Generate panel ${selectedPanelId}`}
+          {step === 'preview' && ' — preview'}
         </div>
 
         {step === 'input' ? (
           <>
-
-            {/* 入力画面 */}
             <div style={{
               marginBottom: '16px',
               padding: '12px',
@@ -165,7 +174,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
               fontSize: '13px',
               color: isDarkMode ? '#ccc' : '#666'
             }}>
-              📐 現在のコマ数: <strong>{panelCount}コマ</strong>
+              Panel count: <strong>{panelCount}</strong>
             </div>
 
             <div style={{ marginBottom: '16px' }}>
@@ -176,7 +185,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                 fontSize: '13px',
                 color: isDarkMode ? '#fff' : '#333'
               }}>
-                🎭 トーン
+                Tone
               </label>
               <select
                 value={tone}
@@ -191,11 +200,11 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                   fontSize: '13px'
                 }}
               >
-                <option value="コメディ">😄 コメディ</option>
-                <option value="シリアス">😐 シリアス</option>
-                <option value="日常">☀️ 日常</option>
-                <option value="感動">😢 感動</option>
-                <option value="緊張">😰 緊張</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Serious">Serious</option>
+                <option value="Slice of life">Slice of life</option>
+                <option value="Heartfelt">Heartfelt</option>
+                <option value="Tense">Tense</option>
               </select>
             </div>
 
@@ -207,15 +216,15 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                 fontSize: '13px',
                 color: isDarkMode ? '#fff' : '#333'
               }}>
-                📝 {generationMode === 'full' ? 'コマごとの内容' : 'このコマの内容'}
+                {generationMode === 'full' ? 'Per-panel beats' : 'This panel'}
               </label>
               <textarea
                 value={story}
                 onChange={(e) => setStory(e.target.value)}
                 placeholder={
                   generationMode === 'full'
-                    ? "例:\n１コマ目→リナが悩んでる\n２コマ目→リナが漫画が描けないよーって悩んでる\n３コマ目→サユがこのアプリを使えばできる！"
-                    : "例:\nリナが驚いた表情で「え！？本当に！？」と言っている"
+                    ? "Example:\nPanel 1 — hero panics\nPanel 2 — hero says they can't draw\nPanel 3 — friend plugs this app"
+                    : "Example:\nHero shocked, saying “No way — really?!”"
                 }
                 autoFocus
                 style={{
@@ -225,7 +234,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                   border: `1px solid ${isDarkMode ? '#555' : '#ccc'}`,
                   borderRadius: '6px',
                   resize: 'vertical',
-                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontFamily: "system-ui, sans-serif",
                   fontSize: '14px',
                   lineHeight: '1.6',
                   background: isDarkMode ? '#404040' : 'white',
@@ -237,14 +246,14 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                 color: isDarkMode ? '#999' : '#666',
                 marginTop: '6px'
               }}>
-                💡 {generationMode === 'full' 
-                  ? 'コマごとに改行して、登場キャラ・動作・場所を書いてください' 
-                  : '登場キャラ・動作・セリフ・場所を書いてください'}
+                {generationMode === 'full'
+                  ? 'One line per panel: who acts, what happens, where if it matters'
+                  : 'Who acts, dialogue, action, place if it matters'}
               </div>
             </div>
 
-            <div style={{ 
-              marginTop: '20px', 
+            <div style={{
+              marginTop: '20px',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '10px'
@@ -263,7 +272,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                   opacity: isGenerating ? 0.5 : 1
                 }}
               >
-                キャンセル
+                Cancel
               </button>
               <button
                 onClick={handleGenerate}
@@ -279,13 +288,12 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                   fontWeight: 'bold'
                 }}
               >
-                {isGenerating ? '生成中...' : '🎯 プレビュー生成'}
+                {isGenerating ? 'Generating…' : 'Generate preview'}
               </button>
             </div>
           </>
         ) : (
           <>
-            {/* プレビュー画面 */}
             <div style={{
               marginBottom: '16px',
               padding: '12px',
@@ -296,17 +304,16 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
               color: isDarkMode ? '#d1fae5' : '#065f46',
               fontWeight: 'bold'
             }}>
-              ✅ プレビューが生成されました。内容を確認して「適用」してください。
+              Preview ready — review and click Apply.
             </div>
 
-            {/* プレビュー内容 */}
             <div style={{
               maxHeight: '400px',
               overflowY: 'auto',
               marginBottom: '16px'
             }}>
               {generationMode === 'full' ? (
-                previewData?.map((panel, index) => (
+                previewData?.map((panel) => (
                   <div
                     key={panel.panelId}
                     style={{
@@ -323,25 +330,25 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                       color: isDarkMode ? '#8b5cf6' : '#7c3aed',
                       marginBottom: '8px'
                     }}>
-                      コマ {panel.panelId}
+ Panel {panel.panelId}
                     </div>
 
                     {panel.characterId && (
                       <div style={{ fontSize: '12px', marginBottom: '4px', color: isDarkMode ? '#fbbf24' : '#d97706' }}>
-                        👤 キャラ: <strong>{characterNames[panel.characterId] || panel.characterId}</strong>
+                        Character: <strong>{characterNames[panel.characterId] || panel.characterId}</strong>
                       </div>
                     )}
 
                     <div style={{ fontSize: '12px', marginBottom: '4px', color: isDarkMode ? '#ccc' : '#666' }}>
-                      📌 メモ: {panel.note}
+                      Note: {panel.note}
                     </div>
 
                     <div style={{ fontSize: '12px', marginBottom: '4px', color: isDarkMode ? '#ccc' : '#666' }}>
-                      💬 吹き出し: 「{panel.dialogue}」 ({panel.bubbleType || '普通'})
+                      Dialogue: “{panel.dialogue}” ({bubbleLabel(panel.bubbleType)})
                     </div>
 
                     <div style={{ fontSize: '11px', marginBottom: '4px', color: isDarkMode ? '#999' : '#888', fontFamily: 'monospace' }}>
-                      🎬 動作: {panel.actionPrompt}
+                      Action (EN): {panel.actionPrompt}
                     </div>
 
                     {panel.actionPromptJa && (
@@ -353,7 +360,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                         borderRadius: '4px',
                         marginTop: '4px'
                       }}>
-                        💬 日本語: {panel.actionPromptJa}
+                        Notes: {panel.actionPromptJa}
                       </div>
                     )}
                   </div>
@@ -374,25 +381,25 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                       color: isDarkMode ? '#8b5cf6' : '#7c3aed',
                       marginBottom: '8px'
                     }}>
-                      コマ {singlePanelData.panelId}
+                      Panel {singlePanelData.panelId}
                     </div>
 
                     {singlePanelData.characterId && (
                       <div style={{ fontSize: '12px', marginBottom: '4px', color: isDarkMode ? '#fbbf24' : '#d97706' }}>
-                        👤 キャラ: <strong>{characterNames[singlePanelData.characterId] || singlePanelData.characterId}</strong>
+                        Character: <strong>{characterNames[singlePanelData.characterId] || singlePanelData.characterId}</strong>
                       </div>
                     )}
 
                     <div style={{ fontSize: '12px', marginBottom: '4px', color: isDarkMode ? '#ccc' : '#666' }}>
-                      📌 メモ: {singlePanelData.note}
+                      Note: {singlePanelData.note}
                     </div>
 
                     <div style={{ fontSize: '12px', marginBottom: '4px', color: isDarkMode ? '#ccc' : '#666' }}>
-                      💬 吹き出し: 「{singlePanelData.dialogue}」 ({singlePanelData.bubbleType || '普通'})
+                      Dialogue: “{singlePanelData.dialogue}” ({bubbleLabel(singlePanelData.bubbleType)})
                     </div>
 
                     <div style={{ fontSize: '11px', marginBottom: '4px', color: isDarkMode ? '#999' : '#888', fontFamily: 'monospace' }}>
-                      🎬 動作: {singlePanelData.actionPrompt}
+                      Action (EN): {singlePanelData.actionPrompt}
                     </div>
 
                     {singlePanelData.actionPromptJa && (
@@ -404,7 +411,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                         borderRadius: '4px',
                         marginTop: '4px'
                       }}>
-                        💬 日本語: {singlePanelData.actionPromptJa}
+                        Notes: {singlePanelData.actionPromptJa}
                       </div>
                     )}
                   </div>
@@ -412,8 +419,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
               )}
             </div>
 
-            {/* ボタンエリア */}
-            <div style={{ 
+            <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               gap: '10px'
@@ -430,7 +436,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                   fontSize: '14px'
                 }}
               >
-                ← 戻る
+                ← Back
               </button>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
@@ -445,7 +451,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                     fontSize: '14px'
                   }}
                 >
-                  キャンセル
+                  Cancel
                 </button>
                 <button
                   onClick={handleApply}
@@ -460,14 +466,13 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
                     fontWeight: 'bold'
                   }}
                 >
-                  ✅ 適用
+                  Apply
                 </button>
               </div>
             </div>
           </>
         )}
 
-        {/* 注意事項 */}
         {step === 'input' && (
           <div style={{
             marginTop: '16px',
@@ -478,7 +483,7 @@ export const StoryToComicModal: React.FC<StoryToComicModalProps> = ({
             fontSize: '11px',
             color: isDarkMode ? '#fbbf24' : '#856404'
           }}>
-            ⚠️ OpenAI APIの使用には料金がかかります（gpt-4o-mini使用、1回数円程度）
+            Text is sent to your local Ollama (Llama). Start Ollama and pull a chat model first.
           </div>
         )}
       </div>

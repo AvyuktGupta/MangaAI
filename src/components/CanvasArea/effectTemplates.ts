@@ -1,11 +1,11 @@
-// src/components/CanvasArea/effectTemplates.ts - クリスタ実用版（5種類）
+// src/components/CanvasArea/effectTemplates.ts - 5
 import { EffectTemplate } from '../../types';
 
 export const effectTemplates: EffectTemplate[] = [
-  // === 1. スピード線（最重要）===
+  // === 1. ===
   {
     id: 'speed_horizontal',
-    name: 'スピード線',
+    name: '',
     type: 'speed',
     direction: 'horizontal',
     intensity: 0.8,
@@ -15,14 +15,14 @@ export const effectTemplates: EffectTemplate[] = [
     color: '#000000',
     opacity: 0.7,
     blur: 1,
-    description: '動きの表現（最重要）',
+    description: '',
     category: 'action'
   },
 
-  // === 2. 集中線（最重要）===
+  // === 2. ===
   {
     id: 'focus_center',
-    name: '集中線',
+    name: '',
     type: 'focus',
     direction: 'radial',
     intensity: 0.9,
@@ -32,14 +32,14 @@ export const effectTemplates: EffectTemplate[] = [
     color: '#000000',
     opacity: 0.6,
     blur: 0,
-    description: '注目・驚きの表現（最重要）',
+    description: 'Expressions of attention and surprise (most important)',
     category: 'emotion'
   },
 
-  // === 3. 爆発線 ===
+  // === 3.  ===
   {
     id: 'explosion_intense',
-    name: '爆発線',
+    name: '',
     type: 'explosion',
     direction: 'radial',
     intensity: 1.0,
@@ -49,14 +49,14 @@ export const effectTemplates: EffectTemplate[] = [
     color: '#000000',
     opacity: 0.9,
     blur: 0,
-    description: '衝撃・爆発シーン',
+    description: '',
     category: 'action'
   },
 
-  // === 4. フラッシュ線 ===
+  // === 4.  ===
   {
     id: 'flash_bright',
-    name: 'フラッシュ線',
+    name: '',
     type: 'flash',
     direction: 'radial',
     intensity: 0.8,
@@ -66,14 +66,14 @@ export const effectTemplates: EffectTemplate[] = [
     color: '#FFFFFF',
     opacity: 0.8,
     blur: 3,
-    description: '強い光・閃光の表現',
+    description: '',
     category: 'special'
   },
 
-  // === 5. 背景効果線 ===
+  // === 5.  ===
   {
     id: 'wind_horizontal',
-    name: '背景効果線',
+    name: '',
     type: 'speed',
     direction: 'horizontal',
     intensity: 0.4,
@@ -83,22 +83,22 @@ export const effectTemplates: EffectTemplate[] = [
     color: '#666666',
     opacity: 0.5,
     blur: 2,
-    description: '雰囲気・環境表現',
+    description: '',
     category: 'environment'
   }
 ];
 
-// カテゴリ別効果線テンプレート取得
+// Get Effect Line Template by Category
 export const getEffectTemplatesByCategory = (category: EffectTemplate['category']): EffectTemplate[] => {
   return effectTemplates.filter(template => template.category === category);
 };
 
-// 効果線タイプ別テンプレート取得
+// Get template by effect line type
 export const getEffectTemplatesByType = (type: EffectTemplate['type']): EffectTemplate[] => {
   return effectTemplates.filter(template => template.type === type);
 };
 
-// 効果線テンプレートをEffectElementに変換
+// EffectElement
 export const createEffectFromTemplate = (
   template: EffectTemplate,
   x: number,

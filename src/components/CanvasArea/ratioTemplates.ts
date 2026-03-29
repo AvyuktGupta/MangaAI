@@ -1,19 +1,19 @@
-// src/components/CanvasArea/ratioTemplates.ts - 比率ベーステンプレートシステム
+// src/components/CanvasArea/ratioTemplates.ts - Ratio-based template system
 import { Templates } from "../../types";
 
 /**
- * 比率ベースのテンプレート定義
- * 座標は0-1の範囲で指定（キャンバスサイズに対する比率）
+ * Ratio-based template definitions
+ * 0-1(ratio to canvas size)
  */
 export const ratioTemplates: Templates = {
-  // === 1コマテンプレート ===
+  // === 1 ===
   "single_impact": {
     panels: [
       { id: 1, x: 0.025, y: 0.025, width: 0.95, height: 0.95 },
     ],
   },
 
-  // === 2コマテンプレート ===
+  // === 2 ===
   "split_horizontal": {
     panels: [
       { id: 1, x: 0.025, y: 0.025, width: 0.4625, height: 0.95 },
@@ -45,7 +45,7 @@ export const ratioTemplates: Templates = {
     ],
   },
 
-  // === 3コマテンプレート ===
+  // === 3 ===
   "three_vertical": {
     panels: [
       { id: 1, x: 0.025, y: 0.025, width: 0.95, height: 0.3 },
@@ -68,7 +68,7 @@ export const ratioTemplates: Templates = {
     ],
   },
 
-  // === 4コマテンプレート ===
+  // === 4 ===
   "4koma": {
     panels: [
       { id: 1, x: 0.025, y: 0.025, width: 0.95, height: 0.225 },
@@ -126,7 +126,7 @@ export const ratioTemplates: Templates = {
     ],
   },
 
-  // === 5コマテンプレート ===
+  // === 5 ===
   "gag": {
     panels: [
       { id: 1, x: 0.025, y: 0.025, width: 0.95, height: 0.2 },
@@ -155,7 +155,7 @@ export const ratioTemplates: Templates = {
     ],
   },
 
-  // === 6コマ以上テンプレート ===
+  // === 6 ===
   "vertical": {
     panels: [
       { id: 1, x: 0.025, y: 0.025, width: 0.95, height: 0.15 },

@@ -3,7 +3,7 @@ import { Panel, Character, SpeechBubble, SnapSettings } from "../../types";
 
 export class PanelManager {
   /**
-   * パネルハンドル判定
+   * 
    */
   static getPanelHandleAt(
     mouseX: number, 
@@ -13,7 +13,7 @@ export class PanelManager {
     const handleSize = 20;
     const tolerance = 5;
     
-    // 削除ハンドル判定
+    // 
     const deleteHandleSize = 24;
     const deleteX = panel.x - deleteHandleSize/2;
     const deleteY = panel.y - deleteHandleSize/2;
@@ -27,7 +27,7 @@ export class PanelManager {
       return { type: "delete" };
     }
 
-    // リサイズハンドル判定
+    // 
     const resizeHandles = [
       { x: panel.x - handleSize/2, y: panel.y - handleSize/2, type: "resize", direction: "nw" },
       { x: panel.x + panel.width/2 - handleSize/2, y: panel.y - handleSize/2, type: "resize", direction: "n" },
@@ -50,7 +50,7 @@ export class PanelManager {
       }
     }
 
-    // 移動ハンドル判定
+    // 
     const moveHandleSize = 30;
     const moveX = panel.x + panel.width/2 - moveHandleSize/2;
     const moveY = panel.y + panel.height/2 - moveHandleSize/2;
@@ -64,7 +64,7 @@ export class PanelManager {
       return { type: "move" };
     }
 
-    // 分割ハンドル判定
+    // 
     const splitHandleSize = 24;
     const splitX = panel.x + panel.width - splitHandleSize - 5;
     const splitY = panel.y + panel.height - splitHandleSize - 5;
@@ -82,7 +82,7 @@ export class PanelManager {
   }
 
   /**
-   * パネルリサイズ
+   * 
    */
   static resizePanel(
     panel: Panel, 
@@ -144,7 +144,7 @@ export class PanelManager {
   }
 
   /**
-   * パネル移動（スナップ機能付き）
+   * Panel movement (with snap function)
    */
   static movePanel(
     panel: Panel,
@@ -163,7 +163,7 @@ export class PanelManager {
     
     const snapLines: Array<{x1: number, y1: number, x2: number, y2: number, type: 'vertical' | 'horizontal'}> = [];
     
-    // スナップが無効な場合は早期リターン
+    // Early return if snap is invalid
     if (!snapSettings.enabled) {
       return {
         panel: { ...panel, x: newX, y: newY },
@@ -171,7 +171,7 @@ export class PanelManager {
       };
     }
     
-    // 感度設定をピクセル値に変換
+    // Convert sensitivity settings to pixel values
     const getSnapSensitivity = () => {
       switch (snapSettings.sensitivity) {
         case 'weak': return 6;
@@ -184,9 +184,9 @@ export class PanelManager {
     
     const otherPanels = allPanels.filter(p => p.id !== panel.id);
     
-    // パネル本体の境界線でスナップ判定
+    // Snap determination by the boundary line of the panel body
     for (const otherPanel of otherPanels) {
-      // 水平方向のスナップ
+      // 
       if (Math.abs(newX - otherPanel.x) < snapThreshold) {
         newX = otherPanel.x;
         snapLines.push({
@@ -208,7 +208,7 @@ export class PanelManager {
       }
     }
     
-    // 垂直方向のスナップ
+    // 
     for (const otherPanel of otherPanels) {
       if (Math.abs(newY - otherPanel.y) < snapThreshold) {
         newY = otherPanel.y;
@@ -238,7 +238,7 @@ export class PanelManager {
   }
 
   /**
-   * パネル複製（完全版）
+   * 
    */
   static duplicatePanel(
     originalPanel: Panel,
@@ -252,35 +252,35 @@ export class PanelManager {
     newCharacters: Character[];
     newBubbles: SpeechBubble[];
   } {
-    console.log("🔍 複製開始 - 元パネル:", originalPanel);
+    console.log("🔍  - :", originalPanel);
     
-    // 新しいパネルID生成
+    // ID
     const maxId = Math.max(...panels.map(p => p.id), 0);
     const newPanelId = maxId + 1;
-    console.log("🔍 新しいパネルID:", newPanelId);
+    console.log("🔍 ID:", newPanelId);
     
-    // パネルを右側に複製（重複しないよう調整）
+    // Duplicate panel to right (adjust not to overlap)
     const newPanel: Panel = {
       ...originalPanel,
       id: newPanelId,
-      x: originalPanel.x + originalPanel.width + 10, // 10px間隔
+      x: originalPanel.x + originalPanel.width + 10, // 10px
       y: originalPanel.y
     };
     
-    // キャンバス範囲チェック
+    // 
     if (newPanel.x + newPanel.width > canvasWidth) {
-      console.log("🔍 右に配置できないため下に配置");
+      console.log("🔍 Can't place to the right, place to the bottom");
       newPanel.x = originalPanel.x;
       newPanel.y = originalPanel.y + originalPanel.height + 10;
       
       if (newPanel.y + newPanel.height > canvasHeight) {
-        console.log("🔍 下にも配置できないため左に配置");
+        console.log("🔍 It can't be placed down either, so it should be placed on the left");
         newPanel.x = Math.max(0, originalPanel.x - originalPanel.width - 10);
         newPanel.y = originalPanel.y;
       }
     }
     
-    // パネル内のキャラクターを複製
+    // Duplicate a character in the panel
     const panelCharacters = characters.filter(char => {
       const isInPanel = char.x >= originalPanel.x && 
         char.x <= originalPanel.x + originalPanel.width &&
@@ -302,7 +302,7 @@ export class PanelManager {
       };
     });
     
-    // パネル内の吹き出しを複製
+    // 
     const panelBubbles = speechBubbles.filter(bubble => {
       const isInPanel = bubble.x >= originalPanel.x && 
         bubble.x <= originalPanel.x + originalPanel.width &&
@@ -324,7 +324,7 @@ export class PanelManager {
       };
     });
     
-    console.log(`✅ コマ ${originalPanel.id} を複製 → コマ ${newPanelId}`);
+    console.log(`✅  ${originalPanel.id}  →  ${newPanelId}`);
     
     return {
       newPanel,
@@ -334,7 +334,7 @@ export class PanelManager {
   }
 
   /**
-   * パネル検索
+   * 
    */
   static findPanelAt(mouseX: number, mouseY: number, panels: Panel[]): Panel | null {
     return panels.find(
@@ -347,7 +347,7 @@ export class PanelManager {
   }
 
   /**
-   * パネル削除の確認処理
+   * 
    */
   static confirmPanelDeletion(
     panel: Panel,
@@ -370,23 +370,23 @@ export class PanelManager {
         bubble.y <= panel.y + panel.height
       );
 
-    let message = `コマ ${panel.id} を削除しますか？\n`;
+    let message = ` ${panel.id} \n`;
     
     if (characterIdsToDelete.length > 0) {
-      message += `キャラクター ${characterIdsToDelete.length}個も一緒に削除されます。\n`;
+      message += ` ${characterIdsToDelete.length}\n`;
     }
     
     if (bubbleIdsToDelete.length > 0) {
-      message += `吹き出し ${bubbleIdsToDelete.length}個も一緒に削除されます。\n`;
+      message += ` ${bubbleIdsToDelete.length}\n`;
     }
     
-    message += `\nこの操作は取り消せません。`;
+    message += `\nThis action cannot be undone`;
 
     return window.confirm(message);
   }
 
   /**
-   * パネル削除処理
+   * 
    */
   static deletePanel(
     panel: Panel,
@@ -420,7 +420,7 @@ export class PanelManager {
     const newCharacters = characters.filter(char => !characterIdsToDelete.includes(char.id));
     const newBubbles = speechBubbles.filter(bubble => !bubbleIdsToDelete.includes(bubble.id));
 
-    console.log(`🗑️ パネル ${panel.id} 削除完了`);
+    console.log(`🗑️  ${panel.id} `);
 
     return {
       newPanels,

@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { Panel, Character, SpeechBubble } from '../../../types';
 
 export interface CanvasState {
-  // 基本選択状態
+  // 
   selectedPanel: Panel | null;
   selectedCharacter: Character | null;
   selectedBubble: SpeechBubble | null;
   
-  // ドラッグ&操作状態
+  // &
   isDragging: boolean;
   isCharacterResizing: boolean;
   isBubbleResizing: boolean;
@@ -17,12 +17,12 @@ export interface CanvasState {
   resizeDirection: string;
   dragOffset: { x: number; y: number };
   
-  // 🆕 回転状態追加
+  // 🆕 
   isCharacterRotating: boolean;
   rotationStartAngle: number;
   originalRotation: number;
   
-  // リサイズ開始時の初期値
+  // 
   initialBubbleBounds: {
     x: number; y: number; width: number; height: number;
   } | null;
@@ -30,7 +30,7 @@ export interface CanvasState {
     x: number; y: number; width: number; height: number;
   } | null;
   
-  // UI状態
+  // UI
   snapLines: Array<{
     x1: number; y1: number; x2: number; y2: number; 
     type: 'vertical' | 'horizontal';
@@ -40,12 +40,12 @@ export interface CanvasState {
 }
 
 export interface CanvasStateActions {
-  // 選択状態更新
+  // 
   setSelectedPanel: (panel: Panel | null) => void;
   setSelectedCharacter: (character: Character | null) => void;
   setSelectedBubble: (bubble: SpeechBubble | null) => void;
   
-  // ドラッグ状態更新
+  // 
   setIsDragging: (isDragging: boolean) => void;
   setIsCharacterResizing: (isResizing: boolean) => void;
   setIsBubbleResizing: (isResizing: boolean) => void;
@@ -54,12 +54,12 @@ export interface CanvasStateActions {
   setResizeDirection: (direction: string) => void;
   setDragOffset: (offset: { x: number; y: number }) => void;
 
-  // 🆕 回転関連アクション追加
+  // 🆕 
   setIsCharacterRotating: (isRotating: boolean) => void;
   setRotationStartAngle: (angle: number) => void;
   setOriginalRotation: (rotation: number) => void;
   
-  // 初期値設定
+  // 
   setInitialBubbleBounds: (bounds: {
     x: number; y: number; width: number; height: number;
   } | null) => void;
@@ -67,7 +67,7 @@ export interface CanvasStateActions {
     x: number; y: number; width: number; height: number;
   } | null) => void;
   
-  // UI状態更新
+  // UI
   setSnapLines: (lines: Array<{
     x1: number; y1: number; x2: number; y2: number; 
     type: 'vertical' | 'horizontal';
@@ -75,22 +75,22 @@ export interface CanvasStateActions {
   setEditingBubble: (bubble: SpeechBubble | null) => void;
   setEditText: (text: string) => void;
   
-  // 全状態リセット
+  // 
   resetAllStates: () => void;
   resetDragStates: () => void;
 }
 
 /**
- * Canvas操作に関する状態管理カスタムhook
- * 複雑な状態管理を一元化し、CanvasComponentの可読性を向上
+ * CanvasOperation related state management customhook
+ * CanvasComponent
  */
 export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
-  // 基本選択状態
+  // 
   const [selectedPanel, setSelectedPanel] = useState<Panel | null>(null);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [selectedBubble, setSelectedBubble] = useState<SpeechBubble | null>(null);
   
-  // ドラッグ&操作状態
+  // &
   const [isDragging, setIsDragging] = useState(false);
   const [isCharacterResizing, setIsCharacterResizing] = useState(false);
   const [isBubbleResizing, setIsBubbleResizing] = useState(false);
@@ -100,13 +100,13 @@ export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   
 
-  // ドラッグ&操作状態の下に追加
+  // &
   const [isCharacterRotating, setIsCharacterRotating] = useState(false);
   const [rotationStartAngle, setRotationStartAngle] = useState(0);
   const [originalRotation, setOriginalRotation] = useState(0);
   
 
-  // リサイズ開始時の初期値
+  // 
   const [initialBubbleBounds, setInitialBubbleBounds] = useState<{
     x: number; y: number; width: number; height: number;
   } | null>(null);
@@ -114,7 +114,7 @@ export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
     x: number; y: number; width: number; height: number;
   } | null>(null);
   
-  // UI状態
+  // UI
   const [snapLines, setSnapLines] = useState<Array<{
     x1: number; y1: number; x2: number; y2: number; 
     type: 'vertical' | 'horizontal';
@@ -122,7 +122,7 @@ export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
   const [editingBubble, setEditingBubble] = useState<SpeechBubble | null>(null);
   const [editText, setEditText] = useState("");
 
-  // 状態オブジェクト
+  // 
   const state: CanvasState = {
     selectedPanel,
     selectedCharacter,
@@ -144,7 +144,7 @@ export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
     editText,
   };
 
-  // 全状態リセット関数
+  // 
   const resetAllStates = () => {
     setSelectedPanel(null);
     setSelectedCharacter(null);
@@ -155,13 +155,13 @@ export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
     setEditText("");
   };
 
-  // ドラッグ状態リセット関数
+  // 
   const resetDragStates = () => {
     setIsDragging(false);
     setIsCharacterResizing(false);
-    setIsCharacterRotating(false); // ← 追加
-    setRotationStartAngle(0);      // ← 追加
-    setOriginalRotation(0);        // ← 追加
+    setIsCharacterRotating(false); // ← 
+    setRotationStartAngle(0);      // ← 
+    setOriginalRotation(0);        // ← 
     setIsBubbleResizing(false);
     setIsPanelResizing(false);
     setIsPanelMoving(false);
@@ -170,15 +170,15 @@ export const useCanvasState = (): [CanvasState, CanvasStateActions] => {
     setInitialCharacterBounds(null);
   };
 
-  // アクションオブジェクト
+  // 
   const actions: CanvasStateActions = {
     setSelectedPanel,
     setSelectedCharacter,
     setSelectedBubble,
     setIsDragging,
-    setIsCharacterRotating,  // ← 追加
-    setRotationStartAngle,   // ← 追加
-    setOriginalRotation,     // ← 追加
+    setIsCharacterRotating,  // ← 
+    setRotationStartAngle,   // ← 
+    setOriginalRotation,     // ← 
     setIsCharacterResizing,
     setIsBubbleResizing,
     setIsPanelResizing,

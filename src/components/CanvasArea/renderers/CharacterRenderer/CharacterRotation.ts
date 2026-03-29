@@ -4,16 +4,16 @@ import { CharacterUtils } from "./utils/CharacterUtils";
 import { CharacterBounds } from "./utils/CharacterBounds";
 
 /**
- * キャラクター回転機能専用クラス
- * 2D回転操作・描画・計算を統合管理
+ * Character rotation exclusive class
+ * 2DIntegrated management of rotation operations, drawings and calculations
  */
 export class CharacterRotation {
 
-  // 🔄 キャラクターの回転更新
+  // 🔄 
   static rotateCharacter(character: Character, newRotation: number): Character {
     const normalizedRotation = CharacterUtils.normalizeAngle(newRotation);
     
-    console.log(`🔄 キャラクター回転: ${character.name} → ${Math.round(normalizedRotation)}°`);
+    console.log(`🔄 : ${character.name} → ${Math.round(normalizedRotation)}°`);
     
     return {
       ...character,
@@ -21,21 +21,21 @@ export class CharacterRotation {
     };
   }
 
-  // 🎨 回転ハンドル描画（座標統一修正版）
+  // 🎨 Rotating handle drawing (unified coordinate revision)
   static drawRotationHandle(
     ctx: CanvasRenderingContext2D, 
     character: Character, 
     panel: Panel,
     bounds: any
   ) {
-    // 🔧 CharacterBoundsと同じ座標計算を使用
+    // 🔧 CharacterBounds
     const characterBounds = CharacterBounds.getCharacterBounds(character, panel);
     const handleDistance = 35;
     const handleRadius = 20;
     const handleX = characterBounds.centerX;
     const handleY = characterBounds.y - handleDistance;
     
-    console.log("🎨 回転ハンドル描画（座標統一版）:", {
+    console.log("🎨 Rotating handle drawing (coordinate unified version):", {
       handleX,
       handleY,
       characterBounds,
@@ -44,7 +44,7 @@ export class CharacterRotation {
 
     ctx.save();
     
-    // 接続線（キャラクター上部から回転ハンドルまで）
+    // Connection line (from the top of the character to the rotating handle)
     ctx.strokeStyle = "rgba(255, 102, 0, 0.6)";
     ctx.lineWidth = 2;
     ctx.setLineDash([5, 5]);
@@ -54,7 +54,7 @@ export class CharacterRotation {
     ctx.stroke();
     ctx.setLineDash([]);
     
-    // 回転ハンドル背景（白い円）
+    // 
     ctx.fillStyle = "#ffffff";
     ctx.strokeStyle = "#4a90e2";
     ctx.lineWidth = 3;
@@ -63,18 +63,18 @@ export class CharacterRotation {
     ctx.fill();
     ctx.stroke();
     
-    // 回転アイコン（回転矢印）
+    // 
     const innerRadius = handleRadius * 0.6;
     const arrowSize = handleRadius * 0.3;
     
-    // 円弧描画
+    // 
     ctx.strokeStyle = "#4a90e2";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(handleX, handleY, innerRadius, -Math.PI/2, Math.PI);
     ctx.stroke();
     
-    // 矢印の先端
+    // 
     const arrowX = handleX + innerRadius * Math.cos(Math.PI);
     const arrowY = handleY + innerRadius * Math.sin(Math.PI);
     
@@ -86,7 +86,7 @@ export class CharacterRotation {
     ctx.closePath();
     ctx.fill();
     
-    // 中心点（小さな円）
+    // 
     ctx.fillStyle = "#4a90e2";
     ctx.beginPath();
     ctx.arc(handleX, handleY, 2, 0, Math.PI * 2);
@@ -95,7 +95,7 @@ export class CharacterRotation {
     ctx.restore();
   }
 
-  // 🎯 回転操作の開始処理
+  // 🎯 
   static startRotation(
     character: Character,
     panel: Panel,
@@ -109,7 +109,7 @@ export class CharacterRotation {
     const startAngle = CharacterUtils.calculateAngle(centerX, centerY, mouseX, mouseY);
     const originalRotation = character.rotation || 0;
 
-    console.log("🔄 回転開始:", {
+    console.log("🔄 :", {
       character: character.name,
       startAngle: Math.round(startAngle),
       originalRotation: Math.round(originalRotation),
@@ -122,7 +122,7 @@ export class CharacterRotation {
     };
   }
 
-  // 🎯 回転操作の更新処理
+  // 🎯 
   static updateRotation(
     character: Character,
     panel: Panel,
@@ -134,48 +134,48 @@ export class CharacterRotation {
     const { centerX, centerY } = CharacterUtils.calculateCenterCoordinates(character, panel);
     const currentAngle = CharacterUtils.calculateAngle(centerX, centerY, mouseX, mouseY);
     
-    // 角度差分計算
+    // 
     const angleDiff = CharacterUtils.calculateAngleDifference(startAngle, currentAngle);
     const newRotation = CharacterUtils.normalizeAngle(originalRotation + angleDiff);
     
-    // キャラクター更新
+    // 
     return CharacterRotation.rotateCharacter(character, newRotation);
   }
 
-  // 🎯 スナップ回転（15度単位）
+  // 🎯 15
   static snapRotation(character: Character, snapEnabled: boolean = false): Character {
     if (!snapEnabled) return character;
     
     const currentRotation = character.rotation || 0;
-    const snapAngle = 15; // 15度単位
+    const snapAngle = 15; // 15
     const snappedRotation = Math.round(currentRotation / snapAngle) * snapAngle;
     
     if (Math.abs(currentRotation - snappedRotation) < 5) {
-      console.log(`📐 スナップ回転: ${Math.round(currentRotation)}° → ${snappedRotation}°`);
+      console.log(`📐 : ${Math.round(currentRotation)}° → ${snappedRotation}°`);
       return CharacterRotation.rotateCharacter(character, snappedRotation);
     }
     
     return character;
   }
 
-  // 🔄 回転リセット
+  // 🔄 
   static resetRotation(character: Character): Character {
-    console.log(`🔄 回転リセット: ${character.name}`);
+    console.log(`🔄 : ${character.name}`);
     return CharacterRotation.rotateCharacter(character, 0);
   }
 
-  // 🎯 回転角度の検証・補正
+  // 🎯 
   static validateRotation(rotation: number): number {
-    // NaNや無限値の防止
+    // NaN
     if (!isFinite(rotation) || isNaN(rotation)) {
-      console.warn("⚠️ 無効な回転角度を検出、0度にリセット");
+      console.warn("⚠️ 0");
       return 0;
     }
     
     return CharacterUtils.normalizeAngle(rotation);
   }
 
-  // 🎨 回転軌跡の描画（デバッグ用）
+  // 🎨 Draw Rotation Trajectory (for debugging)
   static drawRotationPath(
     ctx: CanvasRenderingContext2D,
     character: Character,
@@ -191,12 +191,12 @@ export class CharacterRotation {
     ctx.lineWidth = 2;
     ctx.setLineDash([5, 5]);
     
-    // 回転軌跡の円弧
+    // 
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, startAngle, currentAngle);
     ctx.stroke();
     
-    // 開始点
+    // 
     ctx.fillStyle = "#4a90e2";
     ctx.beginPath();
     ctx.arc(
@@ -206,7 +206,7 @@ export class CharacterRotation {
     );
     ctx.fill();
     
-    // 現在点
+    // 
     ctx.fillStyle = "#ff6600";
     ctx.beginPath();
     ctx.arc(
@@ -219,7 +219,7 @@ export class CharacterRotation {
     ctx.restore();
   }
 
-  // 🔄 プリセット回転（よく使う角度）
+  // 🔄 Preset rotation (common angles)
   static applyPresetRotation(character: Character, preset: string): Character {
     const presetAngles: { [key: string]: number } = {
       'reset': 0,
@@ -234,15 +234,15 @@ export class CharacterRotation {
     
     const angle = presetAngles[preset];
     if (angle !== undefined) {
-      console.log(`🔄 プリセット回転適用: ${preset} (${angle}°)`);
+      console.log(`🔄 : ${preset} (${angle}°)`);
       return CharacterRotation.rotateCharacter(character, angle);
     }
     
-    console.warn(`⚠️ 不明なプリセット: ${preset}`);
+    console.warn(`⚠️ : ${preset}`);
     return character;
   }
 
-  // 🎯 回転状態の情報取得
+  // 🎯 
   static getRotationInfo(character: Character): {
     rotation: number;
     rotationDegrees: string;

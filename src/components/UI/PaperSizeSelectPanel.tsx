@@ -1,4 +1,4 @@
-// src/components/UI/PaperSizeSelectPanel.tsx - カスタムサイズ対応完全版
+// src/components/UI/PaperSizeSelectPanel.tsx - paper size + custom dimensions
 import React, { useState } from 'react';
 import { PaperSize, PAPER_SIZES, CanvasSettings } from '../../types';
 
@@ -18,20 +18,20 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
   isDarkMode = false
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('standard');
-  // カスタムサイズ用のstate
+  // Custom size (mm) inputs
   const [customWidth, setCustomWidth] = useState(210);
   const [customHeight, setCustomHeight] = useState(297);
   
   if (!isVisible) return null;
 
-  // カテゴリ別にサイズを分類
+  // Sizes grouped by category
   const categorizedSizes = {
     standard: Object.values(PAPER_SIZES).filter(size => size.category === 'standard'),
     web: Object.values(PAPER_SIZES).filter(size => size.category === 'web'),
     custom: Object.values(PAPER_SIZES).filter(size => size.category === 'custom')
   };
 
-  // 用紙サイズ変更ハンドラ
+  // Apply preset paper size
   const handleSizeChange = (newSize: PaperSize) => {
     onSettingsChange({
       ...currentSettings,
@@ -39,16 +39,16 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
     });
   };
 
-  // カスタムサイズ適用関数
+  // Build custom PaperSize from mm fields
   const applyCustomSize = () => {
     const customSize: PaperSize = {
       ...PAPER_SIZES.CUSTOM,
       width: customWidth,
       height: customHeight,
-      pixelWidth: Math.round(customWidth * 11.811), // 300DPI換算
+      pixelWidth: Math.round(customWidth * 11.811), // ~300 DPI
       pixelHeight: Math.round(customHeight * 11.811),
       aspectRatio: customHeight / customWidth,
-      displayName: `カスタム（${customWidth}×${customHeight}mm）`,
+      displayName: `Custom (${customWidth}×${customHeight}mm)`,
       isPortrait: customHeight > customWidth
     };
     handleSizeChange(customSize);
@@ -78,7 +78,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
       }} onClick={(e) => e.stopPropagation()}>
     <div className="ui-panel" style={{ margin: 0, border: 'none', background: 'transparent' }}>
-      {/* モーダルヘッダー */}
+      {/* Modal header */}
       <div 
         style={{
           display: 'flex',
@@ -95,7 +95,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
           color: 'var(--text-primary)',
           fontWeight: 'bold'
         }}>
-          📐 用紙サイズ設定
+          📐 Paper size
         </h3>
         <button
           onClick={onToggle}
@@ -120,7 +120,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
           padding: '12px' 
         }}>
           
-          {/* 現在の設定表示 */}
+          {/* Current selection */}
           <div style={{ 
             background: 'var(--bg-secondary)', 
             padding: '10px', 
@@ -136,7 +136,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
               alignItems: 'center'
             }}>
               <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>
-                現在: {currentSettings.paperSize.displayName}
+                Current: {currentSettings.paperSize.displayName}
               </span>
             </div>
             <div style={{ color: 'var(--text-muted)', fontSize: '11px' }}>
@@ -144,12 +144,12 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
             </div>
           </div>
 
-          {/* カテゴリ選択タブ */}
+          {/* Category tabs */}
           <div style={{ display: 'flex', gap: '4px', marginBottom: '12px' }}>
             {[
-              { id: 'standard', name: '📄 標準' },
+              { id: 'standard', name: '📄 Standard' },
               { id: 'web', name: '🌐 Web' },
-              { id: 'custom', name: '⚙️ カスタム' }
+              { id: 'custom', name: '⚙️ Custom' }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -171,7 +171,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
             ))}
           </div>
 
-          {/* サイズ選択グリッド */}
+          {/* Preset grid */}
           {selectedCategory !== 'custom' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {categorizedSizes[selectedCategory as keyof typeof categorizedSizes].map(size => (
@@ -203,7 +203,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
                     }
                   }}
                 >
-                  {/* サイズプレビュー */}
+                  {/* Thumbnail */}
                   <div style={{
                     width: '40px',
                     height: '50px',
@@ -224,7 +224,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
                     />
                   </div>
                   
-                  {/* サイズ情報 */}
+                  {/* Label + description */}
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>
                       {size.name}
@@ -241,7 +241,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
             </div>
           )}
 
-          {/* カスタムサイズ設定 */}
+          {/* Custom mm */}
           {selectedCategory === 'custom' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -253,7 +253,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
                     marginBottom: '4px',
                     color: 'var(--text-primary)'
                   }}>
-                    幅 (mm)
+                    Width (mm)
                   </label>
                   <input
                     type="number"
@@ -281,7 +281,7 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
                     marginBottom: '4px',
                     color: 'var(--text-primary)'
                   }}>
-                    高さ (mm)
+                    Height (mm)
                   </label>
                   <input
                     type="number"
@@ -317,10 +317,10 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
                   fontWeight: 'bold'
                 }}
               >
-                📐 カスタムサイズを適用
+                📐 Apply custom size
               </button>
               
-              {/* プリセットボタン */}
+              {/* Quick presets */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px' }}>
                 <button 
                   onClick={() => { setCustomWidth(210); setCustomHeight(297); }}
@@ -376,13 +376,13 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
                     fontSize: '10px'
                   }}
                 >
-                  A4横
+                  A4 landscape
                 </button>
               </div>
             </div>
           )}
 
-          {/* 使用方法のヒント */}
+          {/* Tips */}
           <div style={{
             background: 'var(--bg-primary)',
             border: '1px solid var(--border-color)',
@@ -393,10 +393,10 @@ export const PaperSizeSelectPanel: React.FC<PaperSizeSelectPanelProps> = ({
             color: 'var(--text-muted)',
             lineHeight: '1.4'
           }}>
-            💡 <strong>用紙サイズの活用:</strong><br/>
-            • A4/B5: 印刷・同人誌用<br/>
-            • Twitter: SNS投稿最適化<br/>
-            • DPI300: 高品質印刷用
+            💡 <strong>Paper sizes:</strong><br/>
+            • A4/B5: print and zines<br/>
+            • Twitter: card images for X<br/>
+            • 300 DPI targets high-quality print
           </div>
         </div>
       )}
